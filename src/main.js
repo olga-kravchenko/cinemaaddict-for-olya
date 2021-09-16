@@ -3,13 +3,16 @@ import {createMenuTemplate} from "./view/menu";
 import {createSortingTemplate} from "./view/sorting";
 import {createContentTemplate} from "./view/content";
 import {createFilmsContainerTemplate} from "./view/films-container";
-import {createFilmsRatedContainerTemplate} from "./view/films-roted-container";
-import {createFilmsCommentedContainerTemplate} from "./view/films-commented-container";
+import {createExtraFilmsContainerTemplate} from "./view/extra-films-container";
 import {createFilmTemplate} from "./view/film";
-import {createFilmExtraTemplate} from "./view/film-extra";
-import {createNumerOfFilmsTemplate} from "./view/number-of-films";
-import {createLoadMoreButtonTemplate} from "./view/load-more-button";
-import {render} from "./utils/films";
+import {createFilmsQuantityTemplate} from "./view/films-quantity";
+import {createShowMoreButtonTemplate} from "./view/show-more-button";
+import {render} from "./utils/render";
+
+const MAX_SHOWN_FILMS_QUANTITY = 5;
+const MIN_SHOWN_FILMS_QUANTITY = 2;
+const RATED = 0;
+const COMMENTED = 1;
 
 const header = document.querySelector(`.header`);
 const main = document.querySelector(`.main`);
@@ -25,21 +28,19 @@ render(contentContainer, createFilmsContainerTemplate(), `beforeend`);
 
 const filmsContainer = document.querySelector(`.films-list__container`);
 const filmsList = document.querySelector(`.films-list`);
-for (let i = 0; i < 5; i++) {
+for (let i = 0; i < MAX_SHOWN_FILMS_QUANTITY; i++) {
   render(filmsContainer, createFilmTemplate(), `beforeend`);
 }
-render(filmsList, createLoadMoreButtonTemplate(), `beforeend`);
+render(filmsList, createShowMoreButtonTemplate(), `beforeend`);
 
-render(contentContainer, createFilmsRatedContainerTemplate(), `beforeend`);
-const filmsRatedContainer = document.querySelector(`.films-list--extra-rate .films-list__container`);
-for (let i = 0; i < 2; i++) {
-  render(filmsRatedContainer, createFilmExtraTemplate(), `beforeend`);
+render(contentContainer, createExtraFilmsContainerTemplate(`rated`), `beforeend`);
+render(contentContainer, createExtraFilmsContainerTemplate(`commented`), `beforeend`);
+const filmsRatedContainer = document.querySelectorAll(`.films-list--extra`)[RATED].querySelector(`.films-list__container`);
+const filmsCommentedContainer = document.querySelectorAll(`.films-list--extra`)[COMMENTED].querySelector(`.films-list__container`);
+
+for (let i = 0; i < MIN_SHOWN_FILMS_QUANTITY; i++) {
+  render(filmsRatedContainer, createFilmTemplate(), `beforeend`);
+  render(filmsCommentedContainer, createFilmTemplate(), `beforeend`);
 }
 
-render(contentContainer, createFilmsCommentedContainerTemplate(), `beforeend`);
-const filmsCommentedContainer = document.querySelector(`.films-list--extra-commented .films-list__container`);
-for (let i = 0; i < 2; i++) {
-  render(filmsCommentedContainer, createFilmExtraTemplate(), `beforeend`);
-}
-
-render(statistics, createNumerOfFilmsTemplate(), `beforeend`);
+render(statistics, createFilmsQuantityTemplate(), `beforeend`);

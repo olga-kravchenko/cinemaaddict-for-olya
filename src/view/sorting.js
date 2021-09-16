@@ -1,9 +1,18 @@
+const createSortingItemsTemplate = (activeItem) => {
+  const sortingNames = [`default`, `date`, `rating`];
+  const items = [];
+  sortingNames.forEach((item) => {
+    items.push(`<li><a href="#" class="sort__button ${item === activeItem ? `sort__button--active` : ``}">Sort by ${item}</a></li>`);
+  });
+  return items.join(``);
+};
+
 const createSortingTemplate = () => {
-  return `<ul class="sort">
-    <li><a href="#" class="sort__button sort__button--active">Sort by default</a></li>
-    <li><a href="#" class="sort__button">Sort by date</a></li>
-    <li><a href="#" class="sort__button">Sort by rating</a></li>
-  </ul>`;
+  const activeItem = `default`;
+  return `
+    <ul class="sort">
+      ${createSortingItemsTemplate(activeItem)}
+    </ul>`;
 };
 
 export {createSortingTemplate};
