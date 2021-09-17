@@ -1,5 +1,5 @@
-const getRandomNumber = (max) => {
-  return Math.floor(Math.random() * max);
+const getRandomNumber = (min, max) => {
+  return Math.floor(Math.random() * (max - min) + min);
 };
 
 const render = (container, template, place) => {
