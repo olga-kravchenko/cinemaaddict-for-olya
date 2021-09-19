@@ -7,13 +7,19 @@ import {createExtraFilmsContainerTemplate} from "./view/extra-films-container";
 import {createFilmTemplate} from "./view/film";
 import {createFilmsQuantityTemplate} from "./view/films-quantity";
 import {createShowMoreButtonTemplate} from "./view/show-more-button";
+import {createPopupTemplate} from "./view/popup";
 import {render} from "./utils/render";
+import {generateFilm} from "./mock/film";
 
 const MAX_SHOWN_FILMS_QUANTITY = 5;
 const MIN_SHOWN_FILMS_QUANTITY = 2;
 const RATED = 0;
 const COMMENTED = 1;
+const FILMS_QUANTITY = 20;
 
+const films = new Array(FILMS_QUANTITY).fill().map(generateFilm);
+
+const body = document.querySelector(`body`);
 const header = document.querySelector(`.header`);
 const main = document.querySelector(`.main`);
 const statistics = document.querySelector(`.footer__statistics`);
@@ -22,6 +28,7 @@ render(header, createUserTemplate(), `beforeend`);
 render(main, createMenuTemplate(), `beforeend`);
 render(main, createSortingTemplate(), `beforeend`);
 render(main, createContentTemplate(), `beforeend`);
+render(body, createPopupTemplate(), `beforeend`);
 
 const contentContainer = document.querySelector(`.films`);
 render(contentContainer, createFilmsContainerTemplate(), `beforeend`);
@@ -29,7 +36,7 @@ render(contentContainer, createFilmsContainerTemplate(), `beforeend`);
 const filmsContainer = document.querySelector(`.films-list__container`);
 const filmsList = document.querySelector(`.films-list`);
 for (let i = 0; i < MAX_SHOWN_FILMS_QUANTITY; i++) {
-  render(filmsContainer, createFilmTemplate(), `beforeend`);
+  render(filmsContainer, createFilmTemplate(films[i]), `beforeend`);
 }
 render(filmsList, createShowMoreButtonTemplate(), `beforeend`);
 
@@ -39,8 +46,8 @@ const filmsRatedContainer = document.querySelectorAll(`.films-list--extra`)[RATE
 const filmsCommentedContainer = document.querySelectorAll(`.films-list--extra`)[COMMENTED].querySelector(`.films-list__container`);
 
 for (let i = 0; i < MIN_SHOWN_FILMS_QUANTITY; i++) {
-  render(filmsRatedContainer, createFilmTemplate(), `beforeend`);
-  render(filmsCommentedContainer, createFilmTemplate(), `beforeend`);
+  render(filmsRatedContainer, createFilmTemplate(films[i]), `beforeend`);
+  render(filmsCommentedContainer, createFilmTemplate(films[i]), `beforeend`);
 }
 
 render(statistics, createFilmsQuantityTemplate(), `beforeend`);
