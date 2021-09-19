@@ -18,7 +18,6 @@ const COMMENTED = 1;
 const FILMS_QUANTITY = 20;
 
 const films = new Array(FILMS_QUANTITY).fill().map(generateFilm);
-
 const body = document.querySelector(`body`);
 const header = document.querySelector(`.header`);
 const main = document.querySelector(`.main`);
@@ -28,7 +27,7 @@ render(header, createUserTemplate(), `beforeend`);
 render(main, createMenuTemplate(), `beforeend`);
 render(main, createSortingTemplate(), `beforeend`);
 render(main, createContentTemplate(), `beforeend`);
-render(body, createPopupTemplate(), `beforeend`);
+render(body, createPopupTemplate(films[0]), `beforeend`);
 
 const contentContainer = document.querySelector(`.films`);
 render(contentContainer, createFilmsContainerTemplate(), `beforeend`);
