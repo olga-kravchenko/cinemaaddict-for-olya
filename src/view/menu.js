@@ -9,7 +9,7 @@ const createFiltersTemplate = () => {
     filters.push(`
       <a href="#${item.toLowerCase()}" class="main-navigation__item">
         ${item}
-        <span class="main-navigation__item-count">${getRandomNumber(MAX_FILMS_QUANTITY)}</span>
+        <span class="main-navigation__item-count">${getRandomNumber(1, MAX_FILMS_QUANTITY)}</span>
       </a>`);
   });
   return filters.join(``);
