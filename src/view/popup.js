@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import {convertTime} from "../utils/film";
-import {EMOTIONS} from "../mock/film";
+import {EMOTIONS, EMPTY_STRING, ONE_ELEMENT} from "../constants";
 
 const createGenreTemplate = (genres) => {
   const shownGenres = [];
@@ -14,14 +14,14 @@ const createGenreTemplate = (genres) => {
 const createFilmControlsTemplate = ({watchlist, alreadyWatched, favorite}) => {
   return `
    <section class="film-details__controls">
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${watchlist ? `checked` : ``}>
-        <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
+     <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${watchlist ? `checked` : EMPTY_STRING}>
+     <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${alreadyWatched ? `checked` : ``}>
-        <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
+     <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${alreadyWatched ? `checked` : EMPTY_STRING}>
+     <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${favorite ? `checked` : ``}>
-        <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
+     <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${favorite ? `checked` : EMPTY_STRING}>
+     <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
     </section>`;
 };
 
@@ -31,17 +31,17 @@ const createCommentsTemplate = (comments) => {
     const time = dayjs(date).format(`YYYY/MM/DD H:mm`);
     const template = `
     <li class="film-details__comment">
-        <span class="film-details__comment-emoji">
-            <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
-        </span>
-        <div>
-            <p class="film-details__comment-text">${comment}</p>
-            <p class="film-details__comment-info">
-                <span class="film-details__comment-author">${author}</span>
-                <span class="film-details__comment-day">${time}</span>
-                <button class="film-details__comment-delete">Delete</button>
-            </p>
-        </div>
+      <span class="film-details__comment-emoji">
+        <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
+      </span>
+      <div>
+        <p class="film-details__comment-text">${comment}</p>
+        <p class="film-details__comment-info">
+          <span class="film-details__comment-author">${author}</span>
+          <span class="film-details__comment-day">${time}</span>
+          <button class="film-details__comment-delete">Delete</button>
+        </p>
+      </div>
     </li>`;
     shownComments.push(template);
   });
@@ -49,9 +49,10 @@ const createCommentsTemplate = (comments) => {
 };
 
 const createCommentListTemplate = (comments) => {
-  return `${comments.length !== 0 ? `<ul class="film-details__comments-list">
-    ${createCommentsTemplate(comments)}
-  </ul>` : ``}`;
+  return `${comments.length !== 0 ? `
+    <ul class="film-details__comments-list">
+      ${createCommentsTemplate(comments)}
+    </ul>` : EMPTY_STRING}`;
 };
 
 const createEmojisTemplate = () => {
@@ -60,7 +61,7 @@ const createEmojisTemplate = () => {
     const template = `
     <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emotion}" value="${emotion}">
     <label class="film-details__emoji-label" for="emoji-${emotion}">
-        <img src="./images/emoji/${emotion}.png" width="30" height="30" alt="emoji">
+      <img src="./images/emoji/${emotion}.png" width="30" height="30" alt="emoji">
     </label>`;
     shownEmojis.push(template);
   });
@@ -70,7 +71,7 @@ const createEmojisTemplate = () => {
 const createEmojiListTemplate = () => {
   return `
     <div class="film-details__emoji-list">
-     ${createEmojisTemplate()}
+      ${createEmojisTemplate()}
     </div>`;
 };
 
@@ -97,85 +98,84 @@ const createPopupTemplate = ({filmInfo, comments, userDetails}) => {
 
   return `
     <section class="film-details">
-        <form class="film-details__inner" action="" method="get">
-            <div class="film-details__top-container">
-                <div class="film-details__close">
-                    <button class="film-details__close-btn" type="button">close</button>
-                </div>
-                <div class="film-details__info-wrap">
-                    <div class="film-details__poster">
-                        <img class="film-details__poster-img" src="./images/posters/${poster}" alt="">
-                        <p class="film-details__age">${ageRating}+</p>
-                    </div>
-
-                    <div class="film-details__info">
-                        <div class="film-details__info-head">
-                            <div class="film-details__title-wrap">
-                                <h3 class="film-details__title">${title}</h3>
-                                <p class="film-details__title-original">Original: ${originalTitle}</p>
-                            </div>
-                            <div class="film-details__rating">
-                                <p class="film-details__total-rating">${rating}</p>
-                            </div>
-                        </div>
-
-                        <table class="film-details__table">
-                            <tr class="film-details__row">
-                                <td class="film-details__term">Director</td>
-                                <td class="film-details__cell">${director}</td>
-                            </tr>
-                            <tr class="film-details__row">
-                                <td class="film-details__term">Writers</td>
-                                <td class="film-details__cell">${screenwriters}</td>
-                            </tr>
-                            <tr class="film-details__row">
-                                <td class="film-details__term">Actors</td>
-                                <td class="film-details__cell">${actors}</td>
-                            </tr>
-                            <tr class="film-details__row">
-                                <td class="film-details__term">Release Date</td>
-                                <td class="film-details__cell">${releaseDate}</td>
-                            </tr>
-                            <tr class="film-details__row">
-                                <td class="film-details__term">Runtime</td>
-                                <td class="film-details__cell">${time}</td>
-                            </tr>
-                            <tr class="film-details__row">
-                                <td class="film-details__term">Country</td>
-                                <td class="film-details__cell">${country}</td>
-                            </tr>
-                            <tr class="film-details__row">
-                                <td class="film-details__term">${shownGeneres.length === 1 ? `Genre` : `Genres`}</td>
-                                <td class="film-details__cell">
-                                ${shownGeneres.join(` `)}
-                            </tr>
-                        </table>
-
-                        <p class="film-details__film-description">${description}</p>
-                    </div>
-                </div>
-
-               ${createFilmControlsTemplate(userDetails)}
+      <form class="film-details__inner" action="" method="get">
+        <div class="film-details__top-container">
+          <div class="film-details__close">
+            <button class="film-details__close-btn" type="button">close</button>
+          </div>
+          <div class="film-details__info-wrap">
+            <div class="film-details__poster">
+              <img class="film-details__poster-img" src="./images/posters/${poster}" alt="">
+              <p class="film-details__age">${ageRating}+</p>
             </div>
 
-            <div class="film-details__bottom-container">
-                <section class="film-details__comments-wrap">
-                    <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
+            <div class="film-details__info">
+              <div class="film-details__info-head">
+                <div class="film-details__title-wrap">
+                  <h3 class="film-details__title">${title}</h3>
+                  <p class="film-details__title-original">Original: ${originalTitle}</p>
+                </div>
+                <div class="film-details__rating">
+                  <p class="film-details__total-rating">${rating}</p>
+                </div>
+              </div>
 
-                    ${createCommentListTemplate(comments)}
+              <table class="film-details__table">
+                <tr class="film-details__row">
+                  <td class="film-details__term">Director</td>
+                  <td class="film-details__cell">${director}</td>
+                </tr>
+                <tr class="film-details__row">
+                  <td class="film-details__term">Writers</td>
+                  <td class="film-details__cell">${screenwriters}</td>
+                </tr>
+                <tr class="film-details__row">
+                  <td class="film-details__term">Actors</td>
+                  <td class="film-details__cell">${actors}</td>
+                </tr>
+                <tr class="film-details__row">
+                  <td class="film-details__term">Release Date</td>
+                  <td class="film-details__cell">${releaseDate}</td>
+                </tr>
+                <tr class="film-details__row">
+                  <td class="film-details__term">Runtime</td>
+                  <td class="film-details__cell">${time}</td>
+                </tr>
+                <tr class="film-details__row">
+                  <td class="film-details__term">Country</td>
+                  <td class="film-details__cell">${country}</td>
+                </tr>
+                <tr class="film-details__row">
+                  <td class="film-details__term">${shownGeneres.length === ONE_ELEMENT ? `Genre` : `Genres`}</td>
+                  <td class="film-details__cell">
+                  ${shownGeneres.join(` `)}
+                </tr>
+              </table>
 
-                    <div class="film-details__new-comment">
-                        <div class="film-details__add-emoji-label"></div>
-
-                        <label class="film-details__comment-label">
-                        <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
-                        </label>
-                        ${createEmojiListTemplate(comments)}
-                    </div>
-                </section>
+              <p class="film-details__film-description">${description}</p>
             </div>
-        </form>
-    </section>`;
+          </div>
+
+              ${createFilmControlsTemplate(userDetails)}
+        </div>
+
+        <div class="film-details__bottom-container">
+          <section class="film-details__comments-wrap">
+            <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
+            ${createCommentListTemplate(comments)}
+
+            <div class="film-details__new-comment">
+              <div class="film-details__add-emoji-label"></div>
+
+              <label class="film-details__comment-label">
+                <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
+              </label>
+              ${createEmojiListTemplate(comments)}
+            </div>
+          </section>
+        </div>
+      </form>
+  </section>`;
 };
 
 export {createPopupTemplate};

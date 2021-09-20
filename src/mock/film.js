@@ -1,12 +1,7 @@
 import {nanoid} from 'nanoid';
 import dayjs from "dayjs";
 import {getRandomNumber} from "../utils/render";
-
-const UserStatus = {
-  NOVICE: `Novice`,
-  FAN: `Fan`,
-  MOVIE_BUFF: `Movie Buff`,
-};
+import {EMOTIONS, MIN_ARRAY_INDEX} from "../constants";
 
 const TITLES = [`Зеленая миля`, `Побег из Шоушенка`, `Форрест Гамп`, `Интерстеллар`, `Иван Васильевич меняет профессию`,
   `Список Шиндлера`, `Матрица`, `1+1`, `Назад в будущее`, `Джентльмены`, `Бойцовский клуб`, `Шрэк`, `Огнеупорный`];
@@ -36,36 +31,38 @@ const GENRES = [`Боевик`, `Вестерн`, `Детектив`, `Коме�
 const NAMES = [`Anthony Mann`, `Anne Wigton`, `Heinz Herald`, `Richard Weil`, `Erich von Stroheim`, `Mary Beth`, `Dan Duryea`];
 const STATES = [true, false];
 const AGE_RATING = [3, 6, 0, 12, 16, 18, 90];
-const MIN_QUANTITY = 1;
 const MAX_QUANTITY = 5;
-const EMOTIONS = [`smile`, `sleeping`, `puke`, `angry`];
+const MIN_QUANTITY = 1;
+const MAX_DURATION = 180;
+const MIN_DURATION = 30;
+const MAX_RATING = 10;
 
 const generateRandomElements = (array) => {
   const randomElements = [];
   for (let i = 0; i < getRandomNumber(MIN_QUANTITY, MAX_QUANTITY); i++) {
-    randomElements.push(array[getRandomNumber(0, array.length)]);
+    randomElements.push(array[getRandomNumber(MIN_ARRAY_INDEX, array.length)]);
   }
   return randomElements;
 };
 
 const generateDate = () => {
-  const maxDaysGap = 7;
+  const maxDaysGap = 10000;
   const daysGap = getRandomNumber(-maxDaysGap, maxDaysGap);
   return dayjs().add(daysGap, `day`).toDate();
 };
 
 const generateComment = () => {
   return {
-    author: NAMES[getRandomNumber(0, NAMES.length)],
-    comment: DESCRIPTIONS[getRandomNumber(0, DESCRIPTIONS.length)],
+    author: NAMES[getRandomNumber(MIN_ARRAY_INDEX, NAMES.length)],
+    comment: DESCRIPTIONS[getRandomNumber(MIN_ARRAY_INDEX, DESCRIPTIONS.length)],
     date: generateDate(),
-    emotion: EMOTIONS[getRandomNumber(0, EMOTIONS.length)],
+    emotion: EMOTIONS[getRandomNumber(MIN_ARRAY_INDEX, EMOTIONS.length)],
   };
 };
 
 const generateComments = () => {
   const shownComments = [];
-  for (let i = 0; i < getRandomNumber(1, 5); i++) {
+  for (let i = 0; i < getRandomNumber(MIN_QUANTITY, MAX_QUANTITY); i++) {
     const comment = generateComment();
     shownComments.push(comment);
   }
@@ -73,32 +70,32 @@ const generateComments = () => {
 };
 
 const generateFilm = () => {
-  const randomIndex = getRandomNumber(0, TITLES.length - 1);
+  const randomIndex = getRandomNumber(MIN_ARRAY_INDEX, TITLES.length - 1);
   return {
     id: nanoid(),
     filmInfo: {
-      poster: POSTERS[getRandomNumber(0, POSTERS.length)],
+      poster: POSTERS[getRandomNumber(MIN_ARRAY_INDEX, POSTERS.length)],
       title: TITLES[randomIndex],
       originalTitle: ORIGINAL_TITLES[randomIndex],
-      rating: getRandomNumber(0, 10),
-      duration: getRandomNumber(30, 180),
+      rating: getRandomNumber(MIN_ARRAY_INDEX, MAX_RATING),
+      duration: getRandomNumber(MIN_DURATION, MAX_DURATION),
       description: generateRandomElements(DESCRIPTIONS),
-      director: NAMES[getRandomNumber(0, NAMES.length)],
+      director: NAMES[getRandomNumber(MIN_ARRAY_INDEX, NAMES.length)],
       screenwriters: generateRandomElements(NAMES),
       actors: generateRandomElements(NAMES),
       date: generateDate(),
-      country: COUNTRIES[getRandomNumber(0, COUNTRIES.length)],
+      country: COUNTRIES[getRandomNumber(MIN_ARRAY_INDEX, COUNTRIES.length)],
       genre: generateRandomElements(GENRES),
-      ageRating: AGE_RATING[getRandomNumber(0, AGE_RATING.length)],
+      ageRating: AGE_RATING[getRandomNumber(MIN_ARRAY_INDEX, AGE_RATING.length)],
     },
     comments: generateComments(),
     userDetails: {
-      watchlist: STATES[getRandomNumber(0, STATES.length)],
-      alreadyWatched: STATES[getRandomNumber(0, STATES.length)],
+      watchlist: STATES[getRandomNumber(MIN_ARRAY_INDEX, STATES.length)],
+      alreadyWatched: STATES[getRandomNumber(MIN_ARRAY_INDEX, STATES.length)],
       watchingDate: generateDate(),
-      favorite: STATES[getRandomNumber(0, STATES.length)],
+      favorite: STATES[getRandomNumber(MIN_ARRAY_INDEX, STATES.length)],
     }
   };
 };
 
-export {UserStatus, EMOTIONS, generateFilm};
+export {EMOTIONS, generateFilm};

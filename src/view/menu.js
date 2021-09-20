@@ -1,4 +1,3 @@
-
 const createFiltersTemplate = (filters) => {
   const filtersTemplate = [];
   filters.forEach((filter) => {

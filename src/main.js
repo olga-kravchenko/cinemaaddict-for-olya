@@ -71,4 +71,4 @@ for (let i = 0; i < MIN_SHOWN_FILMS_QUANTITY; i++) {
   render(filmsCommentedContainer, createFilmTemplate(films[i]), `beforeend`);
 }
 
-render(statistics, createFilmsQuantityTemplate(), `beforeend`);
+render(statistics, createFilmsQuantityTemplate(films), `beforeend`);

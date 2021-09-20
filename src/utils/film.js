@@ -1,11 +1,13 @@
-const convertTime = (min) => {
-  const minutes = Math.floor((min).toFixed(1));
-  const hours = Math.floor((min / 60).toFixed(1));
+const MAX_MINUTES_QUANTITY = 60;
 
-  if (minutes < 60) {
+const convertTime = (min) => {
+  const minutes = min;
+  const hours = Math.floor((min / MAX_MINUTES_QUANTITY));
+
+  if (minutes < MAX_MINUTES_QUANTITY) {
     return `${minutes}m`;
   } else {
-    return `${hours}h ${minutes % 60}m`;
+    return `${hours}h ${minutes % MAX_MINUTES_QUANTITY}m`;
   }
 };
 

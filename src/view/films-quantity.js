@@ -1,7 +1,5 @@
-import {getRandomNumber} from "../utils/render";
-
-const createFilmsQuantityTemplate = () => {
-  return `<p>${getRandomNumber(50, 1000)} movies inside</p>`;
+const createFilmsQuantityTemplate = (films) => {
+  return `<p>${films.length} movies inside</p>`;
 };
 
 export {createFilmsQuantityTemplate};
