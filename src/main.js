@@ -12,7 +12,6 @@ import {render} from "./utils/render";
 import {generateFilm} from "./mock/film";
 import {generateFilter} from "./mock/filter";
 
-const MAX_SHOWN_FILMS_QUANTITY = 5;
 const MIN_SHOWN_FILMS_QUANTITY = 2;
 const RATED = 0;
 const COMMENTED = 1;
@@ -31,7 +30,7 @@ render(header, createUserTemplate(films), `beforeend`);
 render(main, createMenuTemplate(filters), `beforeend`);
 render(main, createSortingTemplate(), `beforeend`);
 render(main, createContentTemplate(), `beforeend`);
-// render(body, createPopupTemplate(films[0]), `beforeend`);
+render(body, createPopupTemplate(films[0]), `beforeend`);
 
 const contentContainer = document.querySelector(`.films`);
 render(contentContainer, createFilmsContainerTemplate(), `beforeend`);
