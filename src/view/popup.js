@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
-import {convertTime} from "../utils/film";
-import {EMOTIONS, EMPTY_STRING, ONE_ELEMENT} from "../constants";
+import {formatTime} from "../utils/util";
+import {EMOTIONS, EMPTY_STRING} from "../constants";
 
 const createGenreTemplate = (genres) => {
   const shownGenres = [];
@@ -92,9 +92,10 @@ const createPopupTemplate = ({filmInfo, comments, userDetails}) => {
     ageRating,
   } = filmInfo;
 
-  const time = convertTime(duration);
+  const time = formatTime(duration);
   const releaseDate = dayjs(date).format(` DD MMMM YYYY`);
   const shownGeneres = createGenreTemplate(genre);
+  const genreTitle = shownGeneres.length === 1 ? `Genre` : `Genres`;
 
   return `
     <section class="film-details">
@@ -127,11 +128,11 @@ const createPopupTemplate = ({filmInfo, comments, userDetails}) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Writers</td>
-                  <td class="film-details__cell">${screenwriters}</td>
+                  <td class="film-details__cell">${screenwriters.join(`, `)}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Actors</td>
-                  <td class="film-details__cell">${actors}</td>
+                  <td class="film-details__cell">${actors.join(`, `)}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Release Date</td>
@@ -146,7 +147,7 @@ const createPopupTemplate = ({filmInfo, comments, userDetails}) => {
                   <td class="film-details__cell">${country}</td>
                 </tr>
                 <tr class="film-details__row">
-                  <td class="film-details__term">${shownGeneres.length === ONE_ELEMENT ? `Genre` : `Genres`}</td>
+                  <td class="film-details__term">${genreTitle}</td>
                   <td class="film-details__cell">
                   ${shownGeneres.join(` `)}
                 </tr>

@@ -1,5 +1,3 @@
-const createFilmsQuantityTemplate = (films) => {
-  return `<p>${films.length} movies inside</p>`;
-};
+const createFilmsQuantityTemplate = (films) => `<p>${films.length} movies inside</p>`;
 
 export {createFilmsQuantityTemplate};

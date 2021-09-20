@@ -4,7 +4,7 @@ const createFiltersTemplate = (filters) => {
     filtersTemplate.push(`
       <a href="#${filter.name.toLowerCase()}" class="main-navigation__item">
         ${filter.name}
-        <span class="main-navigation__item-count">${filter.count}</span>
+        <span class="main-navigation__item-count">${filter.quantity}</span>
       </a>`);
   });
   return filtersTemplate.join(``);
