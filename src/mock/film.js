@@ -2,7 +2,12 @@ import {nanoid} from 'nanoid';
 import dayjs from "dayjs";
 import {getRandomNumber} from "../utils/render";
 
-const USER_STATUSES = [`novice`, `fan`, `movie buff`];
+const UserStatus = {
+  NOVICE: `Novice`,
+  FAN: `Fan`,
+  MOVIE_BUFF: `Movie Buff`,
+};
+
 const TITLES = [`Зеленая миля`, `Побег из Шоушенка`, `Форрест Гамп`, `Интерстеллар`, `Иван Васильевич меняет профессию`,
   `Список Шиндлера`, `Матрица`, `1+1`, `Назад в будущее`, `Джентльмены`, `Бойцовский клуб`, `Шрэк`, `Огнеупорный`];
 
@@ -96,4 +101,4 @@ const generateFilm = () => {
   };
 };
 
-export {EMOTIONS, generateFilm};
+export {UserStatus, EMOTIONS, generateFilm};
