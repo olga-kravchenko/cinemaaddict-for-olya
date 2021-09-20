@@ -17,17 +17,17 @@ const MIN_SHOWN_FILMS_QUANTITY = 2;
 const RATED = 0;
 const COMMENTED = 1;
 const FILMS_QUANTITY = 20;
+const FILM_COUNT_PER_STEP = 5;
 
 const films = new Array(FILMS_QUANTITY).fill().map(generateFilm);
 const filters = generateFilter(films);
-console.log(filters)
 
 const body = document.querySelector(`body`);
 const header = document.querySelector(`.header`);
 const main = document.querySelector(`.main`);
 const statistics = document.querySelector(`.footer__statistics`);
 
-render(header, createUserTemplate(), `beforeend`);
+render(header, createUserTemplate(films), `beforeend`);
 render(main, createMenuTemplate(filters), `beforeend`);
 render(main, createSortingTemplate(), `beforeend`);
 render(main, createContentTemplate(), `beforeend`);
@@ -38,10 +38,28 @@ render(contentContainer, createFilmsContainerTemplate(), `beforeend`);
 
 const filmsContainer = document.querySelector(`.films-list__container`);
 const filmsList = document.querySelector(`.films-list`);
-for (let i = 0; i < MAX_SHOWN_FILMS_QUANTITY; i++) {
+
+for (let i = 0; i < Math.min(films.length, FILM_COUNT_PER_STEP); i++) {
   render(filmsContainer, createFilmTemplate(films[i]), `beforeend`);
 }
-render(filmsList, createShowMoreButtonTemplate(), `beforeend`);
+
+if (films.length > FILM_COUNT_PER_STEP) {
+  let renderedTaskCount = FILM_COUNT_PER_STEP;
+  render(filmsList, createShowMoreButtonTemplate(), `beforeend`);
+
+  const showMoreButton = filmsList.querySelector(`.films-list__show-more`);
+  showMoreButton.addEventListener(`click`, (evt) => {
+    evt.preventDefault();
+    films.slice(renderedTaskCount, renderedTaskCount + FILM_COUNT_PER_STEP)
+      .forEach((film) => render(filmsContainer, createFilmTemplate(film), `beforeend`));
+
+    renderedTaskCount += FILM_COUNT_PER_STEP;
+
+    if (renderedTaskCount >= films.length) {
+      showMoreButton.remove();
+    }
+  });
+}
 
 render(contentContainer, createExtraFilmsContainerTemplate(`rated`), `beforeend`);
 render(contentContainer, createExtraFilmsContainerTemplate(`commented`), `beforeend`);
