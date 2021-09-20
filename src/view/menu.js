@@ -1,26 +1,22 @@
-import {getRandomNumber} from "../utils/render";
 
-const MAX_FILMS_QUANTITY = 100;
-
-const createFiltersTemplate = () => {
-  const filterNames = [`Watchlist`, `History`, `Favorites`];
-  const filters = [];
-  filterNames.forEach((item) => {
-    filters.push(`
-      <a href="#${item.toLowerCase()}" class="main-navigation__item">
-        ${item}
-        <span class="main-navigation__item-count">${getRandomNumber(1, MAX_FILMS_QUANTITY)}</span>
+const createFiltersTemplate = (filters) => {
+  const filtersTemplate = [];
+  filters.forEach((filter) => {
+    filtersTemplate.push(`
+      <a href="#${filter.name.toLowerCase()}" class="main-navigation__item">
+        ${filter.name}
+        <span class="main-navigation__item-count">${filter.count}</span>
       </a>`);
   });
-  return filters.join(``);
+  return filtersTemplate.join(``);
 };
 
-const createMenuTemplate = () => {
+const createMenuTemplate = (filters) => {
   return `
     <nav class="main-navigation">
       <div class="main-navigation__items">
         <a href="#all" class="main-navigation__item main-navigation__item--active">All movies</a>
-        ${createFiltersTemplate()}
+        ${createFiltersTemplate(filters)}
       </div>
       <a href="#stats" class="main-navigation__additional">Stats</a>
     </nav>`;

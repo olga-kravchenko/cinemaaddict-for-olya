@@ -13,7 +13,7 @@ const createFilmTemplate = ({filmInfo, comments, userDetails}) => {
       <p class="film-card__info">
         <span class="film-card__year">${year}</span>
         <span class="film-card__duration">${time}</span>
-        <span class="film-card__genre">${genre}</span>
+        <span class="film-card__genre">${genre.join(` `)}</span>
       </p>
       <img src="./images/posters/${poster}" alt="" class="film-card__poster">
       <p class="film-card__description">${description}</p>
