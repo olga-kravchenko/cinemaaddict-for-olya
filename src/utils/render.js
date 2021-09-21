@@ -3,11 +3,7 @@ const RenderPosition = {
   BEFOREEND: `beforeend`
 };
 
-const renderTemplate = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
-
-const renderElement = (container, element, place) => {
+const render = (container, element, place) => {
   switch (place) {
     case RenderPosition.AFTERBEGIN:
       container.prepend(element);
@@ -20,8 +16,8 @@ const renderElement = (container, element, place) => {
 
 const createElement = (template) => {
   const newElement = document.createElement(`div`);
-  newElement.innerHTML = template;
+  newElement.innerHTML = template.trim();
 
   return newElement.firstChild;
 };
-export {RenderPosition, renderTemplate, renderElement, createElement};
+export {RenderPosition, render, createElement};

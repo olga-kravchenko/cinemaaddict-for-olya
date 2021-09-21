@@ -1,4 +1,5 @@
 import {UserStatus, EMPTY_STRING} from "../constants";
+import {createElement} from "../utils/render";
 
 const NOVICE_MIN_QUANTITY = 1;
 const FAN_MIN_QUANTITY = 11;
@@ -27,4 +28,29 @@ const createUserTemplate = (films) => {
     </section>`;
 };
 
-export {createUserTemplate};
+class UserView {
+  constructor(films) {
+    this._element = null;
+    this._films = films;
+  }
+
+  getTemplate() {
+    return createUserTemplate(this._films);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
+
+export default UserView;
+
+

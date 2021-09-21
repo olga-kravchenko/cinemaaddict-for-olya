@@ -1,3 +1,5 @@
+import {createElement} from "../utils/render";
+
 const createFiltersTemplate = (filters) => {
   const filtersTemplate = [];
   filters.forEach((filter) => {
@@ -21,4 +23,29 @@ const createMenuTemplate = (filters) => {
     </nav>`;
 };
 
-export {createMenuTemplate};
+class MenuView {
+  constructor(filters) {
+    this._element = null;
+    this._filters = filters;
+  }
+
+  getTemplate() {
+    return createMenuTemplate(this._filters);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
+
+export default MenuView;
+
+

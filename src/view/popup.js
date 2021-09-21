@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 import {formatTime} from "../utils/util";
 import {EMOTIONS, EMPTY_STRING} from "../constants";
+import {createElement} from "../utils/render";
 
 const createGenreTemplate = (genres) => {
   const shownGenres = [];
@@ -179,4 +180,30 @@ const createPopupTemplate = ({filmInfo, comments, userDetails}) => {
   </section>`;
 };
 
-export {createPopupTemplate};
+class PopupView {
+  constructor(films) {
+    this._element = null;
+    this._films = films;
+  }
+
+  getTemplate() {
+    return createPopupTemplate(this._films);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
+
+export default PopupView;
+
+
+

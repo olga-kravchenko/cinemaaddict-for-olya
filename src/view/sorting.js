@@ -1,3 +1,4 @@
+import {createElement} from "../utils/render";
 import {EMPTY_STRING} from "../constants";
 
 const createSortingItemsTemplate = (activeItem) => {
@@ -17,4 +18,26 @@ const createSortingTemplate = () => {
     </ul>`;
 };
 
-export {createSortingTemplate};
+class SortingView {
+  constructor() {
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createSortingTemplate();
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
+
+export default SortingView;

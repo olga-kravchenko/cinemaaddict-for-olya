@@ -1,20 +1,18 @@
-import {createUserTemplate} from "./view/user";
-import {createMenuTemplate} from "./view/menu";
-import {createSortingTemplate} from "./view/sorting";
-import {createContentTemplate} from "./view/content";
-import {createFilmsContainerTemplate} from "./view/films-container";
-import {createExtraFilmsContainerTemplate} from "./view/extra-films-container";
-import {createFilmTemplate} from "./view/film";
-import {createFilmsQuantityTemplate} from "./view/films-quantity";
-import {createShowMoreButtonTemplate} from "./view/show-more-button";
-import {createPopupTemplate} from "./view/popup";
-import {RenderPosition, renderTemplate} from "./utils/render";
+import UserView from "./view/user";
+import MenuView from "./view/menu";
+import SortingView from "./view/sorting";
+import ContentView from "./view/content";
+import FilmsContainerView from "./view/films-container";
+import ExtraFilmsContainerView from "./view/extra-films-container";
+import FilmView from "./view/film";
+import FilmsQuantityView from "./view/films-quantity";
+import ShowMoreButtonView from "./view/show-more-button";
+// import PopupView from "./view/popup";
+import {RenderPosition, render} from "./utils/render";
 import {generateFilm} from "./mock/film";
 import {generateFilter} from "./mock/filter";
 
 const MIN_SHOWN_FILMS_QUANTITY = 2;
-const RATED = 0;
-const COMMENTED = 1;
 const FILMS_QUANTITY = 20;
 const FILM_COUNT_PER_STEP = 5;
 
@@ -25,32 +23,34 @@ const body = document.querySelector(`body`);
 const header = document.querySelector(`.header`);
 const main = document.querySelector(`.main`);
 const statistics = document.querySelector(`.footer__statistics`);
+const contentContainerComponent = new ContentView();
+const filmContainerComponent = new FilmsContainerView();
+const ratedContainerComponent = new ExtraFilmsContainerView(`Top rated`);
+const commentedContainerComponent = new ExtraFilmsContainerView(`Top commented`);
 
-renderTemplate(header, createUserTemplate(films), RenderPosition.BEFOREEND);
-renderTemplate(main, createMenuTemplate(filters), RenderPosition.BEFOREEND);
-renderTemplate(main, createSortingTemplate(), RenderPosition.BEFOREEND);
-renderTemplate(main, createContentTemplate(), RenderPosition.BEFOREEND);
-// renderTemplate(body, createPopupTemplate(films[0]), RenderPosition.BEFOREEND);
+render(header, new UserView(films).getElement(), RenderPosition.BEFOREEND);
+render(main, new MenuView(filters).getElement(), RenderPosition.BEFOREEND);
+render(main, new SortingView().getElement(), RenderPosition.BEFOREEND);
+render(main, contentContainerComponent.getElement(), RenderPosition.BEFOREEND);
+// renderElement(body, new PopupView(films[0]).getElement(), RenderPosition.BEFOREEND);
 
-const contentContainer = document.querySelector(`.films`);
-renderTemplate(contentContainer, createFilmsContainerTemplate(), RenderPosition.BEFOREEND);
+render(contentContainerComponent.getElement(), filmContainerComponent.getElement(), RenderPosition.BEFOREEND);
 
-const filmsContainer = document.querySelector(`.films-list__container`);
-const filmsList = document.querySelector(`.films-list`);
+const filmsContainer = filmContainerComponent.getElement().querySelector(`.films-list__container`);
 
 for (let i = 0; i < Math.min(films.length, FILM_COUNT_PER_STEP); i++) {
-  renderTemplate(filmsContainer, createFilmTemplate(films[i]), RenderPosition.BEFOREEND);
+  render(filmsContainer, new FilmView(films[i]).getElement(), RenderPosition.BEFOREEND);
 }
 
 if (films.length > FILM_COUNT_PER_STEP) {
   let renderedTaskCount = FILM_COUNT_PER_STEP;
-  renderTemplate(filmsList, createShowMoreButtonTemplate(), RenderPosition.BEFOREEND);
+  render(filmContainerComponent.getElement(), new ShowMoreButtonView().getElement(), RenderPosition.BEFOREEND);
 
-  const showMoreButton = filmsList.querySelector(`.films-list__show-more`);
+  const showMoreButton = filmContainerComponent.getElement().querySelector(`.films-list__show-more`);
   showMoreButton.addEventListener(`click`, (evt) => {
     evt.preventDefault();
     films.slice(renderedTaskCount, renderedTaskCount + FILM_COUNT_PER_STEP)
-      .forEach((film) => renderTemplate(filmsContainer, createFilmTemplate(film), RenderPosition.BEFOREEND));
+      .forEach((film) => render(filmsContainer, new FilmView(film).getElement(), RenderPosition.BEFOREEND));
 
     renderedTaskCount += FILM_COUNT_PER_STEP;
 
@@ -60,14 +60,15 @@ if (films.length > FILM_COUNT_PER_STEP) {
   });
 }
 
-renderTemplate(contentContainer, createExtraFilmsContainerTemplate(`Top rated`), RenderPosition.BEFOREEND);
-renderTemplate(contentContainer, createExtraFilmsContainerTemplate(`Top commented`), RenderPosition.BEFOREEND);
-const filmsRatedContainer = document.querySelectorAll(`.films-list--extra`)[RATED].querySelector(`.films-list__container`);
-const filmsCommentedContainer = document.querySelectorAll(`.films-list--extra`)[COMMENTED].querySelector(`.films-list__container`);
+render(contentContainerComponent.getElement(), ratedContainerComponent.getElement(), RenderPosition.BEFOREEND);
+render(contentContainerComponent.getElement(), commentedContainerComponent.getElement(), RenderPosition.BEFOREEND);
+
+const ratedContainer = ratedContainerComponent.getElement().querySelector(`.films-list--extra .films-list__container`);
+const commentedContainer = commentedContainerComponent.getElement().querySelector(`.films-list--extra .films-list__container`);
 
 for (let i = 0; i < MIN_SHOWN_FILMS_QUANTITY; i++) {
-  renderTemplate(filmsRatedContainer, createFilmTemplate(films[i]), RenderPosition.BEFOREEND);
-  renderTemplate(filmsCommentedContainer, createFilmTemplate(films[i]), RenderPosition.BEFOREEND);
+  render(ratedContainer, new FilmView(films[i]).getElement(), RenderPosition.BEFOREEND);
+  render(commentedContainer, new FilmView(films[i]).getElement(), RenderPosition.BEFOREEND);
 }
 
-renderTemplate(statistics, createFilmsQuantityTemplate(films), RenderPosition.BEFOREEND);
+render(statistics, new FilmsQuantityView(films).getElement(), RenderPosition.BEFOREEND);

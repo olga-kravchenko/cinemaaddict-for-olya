@@ -1,6 +1,7 @@
 import {formatTime} from "../utils/util";
 import dayjs from "dayjs";
 import {EMPTY_STRING} from "../constants";
+import {createElement} from "../utils/render";
 
 const MIN_SYMBOL_QUANTITY = 0;
 const MAX_SYMBOL_QUANTITY = 140;
@@ -38,4 +39,29 @@ const createFilmTemplate = ({filmInfo, comments, userDetails}) => {
     </article>`;
 };
 
-export {createFilmTemplate};
+class FilmView {
+  constructor(film) {
+    this._film = film;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
+
+export default FilmView;
+
+
