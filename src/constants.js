@@ -1,8 +1,3 @@
-const RenderPosition = {
-  AFTERBEGIN: `afterbegin`,
-  BEFOREEND: `beforeend`
-};
-
 const UserStatus = {
   NOVICE: `Novice`,
   FAN: `Fan`,
@@ -13,4 +8,4 @@ const EMOTIONS = [`smile`, `sleeping`, `puke`, `angry`];
 const MIN_ARRAY_INDEX = 0;
 const EMPTY_STRING = ``;
 
-export {RenderPosition, UserStatus, EMOTIONS, MIN_ARRAY_INDEX, EMPTY_STRING};
+export {UserStatus, EMOTIONS, MIN_ARRAY_INDEX, EMPTY_STRING};
