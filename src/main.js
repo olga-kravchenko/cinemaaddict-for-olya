@@ -7,7 +7,7 @@ import ExtraFilmsContainerView from "./view/extra-films-container";
 import FilmView from "./view/film";
 import FilmsQuantityView from "./view/films-quantity";
 import ShowMoreButtonView from "./view/show-more-button";
-// import PopupView from "./view/popup";
+import PopupView from "./view/popup";
 import {RenderPosition, render} from "./utils/render";
 import {generateFilm} from "./mock/film";
 import {generateFilter} from "./mock/filter";
@@ -23,10 +23,18 @@ const body = document.querySelector(`body`);
 const header = document.querySelector(`.header`);
 const main = document.querySelector(`.main`);
 const statistics = document.querySelector(`.footer__statistics`);
+
 const contentContainerComponent = new ContentView();
 const filmContainerComponent = new FilmsContainerView();
 const ratedContainerComponent = new ExtraFilmsContainerView(`Top rated`);
 const commentedContainerComponent = new ExtraFilmsContainerView(`Top commented`);
+
+const renderFilm = (filmsContainer, film) => {
+  const filmComponent = new FilmView(film);
+  const filmPopupComponent = new PopupView(film);
+
+  render(filmsContainer, filmComponent.getElement(), RenderPosition.BEFOREEND);
+};
 
 render(header, new UserView(films).getElement(), RenderPosition.BEFOREEND);
 render(main, new MenuView(filters).getElement(), RenderPosition.BEFOREEND);
@@ -39,7 +47,7 @@ render(contentContainerComponent.getElement(), filmContainerComponent.getElement
 const filmsContainer = filmContainerComponent.getElement().querySelector(`.films-list__container`);
 
 for (let i = 0; i < Math.min(films.length, FILM_COUNT_PER_STEP); i++) {
-  render(filmsContainer, new FilmView(films[i]).getElement(), RenderPosition.BEFOREEND);
+  renderFilm(filmsContainer, films[i]);
 }
 
 if (films.length > FILM_COUNT_PER_STEP) {
@@ -67,8 +75,8 @@ const ratedContainer = ratedContainerComponent.getElement().querySelector(`.film
 const commentedContainer = commentedContainerComponent.getElement().querySelector(`.films-list--extra .films-list__container`);
 
 for (let i = 0; i < MIN_SHOWN_FILMS_QUANTITY; i++) {
-  render(ratedContainer, new FilmView(films[i]).getElement(), RenderPosition.BEFOREEND);
-  render(commentedContainer, new FilmView(films[i]).getElement(), RenderPosition.BEFOREEND);
+  renderFilm(ratedContainer, films[i]);
+  renderFilm(commentedContainer, films[i]);
 }
 
 render(statistics, new FilmsQuantityView(films).getElement(), RenderPosition.BEFOREEND);
