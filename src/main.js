@@ -32,15 +32,48 @@ const commentedContainerComponent = new ExtraFilmsContainerView(`Top commented`)
 const renderFilm = (filmsContainer, film) => {
   const filmComponent = new FilmView(film);
   const filmPopupComponent = new PopupView(film);
-
   render(filmsContainer, filmComponent.getElement(), RenderPosition.BEFOREEND);
+
+  const replaceCardToPopup = () => {
+    if (!document.querySelector(`.film-details`)) {
+      body.classList.add(`hide-overflow`);
+      body.appendChild(filmPopupComponent.getElement());
+    }
+  };
+
+  const replacePopupToCard = () => {
+    body.classList.remove(`hide-overflow`);
+    body.removeChild(filmPopupComponent.getElement());
+  };
+
+  const onEscKeyDown = (evt) => {
+    if (evt.key === `Escape` || evt.key === `Esc`) {
+      evt.preventDefault();
+      replacePopupToCard();
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    }
+  };
+
+  const onPopupClick = () => {
+    replaceCardToPopup();
+    document.addEventListener(`keydown`, onEscKeyDown);
+  };
+
+  const onCloseButtonClick = () => {
+    replacePopupToCard();
+    document.removeEventListener(`keydown`, onEscKeyDown);
+  };
+
+  filmComponent.getElement().querySelector(`.film-card__poster`).addEventListener(`click`, onPopupClick);
+  filmComponent.getElement().querySelector(`.film-card__title`).addEventListener(`click`, onPopupClick);
+  filmComponent.getElement().querySelector(`.film-card__comments`).addEventListener(`click`, onPopupClick);
+  filmPopupComponent.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, onCloseButtonClick);
 };
 
 render(header, new UserView(films).getElement(), RenderPosition.BEFOREEND);
 render(main, new MenuView(filters).getElement(), RenderPosition.BEFOREEND);
 render(main, new SortingView().getElement(), RenderPosition.BEFOREEND);
 render(main, contentContainerComponent.getElement(), RenderPosition.BEFOREEND);
-// renderElement(body, new PopupView(films[0]).getElement(), RenderPosition.BEFOREEND);
 
 render(contentContainerComponent.getElement(), filmContainerComponent.getElement(), RenderPosition.BEFOREEND);
 
