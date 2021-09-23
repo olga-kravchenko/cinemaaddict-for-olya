@@ -7,7 +7,7 @@ const createFilmsTemplate = () => {
   </section>`;
 };
 
-class FilmsView extends AbstractView{
+class FilmsView extends AbstractView {
   getTemplate() {
     return createFilmsTemplate();
   }

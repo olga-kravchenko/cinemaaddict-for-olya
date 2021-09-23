@@ -1,15 +1,24 @@
+import AbstractView from "../view/abstract";
 const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`
 };
 
-const render = (container, element, place) => {
+const render = (container, child, place) => {
+  if (container instanceof AbstractView) {
+    container = container.getElement();
+  }
+
+  if (child instanceof AbstractView) {
+    child = child.getElement();
+  }
+
   switch (place) {
     case RenderPosition.AFTERBEGIN:
-      container.prepend(element);
+      container.prepend(child);
       break;
     case RenderPosition.BEFOREEND:
-      container.append(element);
+      container.append(child);
       break;
   }
 };
@@ -20,4 +29,13 @@ const createElement = (template) => {
 
   return newElement.firstChild;
 };
-export {RenderPosition, render, createElement};
+
+const remove = (component) => {
+  if (!(component instanceof AbstractView)) {
+    throw new Error(`Can remove only components`);
+  }
+
+  component.getElement().remove();
+  component.removeElement();
+};
+export {RenderPosition, render, createElement, remove};
