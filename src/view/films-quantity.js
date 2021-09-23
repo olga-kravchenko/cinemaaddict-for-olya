@@ -1,28 +1,16 @@
-import {createElement} from "../utils/render";
+import AbstractView from "./abstract";
 
 const createFilmsQuantityTemplate = (films) => `<p>${films.length} movies inside</p>`;
 
 
-class FilmsQuantityView {
+class FilmsQuantityView extends AbstractView {
   constructor(film) {
+    super();
     this._film = film;
-    this._element = null;
   }
 
   getTemplate() {
     return createFilmsQuantityTemplate(this._film);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 

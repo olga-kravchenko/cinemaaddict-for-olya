@@ -1,4 +1,4 @@
-import {createElement} from "../utils/render";
+import AbstractView from "./abstract";
 
 const createExtraFilmsContainerTemplate = (title) => {
   return `
@@ -8,28 +8,15 @@ const createExtraFilmsContainerTemplate = (title) => {
     </section>`;
 };
 
-class ExtraFilmsContainerView {
+class ExtraFilmsContainerView extends AbstractView {
   constructor(title) {
+    super();
     this._title = title;
-    this._element = null;
   }
 
   getTemplate() {
     return createExtraFilmsContainerTemplate(this._title);
   }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
 }
 
 export default ExtraFilmsContainerView;
-

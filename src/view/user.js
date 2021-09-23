@@ -1,5 +1,5 @@
 import {UserStatus, EMPTY_STRING} from "../constants";
-import {createElement} from "../utils/render";
+import AbstractView from "./abstract";
 
 const NOVICE_MIN_QUANTITY = 1;
 const FAN_MIN_QUANTITY = 11;
@@ -28,26 +28,14 @@ const createUserTemplate = (films) => {
     </section>`;
 };
 
-class UserView {
+class UserView extends AbstractView {
   constructor(films) {
-    this._element = null;
+    super();
     this._films = films;
   }
 
   getTemplate() {
     return createUserTemplate(this._films);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 
