@@ -1,3 +1,16 @@
-const createFilmsQuantityTemplate = (films) => `<p>${films.length} movies inside</p>`;
+import Abstract from "./abstract";
 
-export {createFilmsQuantityTemplate};
+const createFilmsQuantityTemplate = (filmQuantity) => `<p>${filmQuantity} movies inside</p>`;
+
+class FilmsQuantity extends Abstract {
+  constructor(filmQuantity) {
+    super();
+    this._filmQuantity = filmQuantity;
+  }
+
+  getTemplate() {
+    return createFilmsQuantityTemplate(this._filmQuantity);
+  }
+}
+
+export default FilmsQuantity;

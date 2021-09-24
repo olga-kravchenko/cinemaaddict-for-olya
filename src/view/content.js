@@ -1,3 +1,11 @@
+import Abstract from "./abstract";
+
 const createContentTemplate = () => `<section class="films"></section>`;
 
-export {createContentTemplate};
+class Content extends Abstract {
+  getTemplate() {
+    return createContentTemplate();
+  }
+}
+
+export default Content;

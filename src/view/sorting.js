@@ -1,11 +1,8 @@
-import {EMPTY_STRING} from "../constants";
+import Abstract from "./abstract";
 
 const createSortingItemsTemplate = (activeItem) => {
-  const sortingNames = [`default`, `date`, `rating`];
-  const items = [];
-  sortingNames.forEach((item) => {
-    items.push(`<li><a href="#" class="sort__button ${item === activeItem ? `sort__button--active` : EMPTY_STRING}">Sort by ${item}</a></li>`);
-  });
+  const SORTING_NAMES = [`default`, `date`, `rating`];
+  const items = SORTING_NAMES.map((item) => `<li><a href="#" class="sort__button ${item === activeItem ? `sort__button--active` : ``}">Sort by ${item}</a></li>`);
   return items.join(``);
 };
 
@@ -17,4 +14,10 @@ const createSortingTemplate = () => {
     </ul>`;
 };
 
-export {createSortingTemplate};
+class Sorting extends Abstract {
+  getTemplate() {
+    return createSortingTemplate();
+  }
+}
+
+export default Sorting;
