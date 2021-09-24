@@ -1,12 +1,11 @@
-import AbstractView from "./abstract";
+import Abstract from "./abstract";
 
 const createContentTemplate = () => `<section class="films"></section>`;
 
-class ContentView extends AbstractView {
+class Content extends Abstract {
   getTemplate() {
     return createContentTemplate();
   }
 }
 
-export default ContentView;
-
+export default Content;

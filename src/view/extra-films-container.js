@@ -1,14 +1,12 @@
-import AbstractView from "./abstract";
+import Abstract from "./abstract";
 
-const createExtraFilmsContainerTemplate = (title) => {
-  return `
+const createExtraFilmsContainerTemplate = (title) => `
     <section class="films-list films-list--extra">
       <h2 class="films-list__title">${title}</h2>
       <div class="films-list__container"></div>
     </section>`;
-};
 
-class ExtraFilmsContainerView extends AbstractView {
+class ExtraFilmsContainer extends Abstract {
   constructor(title) {
     super();
     this._title = title;
@@ -19,4 +17,4 @@ class ExtraFilmsContainerView extends AbstractView {
   }
 }
 
-export default ExtraFilmsContainerView;
+export default ExtraFilmsContainer;

@@ -4,7 +4,7 @@ const FilmToFilter = {
   Favorites: (films) => films.filter((film) => !film.userDetails.favorite).length,
 };
 
-const generateFilter = (films) => {
+const generateFilters = (films) => {
   return Object.entries(FilmToFilter).map(([name, countFilms]) => {
     return {
       name,
@@ -13,4 +13,4 @@ const generateFilter = (films) => {
   });
 };
 
-export {generateFilter};
+export {generateFilters};

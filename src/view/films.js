@@ -1,18 +1,14 @@
-import AbstractView from "./abstract";
+import Abstract from "./abstract";
 
-const createFilmsTemplate = () => {
-  return `
+const createFilmsTemplate = () => `
   <section class="films-list">
     <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
   </section>`;
-};
 
-class FilmsView extends AbstractView {
+class Films extends Abstract {
   getTemplate() {
     return createFilmsTemplate();
   }
 }
 
-export default FilmsView;
-
-
+export default Films;

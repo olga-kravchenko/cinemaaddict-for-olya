@@ -1,36 +1,27 @@
 import dayjs from "dayjs";
 import {formatTime} from "../utils/util";
-import {EMOTIONS, EMPTY_STRING} from "../constants";
-import AbstractView from "./abstract";
-
-const createGenreTemplate = (genres) => {
-  const shownGenres = [];
-  genres.forEach((genre) => {
-    const template = `<span class="film-details__genre">${genre}</span>`;
-    shownGenres.push(template);
-  });
-  return shownGenres;
-};
+import {EMOTIONS} from "../constants";
+import Abstract from "./abstract";
 
 const createFilmControlsTemplate = ({watchlist, alreadyWatched, favorite}) => {
+  const isCheckedWatchlist = watchlist ? `checked` : ``;
+  const isCheckedAlreadyWatched = alreadyWatched ? `checked` : ``;
+  const isCheckedFavorites = favorite ? `checked` : ``;
+
   return `
    <section class="film-details__controls">
-     <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${watchlist ? `checked` : EMPTY_STRING}>
+     <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${isCheckedWatchlist}>
      <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-     <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${alreadyWatched ? `checked` : EMPTY_STRING}>
+     <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isCheckedAlreadyWatched}>
      <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-     <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${favorite ? `checked` : EMPTY_STRING}>
+     <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${isCheckedFavorites}>
      <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
     </section>`;
 };
 
-const createCommentsTemplate = (comments) => {
-  const shownComments = [];
-  comments.forEach(({author, comment, date, emotion}) => {
-    const time = dayjs(date).format(`YYYY/MM/DD H:mm`);
-    const template = `
+const createCommentsTemplate = (comments) => comments.map(({author, comment, date, emotion}) => `
     <li class="film-details__comment">
       <span class="film-details__comment-emoji">
         <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
@@ -39,42 +30,29 @@ const createCommentsTemplate = (comments) => {
         <p class="film-details__comment-text">${comment}</p>
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${author}</span>
-          <span class="film-details__comment-day">${time}</span>
+          <span class="film-details__comment-day">${dayjs(date).format(`YYYY/MM/DD H:mm`)}</span>
           <button class="film-details__comment-delete">Delete</button>
         </p>
       </div>
-    </li>`;
-    shownComments.push(template);
-  });
-  return shownComments.join(``);
-};
+    </li>`).join(``);
 
-const createCommentListTemplate = (comments) => {
-  return `${comments.length !== 0 ? `
+const createCommentListTemplate = (comments) => `
+    ${comments.length !== 0 ? `
     <ul class="film-details__comments-list">
       ${createCommentsTemplate(comments)}
-    </ul>` : EMPTY_STRING}`;
-};
+    </ul>` :
+    ``}`;
 
-const createEmojisTemplate = () => {
-  const shownEmojis = [];
-  EMOTIONS.forEach((emotion) => {
-    const template = `
+const createEmojisTemplate = () => EMOTIONS.map((emotion) => `
     <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emotion}" value="${emotion}">
     <label class="film-details__emoji-label" for="emoji-${emotion}">
       <img src="./images/emoji/${emotion}.png" width="30" height="30" alt="emoji">
-    </label>`;
-    shownEmojis.push(template);
-  });
-  return shownEmojis.join(``);
-};
+    </label>`).join(``);
 
-const createEmojiListTemplate = () => {
-  return `
+const createEmojiListTemplate = () => `
     <div class="film-details__emoji-list">
       ${createEmojisTemplate()}
     </div>`;
-};
 
 const createPopupTemplate = ({filmInfo, comments, userDetails}) => {
   const {
@@ -89,13 +67,13 @@ const createPopupTemplate = ({filmInfo, comments, userDetails}) => {
     actors,
     date,
     country,
-    genre,
+    genres,
     ageRating,
   } = filmInfo;
 
-  const time = formatTime(duration);
+  const formattedDuration = formatTime(duration);
   const releaseDate = dayjs(date).format(` DD MMMM YYYY`);
-  const shownGeneres = createGenreTemplate(genre);
+  const shownGeneres = genres.map((e) => `<span class="film-details__genre">${e}</span>`);
   const genreTitle = shownGeneres.length === 1 ? `Genre` : `Genres`;
 
   return `
@@ -141,7 +119,7 @@ const createPopupTemplate = ({filmInfo, comments, userDetails}) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Runtime</td>
-                  <td class="film-details__cell">${time}</td>
+                  <td class="film-details__cell">${formattedDuration}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Country</td>
@@ -157,7 +135,6 @@ const createPopupTemplate = ({filmInfo, comments, userDetails}) => {
               <p class="film-details__film-description">${description}</p>
             </div>
           </div>
-
               ${createFilmControlsTemplate(userDetails)}
         </div>
 
@@ -180,16 +157,15 @@ const createPopupTemplate = ({filmInfo, comments, userDetails}) => {
   </section>`;
 };
 
-class PopupView extends AbstractView {
-  constructor(films) {
+class Popup extends Abstract {
+  constructor(film) {
     super();
-    this._films = films;
-
+    this._film = film;
     this._popupCloseHandler = this._popupCloseHandler.bind(this);
   }
 
   getTemplate() {
-    return createPopupTemplate(this._films);
+    return createPopupTemplate(this._film);
   }
 
   _popupCloseHandler(evt) {
@@ -199,8 +175,10 @@ class PopupView extends AbstractView {
 
   setPopupCloseHandler(callback) {
     this._callback.popupClose = callback;
-    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._popupCloseHandler);
+    const closeButton = this.getElement().querySelector(`.film-details__close-btn`);
+
+    closeButton.addEventListener(`click`, this._popupCloseHandler);
   }
 }
 
-export default PopupView;
+export default Popup;
