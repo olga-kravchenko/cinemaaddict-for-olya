@@ -5,8 +5,7 @@ import ShowMoreButtonView from "../view/show-more-button";
 import ExtraFilmsContainerView from "../view/extra-films-container";
 import {remove, render, RenderPosition} from "../utils/render";
 import NoFilmsView from "../view/no-films";
-import FilmView from "../view/film";
-import PopupView from "../view/popup";
+import FilmPresenter from "./film";
 
 const FILM_QUANTITY_PER_STEP = 5;
 
@@ -58,43 +57,8 @@ class FilmsBoard {
   }
 
   _renderFilm(film, container) {
-    const body = document.querySelector(`body`);
-    const filmComponent = new FilmView(film);
-    const filmPopupComponent = new PopupView(film);
-    render(container, filmComponent, RenderPosition.BEFORE_END);
-
-    const showPopup = () => {
-      if (!document.querySelector(`.film-details`)) {
-        body.classList.add(`hide-overflow`);
-        body.appendChild(filmPopupComponent.getElement());
-      }
-    };
-
-    const closePopup = () => {
-      body.classList.remove(`hide-overflow`);
-      body.removeChild(filmPopupComponent.getElement());
-    };
-
-    const onEscKeyDown = (evt) => {
-      if (evt.key === `Escape` || evt.key === `Esc`) {
-        evt.preventDefault();
-        closePopup();
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      }
-    };
-
-    const onPopupClick = () => {
-      showPopup();
-      document.addEventListener(`keydown`, onEscKeyDown);
-    };
-
-    const onCloseButtonClick = () => {
-      closePopup();
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    };
-
-    filmComponent.setCardClickHandler(onPopupClick);
-    filmPopupComponent.setPopupCloseHandler(onCloseButtonClick);
+    const filmPresenter = new FilmPresenter(container);
+    filmPresenter.init(film);
   }
 
   _handleShowMoreButtonClick() {
