@@ -13,6 +13,7 @@ const FILM_QUANTITY_PER_STEP = 5;
 class FilmsBoard {
   constructor(container) {
     this._container = container;
+    this._renderedFilmsQuantity = FILM_QUANTITY_PER_STEP;
 
     this._contentContainerComponent = new ContentView();
     this._filmsListComponent = new FilmsView();
@@ -21,6 +22,8 @@ class FilmsBoard {
     this._showMoreButtonComponent = new ShowMoreButtonView();
     this._ratedContainerComponent = new ExtraFilmsContainerView(`Top rated`);
     this._commentedContainerComponent = new ExtraFilmsContainerView(`Top commented`);
+
+    this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
   }
 
   init(films) {
@@ -94,18 +97,18 @@ class FilmsBoard {
     filmPopupComponent.setPopupCloseHandler(onCloseButtonClick);
   }
 
-  _renderShowMoreButton() {
-    let renderedTaskCount = FILM_QUANTITY_PER_STEP;
-    render(this._filmsListComponent, this._showMoreButtonComponent, RenderPosition.BEFORE_END);
+  _handleShowMoreButtonClick() {
+    this._renderFilms(this._renderedFilmsQuantity, this._renderedFilmsQuantity + FILM_QUANTITY_PER_STEP, this._films, this._filmContainerComponent);
+    this._renderedFilmsQuantity += FILM_QUANTITY_PER_STEP;
 
-    this._showMoreButtonComponent.setClickHandler(() => {
-      this._films.slice(renderedTaskCount, renderedTaskCount + FILM_QUANTITY_PER_STEP)
-        .forEach((film) => this._renderFilm(film, this._filmContainerComponent));
-      renderedTaskCount += FILM_QUANTITY_PER_STEP;
-      if (renderedTaskCount >= this._films.length) {
-        remove(this._showMoreButtonComponent);
-      }
-    });
+    if (this._renderedFilmsQuantity >= this._films.length) {
+      remove(this._showMoreButtonComponent);
+    }
+  }
+
+  _renderShowMoreButton() {
+    render(this._filmsListComponent, this._showMoreButtonComponent, RenderPosition.BEFORE_END);
+    this._showMoreButtonComponent.setClickHandler(this._handleShowMoreButtonClick);
   }
 
   _renderFilmList() {
