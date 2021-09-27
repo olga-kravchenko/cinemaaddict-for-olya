@@ -1,6 +1,6 @@
 import FilmView from "../view/film";
 import PopupView from "../view/popup";
-import {render, RenderPosition, remove} from "../utils/render";
+import {render, RenderPosition, remove, replace} from "../utils/render";
 
 class Film {
   constructor(container) {
@@ -34,11 +34,11 @@ class Film {
     }
 
     if (this._container.getElement().contains(prevFilmComponent.getElement())) {
-      this._showPopup();
+      replace(this._filmComponent, prevFilmComponent);
     }
 
     if (this._container.getElement().contains(prevPopupComponent.getElement())) {
-      this._closePopup();
+      replace(this._filmPopupComponent, prevPopupComponent);
     }
 
     remove(prevFilmComponent);
