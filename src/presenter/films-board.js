@@ -4,6 +4,7 @@ import FilmsContainerView from "../view/films-container";
 import ShowMoreButtonView from "../view/show-more-button";
 import ExtraFilmsContainerView from "../view/extra-films-container";
 import {remove, render, RenderPosition} from "../utils/render";
+import {updateItem} from "../utils/util";
 import NoFilmsView from "../view/no-films";
 import FilmPresenter from "./film";
 
@@ -13,6 +14,7 @@ class FilmsBoard {
   constructor(container) {
     this._container = container;
     this._renderedFilmsQuantity = FILM_QUANTITY_PER_STEP;
+    this._filmPresenters = {};
 
     this._contentContainerComponent = new ContentView();
     this._filmsListComponent = new FilmsView();
@@ -22,6 +24,7 @@ class FilmsBoard {
     this._ratedContainerComponent = new ExtraFilmsContainerView(`Top rated`);
     this._commentedContainerComponent = new ExtraFilmsContainerView(`Top commented`);
 
+    this._handleFilmChange = this._handleFilmChange.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
   }
 
@@ -33,6 +36,11 @@ class FilmsBoard {
     render(this._container, this._contentContainerComponent, RenderPosition.BEFORE_END);
     render(this._contentContainerComponent, this._filmsListComponent, RenderPosition.BEFORE_END);
     this._renderFilmsBoard();
+  }
+
+  _handleFilmChange(updatedFilm) {
+    this._films = updateItem(this._films, updatedFilm);
+    this._filmPresenters[updatedFilm.id].init(updatedFilm);
   }
 
   _renderNoFilms() {
@@ -59,6 +67,7 @@ class FilmsBoard {
   _renderFilm(film, container) {
     const filmPresenter = new FilmPresenter(container);
     filmPresenter.init(film);
+    this._filmPresenters[film.id] = filmPresenter;
   }
 
   _handleShowMoreButtonClick() {
@@ -73,6 +82,13 @@ class FilmsBoard {
   _renderShowMoreButton() {
     render(this._filmsListComponent, this._showMoreButtonComponent, RenderPosition.BEFORE_END);
     this._showMoreButtonComponent.setClickHandler(this._handleShowMoreButtonClick);
+  }
+
+  _clearFilmList() {
+    Object.values(this._filmPresenters).forEach((presenter) => presenter.destroy());
+    this._filmPresenters = {};
+    this._renderedFilmsQuantity = FILM_QUANTITY_PER_STEP;
+    remove(this._showMoreButtonComponent);
   }
 
   _renderFilmList() {

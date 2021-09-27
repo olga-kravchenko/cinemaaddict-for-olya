@@ -8,4 +8,15 @@ const formatTime = (minutes) => {
     `${Math.floor((minutes / MINUTE_QUANTITY_IN_HOUR))}h ${minutes % MINUTE_QUANTITY_IN_HOUR}m`;
 };
 
-export {getRandomNumber, formatTime};
+const updateItem = (items, update) => {
+  const index = items.findIndex((item) => item.id === update.id);
+
+  if (index === -1) {
+    return items;
+  }
+
+  return [...items.slice(0, index), update, ...items.slice(index + 1)
+  ];
+};
+
+export {getRandomNumber, formatTime, updateItem};
