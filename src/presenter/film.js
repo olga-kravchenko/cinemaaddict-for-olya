@@ -32,7 +32,11 @@ class Film {
     this._filmComponent.setWatchlistClickHandler(this._handleWatchlistClick);
     this._filmComponent.setAlreadyWatchedClickHandler(this._handleAlreadyWatchedClick);
     this._filmComponent.setFavoriteClickHandler(this._handleFavoriteClick);
+
     this._filmPopupComponent.setPopupCloseHandler(this._onCloseButtonClick);
+    this._filmPopupComponent.setPopupWatchlistClickHandler(this._handleWatchlistClick);
+    this._filmPopupComponent.setPopupAlreadyWatchedClickHandler(this._handleAlreadyWatchedClick);
+    this._filmPopupComponent.setPopupFavoriteClickHandler(this._handleFavoriteClick);
 
 
     if (prevFilmComponent === null || prevPopupComponent === null) {
@@ -41,11 +45,12 @@ class Film {
     }
 
     if (this._container.getElement().contains(prevFilmComponent.getElement())) {
+      if (this._body.contains(prevPopupComponent.getElement())) {
+        replace(this._filmPopupComponent, prevPopupComponent);
+        replace(this._filmComponent, prevFilmComponent);
+        return;
+      }
       replace(this._filmComponent, prevFilmComponent);
-    }
-
-    if (this._container.getElement().contains(prevPopupComponent.getElement())) {
-      replace(this._filmPopupComponent, prevPopupComponent);
     }
 
     remove(prevFilmComponent);

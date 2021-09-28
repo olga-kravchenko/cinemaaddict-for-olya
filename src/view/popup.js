@@ -162,6 +162,9 @@ class Popup extends Abstract {
     super();
     this._film = film;
     this._popupCloseHandler = this._popupCloseHandler.bind(this);
+    this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
+    this._alreadyWatchedClickHandler = this._alreadyWatchedClickHandler.bind(this);
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -173,11 +176,43 @@ class Popup extends Abstract {
     this._callback.popupClose();
   }
 
+  _watchlistClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.watchlistClick();
+  }
+
+  _alreadyWatchedClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.alreadyWatchedClick();
+  }
+
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.favoriteClick();
+  }
+
   setPopupCloseHandler(callback) {
     this._callback.popupClose = callback;
     const closeButton = this.getElement().querySelector(`.film-details__close-btn`);
-
     closeButton.addEventListener(`click`, this._popupCloseHandler);
+  }
+
+  setPopupWatchlistClickHandler(callback) {
+    this._callback.watchlistClick = callback;
+    const button = this.getElement().querySelector(`#watchlist`);
+    button.addEventListener(`change`, this._watchlistClickHandler);
+  }
+
+  setPopupAlreadyWatchedClickHandler(callback) {
+    this._callback.alreadyWatchedClick = callback;
+    const button = this.getElement().querySelector(`#watched`);
+    button.addEventListener(`change`, this._alreadyWatchedClickHandler);
+  }
+
+  setPopupFavoriteClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+    const button = this.getElement().querySelector(`#favorite`);
+    button.addEventListener(`change`, this._favoriteClickHandler);
   }
 }
 
