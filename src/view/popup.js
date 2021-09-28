@@ -161,7 +161,8 @@ class Popup extends Abstract {
   constructor(film) {
     super();
     this._film = film;
-    this._popupCloseHandler = this._popupCloseHandler.bind(this);
+
+    this._popupCloseClickHandler = this._popupCloseClickHandler.bind(this);
     this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
     this._alreadyWatchedClickHandler = this._alreadyWatchedClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
@@ -171,7 +172,7 @@ class Popup extends Abstract {
     return createPopupTemplate(this._film);
   }
 
-  _popupCloseHandler(evt) {
+  _popupCloseClickHandler(evt) {
     evt.preventDefault();
     this._callback.popupClose();
   }
@@ -194,7 +195,7 @@ class Popup extends Abstract {
   setPopupCloseHandler(callback) {
     this._callback.popupClose = callback;
     const closeButton = this.getElement().querySelector(`.film-details__close-btn`);
-    closeButton.addEventListener(`click`, this._popupCloseHandler);
+    closeButton.addEventListener(`click`, this._popupCloseClickHandler);
   }
 
   setPopupWatchlistClickHandler(callback) {

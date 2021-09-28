@@ -11,12 +11,12 @@ class Film {
     this._filmComponent = null;
     this._filmPopupComponent = null;
 
-    this._onFilmCardClick = this._onFilmCardClick.bind(this);
+    this._handleFilmCardClick = this._handleFilmCardClick.bind(this);
     this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
     this._handleAlreadyWatchedClick = this._handleAlreadyWatchedClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
-    this._onCloseButtonClick = this._onCloseButtonClick.bind(this);
-    this._onEscKeyDown = this._onEscKeyDown.bind(this);
+    this._handleCloseButtonClick = this._handleCloseButtonClick.bind(this);
+    this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
   }
 
   init(film) {
@@ -28,12 +28,12 @@ class Film {
     this._filmComponent = new FilmView(film);
     this._filmPopupComponent = new PopupView(film);
 
-    this._filmComponent.setCardClickHandler(this._onFilmCardClick);
+    this._filmComponent.setCardClickHandler(this._handleFilmCardClick);
     this._filmComponent.setWatchlistClickHandler(this._handleWatchlistClick);
     this._filmComponent.setAlreadyWatchedClickHandler(this._handleAlreadyWatchedClick);
     this._filmComponent.setFavoriteClickHandler(this._handleFavoriteClick);
 
-    this._filmPopupComponent.setPopupCloseHandler(this._onCloseButtonClick);
+    this._filmPopupComponent.setPopupCloseHandler(this._handleCloseButtonClick);
     this._filmPopupComponent.setPopupWatchlistClickHandler(this._handleWatchlistClick);
     this._filmPopupComponent.setPopupAlreadyWatchedClickHandler(this._handleAlreadyWatchedClick);
     this._filmPopupComponent.setPopupFavoriteClickHandler(this._handleFavoriteClick);
@@ -75,17 +75,17 @@ class Film {
     this._body.removeChild(this._filmPopupComponent.getElement());
   }
 
-  _onEscKeyDown(evt) {
+  _handleEscKeyDown(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
       this._closePopup();
-      document.removeEventListener(`keydown`, this._onEscKeyDown);
+      document.removeEventListener(`keydown`, this._handleEscKeyDown);
     }
   }
 
-  _onFilmCardClick() {
+  _handleFilmCardClick() {
     this._showPopup();
-    document.addEventListener(`keydown`, this._onEscKeyDown);
+    document.addEventListener(`keydown`, this._handleEscKeyDown);
   }
 
   _handleWatchlistClick() {
@@ -106,9 +106,9 @@ class Film {
     this._changeData(newFilm);
   }
 
-  _onCloseButtonClick() {
+  _handleCloseButtonClick() {
     this._closePopup();
-    document.removeEventListener(`keydown`, this._onEscKeyDown);
+    document.removeEventListener(`keydown`, this._handleEscKeyDown);
   }
 }
 

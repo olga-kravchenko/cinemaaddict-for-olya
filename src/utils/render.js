@@ -12,7 +12,6 @@ const render = (container, child, place) => {
   if (child instanceof Abstract) {
     child = child.getElement();
   }
-
   switch (place) {
     case RenderPosition.AFTER_BEGIN:
       container.prepend(child);
@@ -37,22 +36,18 @@ const remove = (component) => {
   component.removeElement();
 };
 
-const replace = (newChild, oldChild) => {
-  if (oldChild instanceof Abstract) {
-    oldChild = oldChild.getElement();
+const replace = (newElement, oldElement) => {
+  if (oldElement instanceof Abstract) {
+    oldElement = oldElement.getElement();
   }
-
-  if (newChild instanceof Abstract) {
-    newChild = newChild.getElement();
+  if (newElement instanceof Abstract) {
+    newElement = newElement.getElement();
   }
-
-  const parent = oldChild.parentElement;
-
-  if (parent === null || newChild === null) {
+  const parentElement = oldElement.parentElement;
+  if (parentElement === null || newElement === null) {
     throw new Error(`Can't replace unexisting elements`);
   }
-
-  parent.replaceChild(newChild, oldChild);
+  parentElement.replaceChild(newElement, oldElement);
 };
 
 export {RenderPosition, render, createElement, remove, replace};

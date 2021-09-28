@@ -10,23 +10,21 @@ const formatTime = (minutes) => {
     `${Math.floor((minutes / MINUTE_QUANTITY_IN_HOUR))}h ${minutes % MINUTE_QUANTITY_IN_HOUR}m`;
 };
 
-const updateItem = (items, update) => {
-  const index = items.findIndex((item) => item.id === update.id);
-
+const updateElements = (element, updatedElement) => {
+  const index = element.findIndex((item) => item.id === updatedElement.id);
   if (index === -1) {
-    return items;
+    return element;
   }
-
-  return [...items.slice(0, index), update, ...items.slice(index + 1)];
+  return [...element.slice(0, index), updatedElement, ...element.slice(index + 1)];
 };
 
-const sortFilmDate = (filmA, filmB) => {
+const sortFilmsByDate = (filmA, filmB) => {
   return dayjs(filmA.filmInfo.date).diff(dayjs(filmB.filmInfo.date));
 };
 
-const sortFilmRating = (filmA, filmB) => {
+const sortFilmsByRating = (filmA, filmB) => {
   return (filmA.filmInfo.rating - filmB.filmInfo.rating);
 };
 
 
-export {getRandomNumber, formatTime, updateItem, sortFilmDate, sortFilmRating};
+export {getRandomNumber, formatTime, updateElements, sortFilmsByDate, sortFilmsByRating};
