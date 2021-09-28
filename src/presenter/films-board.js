@@ -25,8 +25,8 @@ class FilmsBoard {
     this._noFilms = new NoFilmsView();
     this._filmContainerComponent = new FilmsContainerView();
     this._showMoreButtonComponent = new ShowMoreButtonView();
-    this._ratedContainerComponent = new ExtraFilmsContainerView(`Top rated`);
-    this._commentedContainerComponent = new ExtraFilmsContainerView(`Top commented`);
+    // this._ratedContainerComponent = new ExtraFilmsContainerView(`Top rated`);
+    // this._commentedContainerComponent = new ExtraFilmsContainerView(`Top commented`);
 
     this._handleFilmChange = this._handleFilmChange.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
@@ -86,17 +86,17 @@ class FilmsBoard {
     render(this._filmsListComponent, this._filmContainerComponent, RenderPosition.BEFORE_END);
   }
 
-  _renderExtraContainers() {
-    const filmRatedContainerComponent = new FilmsContainerView();
-    const filmCommentedContainerComponent = new FilmsContainerView();
-    render(this._contentContainerComponent, this._ratedContainerComponent, RenderPosition.BEFORE_END);
-    render(this._contentContainerComponent, this._commentedContainerComponent, RenderPosition.BEFORE_END);
-
-    render(this._ratedContainerComponent, filmRatedContainerComponent, RenderPosition.BEFORE_END);
-    render(this._commentedContainerComponent, filmCommentedContainerComponent, RenderPosition.BEFORE_END);
-    // this._renderFilms(0, 2, this._ratedFilms, filmRatedContainerComponent);
-    // this._renderFilms(0, 2, this._commentedFilms, filmCommentedContainerComponent);
-  }
+  // _renderExtraContainers() {
+  //   const filmRatedContainerComponent = new FilmsContainerView();
+  //   const filmCommentedContainerComponent = new FilmsContainerView();
+  //   render(this._contentContainerComponent, this._ratedContainerComponent, RenderPosition.BEFORE_END);
+  //   render(this._contentContainerComponent, this._commentedContainerComponent, RenderPosition.BEFORE_END);
+  //
+  //   render(this._ratedContainerComponent, filmRatedContainerComponent, RenderPosition.BEFORE_END);
+  //   render(this._commentedContainerComponent, filmCommentedContainerComponent, RenderPosition.BEFORE_END);
+  //   // this._renderFilms(0, 2, this._ratedFilms, filmRatedContainerComponent);
+  //   // this._renderFilms(0, 2, this._commentedFilms, filmCommentedContainerComponent);
+  // }
 
   _renderFilms(from, to, films, container) {
     films.slice(from, to).forEach((film) => this._renderFilm(film, container));
@@ -149,8 +149,7 @@ class FilmsBoard {
     }
     this._renderFilmContainer();
     this._renderFilmList();
-    this._renderExtraContainers();
-
+    // this._renderExtraContainers();
   }
 }
 
