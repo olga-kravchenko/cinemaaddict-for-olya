@@ -7,6 +7,7 @@ import {remove, render, RenderPosition} from "../utils/render";
 import {updateItem} from "../utils/util";
 import NoFilmsView from "../view/no-films";
 import FilmPresenter from "./film";
+import SortingView from "../view/sorting";
 
 const FILM_QUANTITY_PER_STEP = 5;
 
@@ -16,6 +17,7 @@ class FilmsBoard {
     this._renderedFilmsQuantity = FILM_QUANTITY_PER_STEP;
     this._filmPresenters = {};
 
+    this._sortingComponent = new SortingView();
     this._contentContainerComponent = new ContentView();
     this._filmsListComponent = new FilmsView();
     this._noFilms = new NoFilmsView();
@@ -33,14 +35,16 @@ class FilmsBoard {
     this._ratedFilms = films.slice().sort((a, b) => a.filmInfo.rating - b.filmInfo.rating).reverse();
     this._commentedFilms = films.slice().sort((a, b) => a.comments.length - b.comments.length).reverse();
 
-    render(this._container, this._contentContainerComponent, RenderPosition.BEFORE_END);
-    render(this._contentContainerComponent, this._filmsListComponent, RenderPosition.BEFORE_END);
     this._renderFilmsBoard();
   }
 
   _handleFilmChange(updatedFilm) {
     this._films = updateItem(this._films, updatedFilm);
     this._filmPresenters[updatedFilm.id].init(updatedFilm);
+  }
+
+  _renderSorting() {
+    render(this._container, this._sortingComponent, RenderPosition.BEFORE_END);
   }
 
   _renderNoFilms() {
@@ -103,6 +107,11 @@ class FilmsBoard {
   }
 
   _renderFilmsBoard() {
+    this._renderSorting();
+
+    render(this._container, this._contentContainerComponent, RenderPosition.BEFORE_END);
+    render(this._contentContainerComponent, this._filmsListComponent, RenderPosition.BEFORE_END);
+
     if (!this._films.length) {
       this._renderNoFilms();
       return;

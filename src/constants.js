@@ -6,4 +6,10 @@ const UserStatus = {
 
 const EMOTIONS = [`smile`, `sleeping`, `puke`, `angry`];
 
-export {UserStatus, EMOTIONS};
+const SortType = {
+  DEFAULT: `default`,
+  DATE: `date`,
+  RATING: `rating`
+};
+
+export {UserStatus, EMOTIONS, SortType};
