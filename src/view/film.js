@@ -37,7 +37,7 @@ const createFilmTemplate = ({filmInfo, comments, userDetails}) => {
       <div class="film-card__controls">
         <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${isActiveWatchlist}" type="button">Add to watchlist</button>
         <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${isAlreadyWatched}" type="button">Mark as watched</button>
-        <button class="film-card__controls-item button film-card__controls-item--favorite  ${isFavorite}" type="button">Mark as favorite</button>
+        <button class="film-card__controls-item button film-card__controls-item--favorite ${isFavorite}" type="button">Mark as favorite</button>
       </div>
     </article>`;
 };
@@ -46,7 +46,11 @@ class Film extends Abstract {
   constructor(film) {
     super();
     this._film = film;
+
     this._cardClickHandler = this._cardClickHandler.bind(this);
+    this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
+    this._alreadyWatchedClickHandler = this._alreadyWatchedClickHandler.bind(this);
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -58,6 +62,21 @@ class Film extends Abstract {
     this._callback.popupClick();
   }
 
+  _watchlistClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.watchlistClick();
+  }
+
+  _alreadyWatchedClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.alreadyWatchedClick();
+  }
+
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.favoriteClick();
+  }
+
   setCardClickHandler(callback) {
     this._callback.popupClick = callback;
     const poster = this.getElement().querySelector(`.film-card__poster`);
@@ -67,6 +86,21 @@ class Film extends Abstract {
     poster.addEventListener(`click`, this._cardClickHandler);
     title.addEventListener(`click`, this._cardClickHandler);
     comments.addEventListener(`click`, this._cardClickHandler);
+  }
+
+  setWatchlistClickHandler(callback) {
+    this._callback.watchlistClick = callback;
+    this.getElement().querySelector(`.film-card__controls-item--add-to-watchlist`).addEventListener(`click`, this._watchlistClickHandler);
+  }
+
+  setAlreadyWatchedClickHandler(callback) {
+    this._callback.alreadyWatchedClick = callback;
+    this.getElement().querySelector(`.film-card__controls-item--mark-as-watched`).addEventListener(`click`, this._alreadyWatchedClickHandler);
+  }
+
+  setFavoriteClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this.getElement().querySelector(`.film-card__controls-item--favorite`).addEventListener(`click`, this._favoriteClickHandler);
   }
 }
 

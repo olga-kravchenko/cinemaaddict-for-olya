@@ -3,16 +3,20 @@ import PopupView from "../view/popup";
 import {render, RenderPosition, remove, replace} from "../utils/render";
 
 class Film {
-  constructor(container) {
+  constructor(container, changeData) {
     this._container = container;
+    this._changeData = changeData;
     this._body = document.querySelector(`body`);
 
     this._filmComponent = null;
     this._filmPopupComponent = null;
 
-    this._onEscKeyDown = this._onEscKeyDown.bind(this);
     this._onFilmCardClick = this._onFilmCardClick.bind(this);
+    this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
+    this._handleAlreadyWatchedClick = this._handleAlreadyWatchedClick.bind(this);
+    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._onCloseButtonClick = this._onCloseButtonClick.bind(this);
+    this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
 
   init(film) {
@@ -25,6 +29,9 @@ class Film {
     this._filmPopupComponent = new PopupView(film);
 
     this._filmComponent.setCardClickHandler(this._onFilmCardClick);
+    this._filmComponent.setWatchlistClickHandler(this._handleWatchlistClick);
+    this._filmComponent.setAlreadyWatchedClickHandler(this._handleAlreadyWatchedClick);
+    this._filmComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._filmPopupComponent.setPopupCloseHandler(this._onCloseButtonClick);
 
 
@@ -73,6 +80,24 @@ class Film {
   _onFilmCardClick() {
     this._showPopup();
     document.addEventListener(`keydown`, this._onEscKeyDown);
+  }
+
+  _handleWatchlistClick() {
+    const newFilm = Object.assign({}, this._film);
+    newFilm.userDetails.watchlist = !this._film.userDetails.watchlist;
+    this._changeData(newFilm);
+  }
+
+  _handleAlreadyWatchedClick() {
+    const newFilm = Object.assign({}, this._film);
+    newFilm.userDetails.alreadyWatched = !this._film.userDetails.alreadyWatched;
+    this._changeData(newFilm);
+  }
+
+  _handleFavoriteClick() {
+    const newFilm = Object.assign({}, this._film);
+    newFilm.userDetails.favorite = !this._film.userDetails.favorite;
+    this._changeData(newFilm);
   }
 
   _onCloseButtonClick() {

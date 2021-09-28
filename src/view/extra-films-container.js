@@ -3,7 +3,7 @@ import Abstract from "./abstract";
 const createExtraFilmsContainerTemplate = (title) => `
     <section class="films-list films-list--extra">
       <h2 class="films-list__title">${title}</h2>
-      <div class="films-list__container"></div>
+<!--      <div class="films-list__container"></div>-->
     </section>`;
 
 class ExtraFilmsContainer extends Abstract {

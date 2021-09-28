@@ -52,12 +52,15 @@ class FilmsBoard {
   }
 
   _renderExtraContainers() {
+    const filmRatedContainerComponent = new FilmsContainerView();
+    const filmCommentedContainerComponent = new FilmsContainerView();
     render(this._contentContainerComponent, this._ratedContainerComponent, RenderPosition.BEFORE_END);
     render(this._contentContainerComponent, this._commentedContainerComponent, RenderPosition.BEFORE_END);
-    const ratedContainer = this._ratedContainerComponent.getElement().querySelector(`.films-list--extra .films-list__container`);
-    const commentedContainer = this._commentedContainerComponent.getElement().querySelector(`.films-list--extra .films-list__container`);
-    this._renderFilms(0, 2, this._ratedFilms, ratedContainer);
-    this._renderFilms(0, 2, this._commentedFilms, commentedContainer);
+
+    render(this._ratedContainerComponent, filmRatedContainerComponent, RenderPosition.BEFORE_END);
+    render(this._commentedContainerComponent, filmCommentedContainerComponent, RenderPosition.BEFORE_END);
+    this._renderFilms(0, 2, this._ratedFilms, filmRatedContainerComponent);
+    this._renderFilms(0, 2, this._commentedFilms, filmCommentedContainerComponent);
   }
 
   _renderFilms(from, to, films, container) {
@@ -65,7 +68,7 @@ class FilmsBoard {
   }
 
   _renderFilm(film, container) {
-    const filmPresenter = new FilmPresenter(container);
+    const filmPresenter = new FilmPresenter(container, this._handleFilmChange);
     filmPresenter.init(film);
     this._filmPresenters[film.id] = filmPresenter;
   }
