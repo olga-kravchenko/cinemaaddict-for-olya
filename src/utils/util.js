@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 const MINUTE_QUANTITY_IN_HOUR = 60;
 
 const getRandomNumber = (min, max) => Math.floor(Math.random() * (max - min) + min);
@@ -18,4 +20,13 @@ const updateItem = (items, update) => {
   return [...items.slice(0, index), update, ...items.slice(index + 1)];
 };
 
-export {getRandomNumber, formatTime, updateItem};
+const sortFilmDate = (filmA, filmB) => {
+  return dayjs(filmA.filmInfo.date).diff(dayjs(filmB.filmInfo.date));
+};
+
+const sortFilmRating = (filmA, filmB) => {
+  return (filmA.filmInfo.rating - filmB.filmInfo.rating);
+};
+
+
+export {getRandomNumber, formatTime, updateItem, sortFilmDate, sortFilmRating};

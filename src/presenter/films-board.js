@@ -4,10 +4,11 @@ import FilmsContainerView from "../view/films-container";
 import ShowMoreButtonView from "../view/show-more-button";
 import ExtraFilmsContainerView from "../view/extra-films-container";
 import {remove, render, RenderPosition} from "../utils/render";
-import {updateItem} from "../utils/util";
+import {updateItem, sortFilmDate, sortFilmRating} from "../utils/util";
 import NoFilmsView from "../view/no-films";
 import FilmPresenter from "./film";
 import SortingView from "../view/sorting";
+import {SortType} from "../constants";
 
 const FILM_QUANTITY_PER_STEP = 5;
 
@@ -16,8 +17,9 @@ class FilmsBoard {
     this._container = container;
     this._renderedFilmsQuantity = FILM_QUANTITY_PER_STEP;
     this._filmPresenters = {};
+    this._currentSortType = SortType.DEFAULT;
 
-    this._sortingComponent = new SortingView();
+    this._sortingComponent = new SortingView(this._currentSortType);
     this._contentContainerComponent = new ContentView();
     this._filmsListComponent = new FilmsView();
     this._noFilms = new NoFilmsView();
@@ -28,12 +30,15 @@ class FilmsBoard {
 
     this._handleFilmChange = this._handleFilmChange.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
+
+    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
   init(films) {
-    this._films = films.slice();
-    this._ratedFilms = films.slice().sort((a, b) => a.filmInfo.rating - b.filmInfo.rating).reverse();
-    this._commentedFilms = films.slice().sort((a, b) => a.comments.length - b.comments.length).reverse();
+    this._films = films;
+    this._sourcedFilms = [...films];
+    // this._ratedFilms = [...films].sort(sortFilmRating).reverse();
+    // this._commentedFilms = [...films].sort((a, b) => a.comments.length - b.comments.length).reverse();
 
     this._renderFilmsBoard();
   }
@@ -43,8 +48,34 @@ class FilmsBoard {
     this._filmPresenters[updatedFilm.id].init(updatedFilm);
   }
 
+  _sortFilms(sortType) {
+    switch (sortType) {
+      case SortType.DATE:
+        this._films.sort(sortFilmDate).reverse();
+        break;
+      case SortType.RATING:
+        this._films.sort(sortFilmRating).reverse();
+        break;
+      default:
+        this._films = this._sourcedFilms.slice();
+    }
+
+    this._currentSortType = sortType;
+  }
+
+  _handleSortTypeChange(sortType) {
+    if (this._currentSortType === sortType) {
+      return;
+    }
+    this._sortFilms(sortType);
+
+    this._clearFilmList();
+    this._renderFilmList();
+  }
+
   _renderSorting() {
     render(this._container, this._sortingComponent, RenderPosition.BEFORE_END);
+    this._sortingComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 
   _renderNoFilms() {
@@ -63,8 +94,8 @@ class FilmsBoard {
 
     render(this._ratedContainerComponent, filmRatedContainerComponent, RenderPosition.BEFORE_END);
     render(this._commentedContainerComponent, filmCommentedContainerComponent, RenderPosition.BEFORE_END);
-    this._renderFilms(0, 2, this._ratedFilms, filmRatedContainerComponent);
-    this._renderFilms(0, 2, this._commentedFilms, filmCommentedContainerComponent);
+    // this._renderFilms(0, 2, this._ratedFilms, filmRatedContainerComponent);
+    // this._renderFilms(0, 2, this._commentedFilms, filmCommentedContainerComponent);
   }
 
   _renderFilms(from, to, films, container) {
