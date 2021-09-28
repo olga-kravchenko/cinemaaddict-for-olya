@@ -48,6 +48,7 @@ class Film {
       if (this._body.contains(prevPopupComponent.getElement())) {
         replace(this._filmPopupComponent, prevPopupComponent);
         replace(this._filmComponent, prevFilmComponent);
+        this._filmPopupComponent.getElement().scrollTo(0, 350);
         return;
       }
       replace(this._filmComponent, prevFilmComponent);
