@@ -34,7 +34,8 @@ const createCommentsTemplate = (comments) => comments.map(({author, comment, dat
           <button class="film-details__comment-delete">Delete</button>
         </p>
       </div>
-    </li>`).join(``);
+    </li>`)
+  .join(``);
 
 const createCommentListTemplate = (comments) => `
     ${comments.length !== 0 ? `
@@ -47,7 +48,8 @@ const createEmojisTemplate = () => EMOTIONS.map((emotion) => `
     <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emotion}" value="${emotion}">
     <label class="film-details__emoji-label" for="emoji-${emotion}">
       <img src="./images/emoji/${emotion}.png" width="30" height="30" alt="emoji">
-    </label>`).join(``);
+    </label>`)
+  .join(``);
 
 const createEmojiListTemplate = () => `
     <div class="film-details__emoji-list">
@@ -161,23 +163,63 @@ class Popup extends Abstract {
   constructor(film) {
     super();
     this._film = film;
-    this._popupCloseHandler = this._popupCloseHandler.bind(this);
+
+    this._popupCloseClickHandler = this._popupCloseClickHandler.bind(this);
+    this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
+    this._alreadyWatchedClickHandler = this._alreadyWatchedClickHandler.bind(this);
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
   }
 
   getTemplate() {
     return createPopupTemplate(this._film);
   }
 
-  _popupCloseHandler(evt) {
+  _popupCloseClickHandler(evt) {
     evt.preventDefault();
     this._callback.popupClose();
   }
 
+  _watchlistClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.watchlistClick();
+  }
+
+  _alreadyWatchedClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.alreadyWatchedClick();
+  }
+
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.favoriteClick();
+  }
+
   setPopupCloseHandler(callback) {
     this._callback.popupClose = callback;
-    const closeButton = this.getElement().querySelector(`.film-details__close-btn`);
+    this.getElement()
+      .querySelector(`.film-details__close-btn`)
+      .addEventListener(`click`, this._popupCloseClickHandler);
+  }
 
-    closeButton.addEventListener(`click`, this._popupCloseHandler);
+  setPopupWatchlistClickHandler(callback) {
+    this._callback.watchlistClick = callback;
+    this.getElement()
+      .querySelector(`#watchlist`)
+      .addEventListener(`change`, this._watchlistClickHandler);
+  }
+
+  setPopupAlreadyWatchedClickHandler(callback) {
+    this._callback.alreadyWatchedClick = callback;
+    this.getElement()
+      .querySelector(`#watched`)
+      .addEventListener(`change`, this._alreadyWatchedClickHandler);
+  }
+
+  setPopupFavoriteClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this.getElement()
+      .querySelector(`#favorite`)
+      .addEventListener(`change`, this._favoriteClickHandler);
   }
 }
 
