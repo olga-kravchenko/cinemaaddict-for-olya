@@ -19,7 +19,7 @@ class Film {
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
   }
 
-  init(film) {
+  initOrUpdate(film) {
     this._film = film;
 
     const prevFilmComponent = this._filmComponent;
@@ -48,7 +48,8 @@ class Film {
         const currentScroll = this._body.querySelector(`.film-details`).scrollTop;
         replace(this._filmPopupComponent, prevPopupComponent);
         replace(this._filmComponent, prevFilmComponent);
-        this._filmPopupComponent.getElement().scrollTo(0, currentScroll);
+        this._filmPopupComponent.getElement()
+          .scrollTo(0, currentScroll);
         return;
       }
       replace(this._filmComponent, prevFilmComponent);
@@ -89,21 +90,21 @@ class Film {
   }
 
   _handleWatchlistClick() {
-    const newFilm = Object.assign({}, this._film);
-    newFilm.userDetails.watchlist = !this._film.userDetails.watchlist;
-    this._changeData(newFilm);
+    const updatedFilm = Object.assign({}, this._film);
+    updatedFilm.userDetails.watchlist = !this._film.userDetails.watchlist;
+    this._changeData(updatedFilm);
   }
 
   _handleAlreadyWatchedClick() {
-    const newFilm = Object.assign({}, this._film);
-    newFilm.userDetails.alreadyWatched = !this._film.userDetails.alreadyWatched;
-    this._changeData(newFilm);
+    const updatedFilm = Object.assign({}, this._film);
+    updatedFilm.userDetails.alreadyWatched = !this._film.userDetails.alreadyWatched;
+    this._changeData(updatedFilm);
   }
 
   _handleFavoriteClick() {
-    const newFilm = Object.assign({}, this._film);
-    newFilm.userDetails.favorite = !this._film.userDetails.favorite;
-    this._changeData(newFilm);
+    const updatedFilm = Object.assign({}, this._film);
+    updatedFilm.userDetails.favorite = !this._film.userDetails.favorite;
+    this._changeData(updatedFilm);
   }
 
   _handleCloseButtonClick() {

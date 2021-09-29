@@ -6,7 +6,7 @@ import FilmsContainerView from "../view/films-container";
 import ShowMoreButtonView from "../view/show-more-button";
 import FilmPresenter from "./film";
 import {remove, render, RenderPosition} from "../utils/render";
-import {updateElements, sortFilmsByDate, sortFilmsByRating} from "../utils/util";
+import {updateElementInArrayByIndex, sortFilmsByDate, sortFilmsByRating} from "../utils/util";
 import {SortType} from "../constants";
 
 const FILM_QUANTITY_PER_STEP = 5;
@@ -20,7 +20,7 @@ class FilmsBoard {
 
     this._sortingComponent = new SortingView(this._currentSortType);
     this._contentContainerComponent = new ContentView();
-    this._filmsListComponent = new FilmsView();
+    this._filmListComponent = new FilmsView();
     this._noFilmsComponent = new NoFilmsView();
     this._filmContainerComponent = new FilmsContainerView();
     this._showMoreButtonComponent = new ShowMoreButtonView();
@@ -38,12 +38,12 @@ class FilmsBoard {
   }
 
   _handleFilmChange(updatedFilm) {
-    this._films = updateElements(this._films, updatedFilm);
-    this._filmPresenters[updatedFilm.id].init(updatedFilm);
+    this._films = updateElementInArrayByIndex(this._films, updatedFilm);
+    this._filmPresenters[updatedFilm.id].initOrUpdate(updatedFilm);
   }
 
   _handleShowMoreButtonClick() {
-    this._renderFilms(this._renderedFilmsQuantity, this._renderedFilmsQuantity + FILM_QUANTITY_PER_STEP, this._films, this._filmContainerComponent);
+    this._renderFilms(this._renderedFilmsQuantity, this._renderedFilmsQuantity + FILM_QUANTITY_PER_STEP);
     this._renderedFilmsQuantity += FILM_QUANTITY_PER_STEP;
     if (this._renderedFilmsQuantity >= this._films.length) {
       remove(this._showMoreButtonComponent);
@@ -68,13 +68,14 @@ class FilmsBoard {
         this._films.sort(sortFilmsByRating).reverse();
         break;
       default:
-        this._films = this._sourcedFilms.slice();
+        this._films = [...this._sourcedFilms];
     }
     this._currentSortType = sortType;
   }
 
   _clearFilmList() {
-    Object.values(this._filmPresenters).forEach((presenter) => presenter.destroy());
+    Object.values(this._filmPresenters)
+      .forEach((presenter) => presenter.destroy());
     this._filmPresenters = {};
     this._renderedFilmsQuantity = FILM_QUANTITY_PER_STEP;
     remove(this._showMoreButtonComponent);
@@ -90,26 +91,28 @@ class FilmsBoard {
   }
 
   _renderFilmContainer() {
-    render(this._filmsListComponent, this._filmContainerComponent, RenderPosition.BEFORE_END);
+    render(this._filmListComponent, this._filmContainerComponent, RenderPosition.BEFORE_END);
   }
 
   _renderFilms(from, to) {
-    this._films.slice(from, to).forEach((film) => this._renderFilm(film));
+    this._films.slice(from, to)
+      .forEach((film) => this._renderFilm(film));
   }
 
   _renderFilm(film) {
     const filmPresenter = new FilmPresenter(this._filmContainerComponent, this._handleFilmChange);
-    filmPresenter.init(film);
+    filmPresenter.initOrUpdate(film);
     this._filmPresenters[film.id] = filmPresenter;
   }
 
   _renderShowMoreButton() {
-    render(this._filmsListComponent, this._showMoreButtonComponent, RenderPosition.BEFORE_END);
+    render(this._filmListComponent, this._showMoreButtonComponent, RenderPosition.BEFORE_END);
     this._showMoreButtonComponent.setClickHandler(this._handleShowMoreButtonClick);
   }
 
   _renderFilmList() {
-    this._renderFilms(0, Math.min(this._films.length, FILM_QUANTITY_PER_STEP));
+    const minFilmQuantityPerStep = Math.min(this._films.length, FILM_QUANTITY_PER_STEP);
+    this._renderFilms(0, minFilmQuantityPerStep);
     if (this._films.length > FILM_QUANTITY_PER_STEP) {
       this._renderShowMoreButton();
     }
@@ -117,10 +120,8 @@ class FilmsBoard {
 
   _renderFilmsBoard() {
     this._renderSorting();
-
     render(this._container, this._contentContainerComponent, RenderPosition.BEFORE_END);
-    render(this._contentContainerComponent, this._filmsListComponent, RenderPosition.BEFORE_END);
-
+    render(this._contentContainerComponent, this._filmListComponent, RenderPosition.BEFORE_END);
     if (!this._films.length) {
       this._renderNoFilms();
       return;

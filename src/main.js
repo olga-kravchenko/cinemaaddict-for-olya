@@ -15,9 +15,9 @@ const header = document.querySelector(`.header`);
 const main = document.querySelector(`.main`);
 const statistics = document.querySelector(`.footer__statistics`);
 
-const filmPresenter = new FilmsBoardPresenter(main);
+const filmBoardPresenter = new FilmsBoardPresenter(main);
 render(header, new UserView(films), RenderPosition.BEFORE_END);
 render(main, new MenuView(filters), RenderPosition.BEFORE_END);
 render(statistics, new FilmsQuantityView(films.length), RenderPosition.BEFORE_END);
 
-filmPresenter.init(films);
+filmBoardPresenter.init(films);
