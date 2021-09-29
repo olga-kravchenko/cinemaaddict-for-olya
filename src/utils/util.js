@@ -10,12 +10,13 @@ const formatTime = (minutes) => {
     `${Math.floor((minutes / MINUTE_QUANTITY_IN_HOUR))}h ${minutes % MINUTE_QUANTITY_IN_HOUR}m`;
 };
 
-const updateElements = (element, updatedElement) => {
-  const index = element.findIndex((item) => item.id === updatedElement.id);
+const updateElementInArrayByIndex = (array, updatedElement) => {
+  const index = array.findIndex((element) => element.id === updatedElement.id);
   if (index === -1) {
-    return element;
+    return array;
   }
-  return [...element.slice(0, index), updatedElement, ...element.slice(index + 1)];
+  array[index] = updatedElement;
+  return array;
 };
 
 const sortFilmsByDate = (filmA, filmB) => {
@@ -27,4 +28,4 @@ const sortFilmsByRating = (filmA, filmB) => {
 };
 
 
-export {getRandomNumber, formatTime, updateElements, sortFilmsByDate, sortFilmsByRating};
+export {getRandomNumber, formatTime, updateElementInArrayByIndex, sortFilmsByDate, sortFilmsByRating};
