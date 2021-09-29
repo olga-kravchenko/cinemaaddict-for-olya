@@ -38,7 +38,6 @@ class Film {
     this._filmPopupComponent.setPopupAlreadyWatchedClickHandler(this._handleAlreadyWatchedClick);
     this._filmPopupComponent.setPopupFavoriteClickHandler(this._handleFavoriteClick);
 
-
     if (prevFilmComponent === null || prevPopupComponent === null) {
       render(this._container, this._filmComponent, RenderPosition.BEFORE_END);
       return;
@@ -46,9 +45,10 @@ class Film {
 
     if (this._container.getElement().contains(prevFilmComponent.getElement())) {
       if (this._body.contains(prevPopupComponent.getElement())) {
+        const currentScroll = this._body.querySelector(`.film-details`).scrollTop;
         replace(this._filmPopupComponent, prevPopupComponent);
         replace(this._filmComponent, prevFilmComponent);
-        this._filmPopupComponent.getElement().scrollTo(0, 350);
+        this._filmPopupComponent.getElement().scrollTo(0, currentScroll);
         return;
       }
       replace(this._filmComponent, prevFilmComponent);
