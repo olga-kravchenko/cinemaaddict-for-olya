@@ -34,7 +34,8 @@ const createCommentsTemplate = (comments) => comments.map(({author, comment, dat
           <button class="film-details__comment-delete">Delete</button>
         </p>
       </div>
-    </li>`).join(``);
+    </li>`)
+  .join(``);
 
 const createCommentListTemplate = (comments) => `
     ${comments.length !== 0 ? `
@@ -47,7 +48,8 @@ const createEmojisTemplate = () => EMOTIONS.map((emotion) => `
     <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emotion}" value="${emotion}">
     <label class="film-details__emoji-label" for="emoji-${emotion}">
       <img src="./images/emoji/${emotion}.png" width="30" height="30" alt="emoji">
-    </label>`).join(``);
+    </label>`)
+  .join(``);
 
 const createEmojiListTemplate = () => `
     <div class="film-details__emoji-list">
@@ -194,26 +196,30 @@ class Popup extends Abstract {
 
   setPopupCloseHandler(callback) {
     this._callback.popupClose = callback;
-    const closeButton = this.getElement().querySelector(`.film-details__close-btn`);
-    closeButton.addEventListener(`click`, this._popupCloseClickHandler);
+    this.getElement()
+      .querySelector(`.film-details__close-btn`)
+      .addEventListener(`click`, this._popupCloseClickHandler);
   }
 
   setPopupWatchlistClickHandler(callback) {
     this._callback.watchlistClick = callback;
-    const button = this.getElement().querySelector(`#watchlist`);
-    button.addEventListener(`change`, this._watchlistClickHandler);
+    this.getElement()
+      .querySelector(`#watchlist`)
+      .addEventListener(`change`, this._watchlistClickHandler);
   }
 
   setPopupAlreadyWatchedClickHandler(callback) {
     this._callback.alreadyWatchedClick = callback;
-    const button = this.getElement().querySelector(`#watched`);
-    button.addEventListener(`change`, this._alreadyWatchedClickHandler);
+    this.getElement()
+      .querySelector(`#watched`)
+      .addEventListener(`change`, this._alreadyWatchedClickHandler);
   }
 
   setPopupFavoriteClickHandler(callback) {
     this._callback.favoriteClick = callback;
-    const button = this.getElement().querySelector(`#favorite`);
-    button.addEventListener(`change`, this._favoriteClickHandler);
+    this.getElement()
+      .querySelector(`#favorite`)
+      .addEventListener(`change`, this._favoriteClickHandler);
   }
 }
 
