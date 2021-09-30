@@ -52,6 +52,7 @@ const generateDate = () => {
 
 const generateComment = () => {
   return {
+    id: nanoid(),
     author: NAMES[getRandomNumber(0, NAMES.length)],
     comment: SENTENCES[getRandomNumber(0, SENTENCES.length)],
     date: generateDate(),
@@ -59,10 +60,13 @@ const generateComment = () => {
   };
 };
 
+const IdToMap = new Map();
+
 const generateComments = () => {
   const comments = [];
   for (let i = 0; i < getRandomNumber(MIN_QUANTITY, MAX_QUANTITY); i++) {
     const comment = generateComment();
+    IdToMap.set(comment.id, comment);
     comments.push(comment);
   }
   return comments;
@@ -91,7 +95,7 @@ const generateFilm = () => {
       genres: generateRandomElements(GENRES),
       ageRating: AGE_RATING[getRandomNumber(0, AGE_RATING.length)],
     },
-    comments: generateComments(),
+    comments: generateComments().map((c) => c.id),
     userDetails: {
       watchlist: STATES[getRandomNumber(0, STATES.length)],
       alreadyWatched: STATES[getRandomNumber(0, STATES.length)],
@@ -101,4 +105,4 @@ const generateFilm = () => {
   };
 };
 
-export {generateFilm};
+export {generateFilm, IdToMap};

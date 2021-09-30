@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import {formatTime} from "../utils/util";
 import {EMOTIONS} from "../constants";
 import Abstract from "./abstract";
+import {IdToMap} from "../mock/film";
 
 const createFilmControlsTemplate = ({watchlist, alreadyWatched, favorite}) => {
   const isCheckedWatchlist = watchlist ? `checked` : ``;
@@ -21,8 +22,8 @@ const createFilmControlsTemplate = ({watchlist, alreadyWatched, favorite}) => {
     </section>`;
 };
 
-const createCommentsTemplate = (comments) => comments.map(({author, comment, date, emotion}) => `
-    <li class="film-details__comment">
+const createCommentsTemplate = (newComments) => {
+  return newComments.map(({author, comment, date, emotion}) => `<li class="film-details__comment">
       <span class="film-details__comment-emoji">
         <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
       </span>
@@ -34,13 +35,13 @@ const createCommentsTemplate = (comments) => comments.map(({author, comment, dat
           <button class="film-details__comment-delete">Delete</button>
         </p>
       </div>
-    </li>`)
-  .join(``);
+    </li>`).join(``);
+};
 
-const createCommentListTemplate = (comments) => `
-    ${comments.length !== 0 ? `
+const createCommentListTemplate = (newComments) => `
+    ${newComments.length !== 0 ? `
     <ul class="film-details__comments-list">
-      ${createCommentsTemplate(comments)}
+      ${createCommentsTemplate(newComments)}
     </ul>` :
     ``}`;
 
@@ -77,6 +78,7 @@ const createPopupTemplate = ({filmInfo, comments, userDetails}) => {
   const releaseDate = dayjs(date).format(` DD MMMM YYYY`);
   const shownGeneres = genres.map((e) => `<span class="film-details__genre">${e}</span>`);
   const genreTitle = shownGeneres.length === 1 ? `Genre` : `Genres`;
+  const newComments = comments.map((id) => IdToMap.get(id));
 
   return `
     <section class="film-details">
@@ -143,7 +145,7 @@ const createPopupTemplate = ({filmInfo, comments, userDetails}) => {
         <div class="film-details__bottom-container">
           <section class="film-details__comments-wrap">
             <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
-            ${createCommentListTemplate(comments)}
+            ${createCommentListTemplate(newComments)}
 
             <div class="film-details__new-comment">
               <div class="film-details__add-emoji-label"></div>
@@ -151,7 +153,7 @@ const createPopupTemplate = ({filmInfo, comments, userDetails}) => {
               <label class="film-details__comment-label">
                 <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
               </label>
-              ${createEmojiListTemplate(comments)}
+              ${createEmojiListTemplate()}
             </div>
           </section>
         </div>
