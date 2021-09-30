@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import {formatTime} from "../utils/util";
 import {EMOTIONS} from "../constants";
-import Abstract from "./abstract";
+import SmartView from "./smart";
 import {IdToMap} from "../mock/film";
 
 const createFilmControlsTemplate = ({watchlist, alreadyWatched, favorite}) => {
@@ -161,7 +161,7 @@ const createPopupTemplate = ({filmInfo, comments, userDetails}) => {
   </section>`;
 };
 
-class Popup extends Abstract {
+class Popup extends SmartView {
   constructor(film) {
     super();
     this._film = film;
