@@ -1,32 +1,28 @@
 import Abstract from "./abstract";
 
 class Smart extends Abstract {
-  constructor() {
+  constructor(data) {
     super();
-    this._data = {};
+    this._data = data;
   }
 
-  updateData(update, justDataUpdating) {
-    if (!update) {
+  updateData(newState, isUpdatingState) {
+    if (!newState) {
       return;
     }
-    this._data = Object.assign(
-        {},
-        this._data,
-        update
-    );
-    if (justDataUpdating) {
+    this._data = Object.assign({}, this._data, newState);
+    if (isUpdatingState) {
       return;
     }
     this.updateElement();
   }
 
   updateElement() {
-    let prevElement = this.getElement();
-    const parent = prevElement.parentElement;
+    let oldChild = this.getElement();
+    const parent = oldChild.parentElement;
     this.removeElement();
-    const newElement = this.getElement();
-    parent.replaceChild(newElement, prevElement);
+    const newChild = this.getElement();
+    parent.replaceChild(newChild, oldChild);
     this.restoreHandlers();
   }
 

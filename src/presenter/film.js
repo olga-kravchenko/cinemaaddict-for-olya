@@ -17,6 +17,7 @@ class Film {
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleCloseButtonClick = this._handleCloseButtonClick.bind(this);
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
+    this._submitCommentHandler = this._submitCommentHandler.bind(this);
   }
 
   initOrUpdate(film) {
@@ -37,6 +38,7 @@ class Film {
     this._filmPopupComponent.setPopupWatchlistClickHandler(this._handleWatchlistClick);
     this._filmPopupComponent.setPopupAlreadyWatchedClickHandler(this._handleAlreadyWatchedClick);
     this._filmPopupComponent.setPopupFavoriteClickHandler(this._handleFavoriteClick);
+    this._filmPopupComponent.setFormSubmitHandler(this._submitCommentHandler);
 
     if (prevFilmComponent === null || prevPopupComponent === null) {
       render(this._container, this._filmComponent, RenderPosition.BEFORE_END);
@@ -110,6 +112,10 @@ class Film {
   _handleCloseButtonClick() {
     this._closePopup();
     document.removeEventListener(`keydown`, this._handleEscKeyDown);
+  }
+
+  _submitCommentHandler(film) {
+    this._changeData(film);
   }
 }
 

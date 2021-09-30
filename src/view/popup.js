@@ -1,8 +1,9 @@
 import dayjs from "dayjs";
-import {formatTime} from "../utils/util";
+import {copyFilm, formatTime} from "../utils/util";
 import {EMOTIONS} from "../constants";
 import SmartView from "./smart";
 import {IdToMap} from "../mock/film";
+import {nanoid} from "nanoid";
 
 const createFilmControlsTemplate = ({watchlist, alreadyWatched, favorite}) => {
   const isCheckedWatchlist = watchlist ? `checked` : ``;
@@ -23,7 +24,7 @@ const createFilmControlsTemplate = ({watchlist, alreadyWatched, favorite}) => {
 };
 
 const createCommentsTemplate = (newComments) => {
-  return newComments.map(({author, comment, date, emotion}) => `<li class="film-details__comment">
+  return newComments.map(({id, author, comment, date, emotion}) => `<li class="film-details__comment" data-id="${id}">
       <span class="film-details__comment-emoji">
         <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
       </span>
@@ -161,19 +162,55 @@ const createPopupTemplate = ({filmInfo, comments, userDetails}) => {
   </section>`;
 };
 
+const EMPTY_COMMENT = {
+  id: null,
+  author: `some-cool-author`,
+  comment: null,
+  date: null,
+  emotion: null
+};
+
 class Popup extends SmartView {
   constructor(film) {
-    super();
-    this._film = film;
+    super(film);
+    this._newComment = EMPTY_COMMENT;
 
     this._popupCloseClickHandler = this._popupCloseClickHandler.bind(this);
     this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
     this._alreadyWatchedClickHandler = this._alreadyWatchedClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
+    this._checkedTypeToggleHandler = this._checkedTypeToggleHandler.bind(this);
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
+
+    this.setHandlers();
+
   }
 
   getTemplate() {
-    return createPopupTemplate(this._film);
+    return createPopupTemplate(this._data);
+  }
+
+  restoreHandlers() {
+    this.setHandlers();
+  }
+
+  setHandlers() {
+    this._setClickEmojiHandler();
+  }
+
+  _checkedTypeToggleHandler(evt) {
+    evt.preventDefault();
+    let type = ``;
+    if (evt.target.tagName === `INPUT`) {
+      type = evt.target.value;
+      this._newComment.emotion = type;
+      document.querySelector(`.film-details__add-emoji-label`).innerHTML = `<img src="./images/emoji/${type}.png" width="55" height="55" alt="emoji-${type}">`;
+      document.querySelector(`.film-details__comment-input`).focus();
+    }
+  }
+
+  _setClickEmojiHandler() {
+    this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`change`, this._checkedTypeToggleHandler);
   }
 
   _popupCloseClickHandler(evt) {
@@ -194,6 +231,21 @@ class Popup extends SmartView {
   _favoriteClickHandler(evt) {
     evt.preventDefault();
     this._callback.favoriteClick();
+  }
+
+  _formSubmitHandler(evt) {
+    const commentText = evt.target.value;
+    if (evt.ctrlKey && evt.key === `Enter` && commentText && this._newComment.emotion) {
+      evt.preventDefault();
+      this._newComment.comment = commentText;
+      this._newComment.id = nanoid();
+      this._newComment.date = dayjs().toDate();
+
+      const newFilm = copyFilm(this._data);
+      newFilm.comments.push(Object.assign({}, this._newComment));
+      this._newComment = EMPTY_COMMENT;
+    }
+    this._callback.formSubmit(this._data);
   }
 
   setPopupCloseHandler(callback) {
@@ -222,6 +274,11 @@ class Popup extends SmartView {
     this.getElement()
       .querySelector(`#favorite`)
       .addEventListener(`change`, this._favoriteClickHandler);
+  }
+
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().querySelector(`.film-details__comment-input`).addEventListener(`keydown`, this._formSubmitHandler);
   }
 }
 
