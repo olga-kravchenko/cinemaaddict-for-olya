@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import {copyFilm, formatTime} from "../utils/util";
+import {copyFilm, formatTime, convertFormat} from "../utils/util";
 import {EMOTIONS} from "../constants";
 import SmartView from "./smart";
 import {IdToMap} from "../mock/film";
@@ -24,7 +24,10 @@ const createFilmControlsTemplate = ({watchlist, alreadyWatched, favorite}) => {
 };
 
 const createCommentsTemplate = (newComments) => {
-  return newComments.map(({id, author, comment, date, emotion}) => `<li class="film-details__comment" id="${id}">
+  return newComments.map(({id, author, comment, date, emotion}) => {
+    const dayDifference = (dayjs(date).diff(dayjs().toDate()));
+    const format = convertFormat(dayDifference);
+    return `<li class="film-details__comment" id="${id}">
       <span class="film-details__comment-emoji">
         <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
       </span>
@@ -32,11 +35,12 @@ const createCommentsTemplate = (newComments) => {
         <p class="film-details__comment-text">${comment}</p>
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${author}</span>
-          <span class="film-details__comment-day">${dayjs(date).format(`YYYY/MM/DD H:mm`)}</span>
+          <span class="film-details__comment-day">${format}</span>
           <button class="film-details__comment-delete">Delete</button>
         </p>
       </div>
-    </li>`).join(``);
+    </li>`;
+  }).join(``);
 };
 
 const createCommentListTemplate = (newComments) => `
