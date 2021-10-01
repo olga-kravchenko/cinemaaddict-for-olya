@@ -49,10 +49,14 @@ class Film {
       if (this._body.contains(prevPopupComponent.getElement())) {
         const currentScroll = this._body.querySelector(`.film-details`).scrollTop;
         replace(this._filmPopupComponent, prevPopupComponent);
-        replace(this._filmComponent, prevFilmComponent);
         this._filmPopupComponent.getElement()
           .scrollTo(0, currentScroll);
+        replace(this._filmComponent, prevFilmComponent);
         return;
+
+        // if (this._filmPopupComponent) {
+        //   this._filmPopupComponent.updateState(updatedFilm, isReloadPopup);
+        // }
       }
       replace(this._filmComponent, prevFilmComponent);
     }
@@ -67,6 +71,7 @@ class Film {
   }
 
   _showPopup() {
+    this._body.classList.add(`hide-overflow`);
     if (!document.querySelector(`.film-details`)) {
       this._body.classList.add(`hide-overflow`);
       this._body.appendChild(this._filmPopupComponent.getElement());
@@ -114,8 +119,17 @@ class Film {
     document.removeEventListener(`keydown`, this._handleEscKeyDown);
   }
 
-  _submitCommentHandler(film) {
-    this._changeData(film);
+  _submitCommentHandler(updatedFilm) {
+    // const updatedFilm = Object.assign({}, this._film);
+    // updatedFilm.comments.push(cmt.id);
+    // IdToMap.set(cmt.id, cmt);
+
+    this._changeData(updatedFilm);
+  }
+
+  update(newFilm, isReload) {
+    this._film = newFilm;
+    this._filmComponent.updateState(newFilm, isReload);
   }
 }
 

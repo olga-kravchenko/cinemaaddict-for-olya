@@ -6,15 +6,11 @@ class Smart extends Abstract {
     this._data = data;
   }
 
-  updateData(newState, isUpdatingState) {
-    if (!newState) {
-      return;
-    }
+  updateState(newState, isUpdatingState) {
     this._data = Object.assign({}, this._data, newState);
     if (isUpdatingState) {
-      return;
+      this.updateElement();
     }
-    this.updateElement();
   }
 
   updateElement() {

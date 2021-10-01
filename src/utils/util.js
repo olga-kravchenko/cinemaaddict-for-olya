@@ -27,11 +27,11 @@ const sortFilmsByRating = (filmA, filmB) => {
   return (filmA.filmInfo.rating - filmB.filmInfo.rating);
 };
 
-const copyFilm = (initialFilm) => {
-  const newFilm = Object.assign({}, initialFilm);
-  newFilm.userDetails = Object.assign({}, initialFilm.userDetails);
-  newFilm.filmInfo = Object.assign({}, initialFilm.filmInfo);
-  return newFilm;
+const updateFilm = (initialFilm) => {
+  const updatedFilm = Object.assign({}, initialFilm);
+  updatedFilm.userDetails = Object.assign({}, initialFilm.userDetails);
+  updatedFilm.filmInfo = Object.assign({}, initialFilm.filmInfo);
+  return updatedFilm;
 };
 
-export {getRandomNumber, formatTime, updateElementInArrayByIndex, sortFilmsByDate, sortFilmsByRating, copyFilm};
+export {getRandomNumber, formatTime, updateElementInArrayByIndex, sortFilmsByDate, sortFilmsByRating, updateFilm};

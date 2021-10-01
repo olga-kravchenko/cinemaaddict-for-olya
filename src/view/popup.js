@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import {copyFilm, formatTime} from "../utils/util";
+import {updateFilm, formatTime} from "../utils/util";
 import {EMOTIONS} from "../constants";
 import SmartView from "./smart";
 import {IdToMap} from "../mock/film";
@@ -24,7 +24,7 @@ const createFilmControlsTemplate = ({watchlist, alreadyWatched, favorite}) => {
 };
 
 const createCommentsTemplate = (newComments) => {
-  return newComments.map(({id, author, comment, date, emotion}) => `<li class="film-details__comment" data-id="${id}">
+  return newComments.map(({id, author, comment, date, emotion}) => `<li class="film-details__comment" id="${id}">
       <span class="film-details__comment-emoji">
         <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
       </span>
@@ -241,11 +241,15 @@ class Popup extends SmartView {
       this._newComment.id = nanoid();
       this._newComment.date = dayjs().toDate();
 
-      const newFilm = copyFilm(this._data);
-      newFilm.comments.push(Object.assign({}, this._newComment));
+      const newFilm = updateFilm(this._data);
+
       this._newComment = EMPTY_COMMENT;
+
+      newFilm.comments.push(this._newComment.id);
+      IdToMap.set(this._newComment.id, this._newComment);
+
+      this._callback.formSubmit(newFilm);
     }
-    this._callback.formSubmit(this._data);
   }
 
   setPopupCloseHandler(callback) {
