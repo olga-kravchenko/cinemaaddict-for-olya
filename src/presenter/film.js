@@ -35,9 +35,6 @@ class Film {
     this._filmComponent.setFavoriteClickHandler(this._handleFavoriteClick);
 
     this._filmPopupComponent.setPopupCloseHandler(this._handleCloseButtonClick);
-    this._filmPopupComponent.setPopupWatchlistClickHandler(this._handleWatchlistClick);
-    this._filmPopupComponent.setPopupAlreadyWatchedClickHandler(this._handleAlreadyWatchedClick);
-    this._filmPopupComponent.setPopupFavoriteClickHandler(this._handleFavoriteClick);
     this._filmPopupComponent.setFormSubmitHandler(this._submitCommentHandler);
 
     if (prevFilmComponent === null || prevPopupComponent === null) {
@@ -53,10 +50,6 @@ class Film {
           .scrollTo(0, currentScroll);
         replace(this._filmComponent, prevFilmComponent);
         return;
-
-        // if (this._filmPopupComponent) {
-        //   this._filmPopupComponent.updateState(updatedFilm, isReloadPopup);
-        // }
       }
       replace(this._filmComponent, prevFilmComponent);
     }
@@ -114,22 +107,14 @@ class Film {
     this._changeData(updatedFilm);
   }
 
-  _handleCloseButtonClick() {
+  _handleCloseButtonClick(updatedFilm) {
     this._closePopup();
+    this._changeData(updatedFilm);
     document.removeEventListener(`keydown`, this._handleEscKeyDown);
   }
 
   _submitCommentHandler(updatedFilm) {
-    // const updatedFilm = Object.assign({}, this._film);
-    // updatedFilm.comments.push(cmt.id);
-    // IdToMap.set(cmt.id, cmt);
-
     this._changeData(updatedFilm);
-  }
-
-  update(newFilm, isReload) {
-    this._film = newFilm;
-    this._filmComponent.updateState(newFilm, isReload);
   }
 }
 

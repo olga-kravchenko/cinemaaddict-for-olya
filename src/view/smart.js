@@ -8,6 +8,7 @@ class Smart extends Abstract {
 
   updateState(newState, isUpdatingState) {
     this._data = Object.assign({}, this._data, newState);
+
     if (isUpdatingState) {
       this.updateElement();
     }
