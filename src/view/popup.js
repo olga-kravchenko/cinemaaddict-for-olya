@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import {updateFilm, formatTime} from "../utils/util";
+import {copyFilm, formatTime} from "../utils/util";
 import {EMOTIONS} from "../constants";
 import SmartView from "./smart";
 import {IdToMap} from "../mock/film";
@@ -162,25 +162,17 @@ const createPopupTemplate = ({filmInfo, comments, userDetails}) => {
   </section>`;
 };
 
-const EMPTY_COMMENT = {
-  id: null,
-  author: `some-cool-author`,
-  comment: null,
-  date: null,
-  emotion: null
-};
-
 class Popup extends SmartView {
   constructor(film) {
     super(film);
-    this._newComment = EMPTY_COMMENT;
+    this._emotionState = null;
 
     this._popupCloseClickHandler = this._popupCloseClickHandler.bind(this);
     this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
     this._alreadyWatchedClickHandler = this._alreadyWatchedClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._checkedTypeToggleHandler = this._checkedTypeToggleHandler.bind(this);
-    this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._commentSubmitHandler = this._commentSubmitHandler.bind(this);
 
     this.setHandlers();
 
@@ -203,7 +195,7 @@ class Popup extends SmartView {
     let type = ``;
     if (evt.target.tagName === `INPUT`) {
       type = evt.target.value;
-      this._newComment.emotion = type;
+      this._emotionState = type;
       document.querySelector(`.film-details__add-emoji-label`).innerHTML = `<img src="./images/emoji/${type}.png" width="55" height="55" alt="emoji-${type}">`;
       document.querySelector(`.film-details__comment-input`).focus();
     }
@@ -233,21 +225,21 @@ class Popup extends SmartView {
     this._callback.favoriteClick();
   }
 
-  _formSubmitHandler(evt) {
+  _commentSubmitHandler(evt) {
     const commentText = evt.target.value;
-    if (evt.ctrlKey && evt.key === `Enter` && commentText && this._newComment.emotion) {
+    if (evt.ctrlKey && evt.key === `Enter` && commentText && this._emotionState) {
       evt.preventDefault();
-      this._newComment.comment = commentText;
-      this._newComment.id = nanoid();
-      this._newComment.date = dayjs().toDate();
+      const comment = {};
+      comment.id = nanoid();
+      comment.author = `You`;
+      comment.comment = commentText;
+      comment.date = dayjs().toDate();
+      comment.emotion = this._emotionState;
 
-      const newFilm = updateFilm(this._data);
-
-      this._newComment = EMPTY_COMMENT;
-
-      newFilm.comments.push(this._newComment.id);
-      IdToMap.set(this._newComment.id, this._newComment);
-
+      const newFilm = copyFilm(this._data);
+      newFilm.comments.push(comment.id);
+      IdToMap.set(comment.id, comment);
+      this._emotionState = null;
       this._callback.formSubmit(newFilm);
     }
   }
@@ -282,7 +274,7 @@ class Popup extends SmartView {
 
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
-    this.getElement().querySelector(`.film-details__comment-input`).addEventListener(`keydown`, this._formSubmitHandler);
+    this.getElement().querySelector(`.film-details__comment-input`).addEventListener(`keydown`, this._commentSubmitHandler);
   }
 }
 
