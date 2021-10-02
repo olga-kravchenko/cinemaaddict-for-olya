@@ -17,6 +17,7 @@ class Film {
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleCloseButtonClick = this._handleCloseButtonClick.bind(this);
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
+    this._submitCommentHandler = this._submitCommentHandler.bind(this);
   }
 
   initOrUpdate(film) {
@@ -34,9 +35,7 @@ class Film {
     this._filmComponent.setFavoriteClickHandler(this._handleFavoriteClick);
 
     this._filmPopupComponent.setPopupCloseHandler(this._handleCloseButtonClick);
-    this._filmPopupComponent.setPopupWatchlistClickHandler(this._handleWatchlistClick);
-    this._filmPopupComponent.setPopupAlreadyWatchedClickHandler(this._handleAlreadyWatchedClick);
-    this._filmPopupComponent.setPopupFavoriteClickHandler(this._handleFavoriteClick);
+    this._filmPopupComponent.setFormSubmitHandler(this._submitCommentHandler);
 
     if (prevFilmComponent === null || prevPopupComponent === null) {
       render(this._container, this._filmComponent, RenderPosition.BEFORE_END);
@@ -47,9 +46,9 @@ class Film {
       if (this._body.contains(prevPopupComponent.getElement())) {
         const currentScroll = this._body.querySelector(`.film-details`).scrollTop;
         replace(this._filmPopupComponent, prevPopupComponent);
-        replace(this._filmComponent, prevFilmComponent);
         this._filmPopupComponent.getElement()
           .scrollTo(0, currentScroll);
+        replace(this._filmComponent, prevFilmComponent);
         return;
       }
       replace(this._filmComponent, prevFilmComponent);
@@ -65,6 +64,7 @@ class Film {
   }
 
   _showPopup() {
+    this._body.classList.add(`hide-overflow`);
     if (!document.querySelector(`.film-details`)) {
       this._body.classList.add(`hide-overflow`);
       this._body.appendChild(this._filmPopupComponent.getElement());
@@ -80,6 +80,7 @@ class Film {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
       this._closePopup();
+      this._changeData(this._filmPopupComponent.data);
       document.removeEventListener(`keydown`, this._handleEscKeyDown);
     }
   }
@@ -107,9 +108,14 @@ class Film {
     this._changeData(updatedFilm);
   }
 
-  _handleCloseButtonClick() {
+  _handleCloseButtonClick(updatedFilm) {
     this._closePopup();
+    this._changeData(updatedFilm);
     document.removeEventListener(`keydown`, this._handleEscKeyDown);
+  }
+
+  _submitCommentHandler(updatedFilm) {
+    this._changeData(updatedFilm);
   }
 }
 

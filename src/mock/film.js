@@ -44,25 +44,35 @@ const generateRandomElements = (array) => {
   return Array.from(uniqueElements);
 };
 
-const generateDate = () => {
+const generateYear = () => {
   const maxYearGap = 30;
   const daysGap = getRandomNumber(-maxYearGap, maxYearGap);
   return dayjs().add(daysGap, `year`).toDate();
 };
 
+const generateDay = () => {
+  const maxDayGap = 365;
+  const daysGap = getRandomNumber(0, maxDayGap);
+  return dayjs().add(daysGap, `day`).toDate();
+};
+
 const generateComment = () => {
   return {
+    id: nanoid(),
     author: NAMES[getRandomNumber(0, NAMES.length)],
     comment: SENTENCES[getRandomNumber(0, SENTENCES.length)],
-    date: generateDate(),
+    date: generateDay(),
     emotion: EMOTIONS[getRandomNumber(0, EMOTIONS.length)],
   };
 };
+
+const IdToMap = new Map();
 
 const generateComments = () => {
   const comments = [];
   for (let i = 0; i < getRandomNumber(MIN_QUANTITY, MAX_QUANTITY); i++) {
     const comment = generateComment();
+    IdToMap.set(comment.id, comment);
     comments.push(comment);
   }
   return comments;
@@ -86,19 +96,19 @@ const generateFilm = () => {
       director: NAMES[getRandomNumber(0, NAMES.length)],
       screenwriters: generateRandomElements(NAMES),
       actors: generateRandomElements(NAMES),
-      date: generateDate(),
+      date: generateYear(),
       country: COUNTRIES[getRandomNumber(0, COUNTRIES.length)],
       genres: generateRandomElements(GENRES),
       ageRating: AGE_RATING[getRandomNumber(0, AGE_RATING.length)],
     },
-    comments: generateComments(),
+    comments: generateComments().map((c) => c.id),
     userDetails: {
       watchlist: STATES[getRandomNumber(0, STATES.length)],
       alreadyWatched: STATES[getRandomNumber(0, STATES.length)],
-      watchingDate: generateDate(),
+      watchingDate: generateDay(),
       favorite: STATES[getRandomNumber(0, STATES.length)],
     }
   };
 };
 
-export {generateFilm};
+export {generateFilm, IdToMap};
