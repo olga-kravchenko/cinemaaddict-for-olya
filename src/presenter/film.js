@@ -80,6 +80,7 @@ class Film {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
       this._closePopup();
+      this._changeData(this._filmPopupComponent.data);
       document.removeEventListener(`keydown`, this._handleEscKeyDown);
     }
   }

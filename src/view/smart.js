@@ -3,11 +3,11 @@ import Abstract from "./abstract";
 class Smart extends Abstract {
   constructor(data) {
     super();
-    this._data = data;
+    this.data = data;
   }
 
   updateState(newState, isUpdatingState) {
-    this._data = Object.assign({}, this._data, newState);
+    this.data = Object.assign({}, this.data, newState);
 
     if (isUpdatingState) {
       this.updateElement();

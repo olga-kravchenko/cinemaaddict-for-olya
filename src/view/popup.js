@@ -182,7 +182,7 @@ class Popup extends SmartView {
   }
 
   getTemplate() {
-    return createPopupTemplate(this._data);
+    return createPopupTemplate(this.data);
   }
 
   restoreHandlers() {
@@ -214,30 +214,24 @@ class Popup extends SmartView {
     this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`change`, this._checkedTypeToggleHandler);
   }
 
-  _popupCloseClickHandler(evt) {
-    evt.preventDefault();
-    const data = Object.assign({}, copyFilm(this._data));
-    this._callback.popupClose(data);
-  }
-
   _watchlistClickHandler(evt) {
     evt.preventDefault();
-    const updatedFilm = copyFilm(this._data);
-    updatedFilm.userDetails.watchlist = !this._data.userDetails.watchlist;
+    const updatedFilm = copyFilm(this.data);
+    updatedFilm.userDetails.watchlist = !this.data.userDetails.watchlist;
     this.updateState(updatedFilm, false);
   }
 
   _alreadyWatchedClickHandler(evt) {
     evt.preventDefault();
-    const updatedFilm = copyFilm(this._data);
-    updatedFilm.userDetails.alreadyWatched = !this._data.userDetails.alreadyWatched;
+    const updatedFilm = copyFilm(this.data);
+    updatedFilm.userDetails.alreadyWatched = !this.data.userDetails.alreadyWatched;
     this.updateState(updatedFilm, false);
   }
 
   _favoriteClickHandler(evt) {
     evt.preventDefault();
-    const updatedFilm = copyFilm(this._data);
-    updatedFilm.userDetails.favorite = !this._data.userDetails.favorite;
+    const updatedFilm = copyFilm(this.data);
+    updatedFilm.userDetails.favorite = !this.data.userDetails.favorite;
     this.updateState(updatedFilm, false);
   }
 
@@ -252,7 +246,7 @@ class Popup extends SmartView {
       comment.date = dayjs().toDate();
       comment.emotion = this._emotionState;
 
-      const newFilm = copyFilm(this._data);
+      const newFilm = copyFilm(this.data);
       newFilm.comments.push(comment.id);
       IdToMap.set(comment.id, comment);
       this._emotionState = null;
@@ -260,11 +254,10 @@ class Popup extends SmartView {
     }
   }
 
-  setPopupCloseHandler(callback) {
-    this._callback.popupClose = callback;
-    this.getElement()
-      .querySelector(`.film-details__close-btn`)
-      .addEventListener(`click`, this._popupCloseClickHandler);
+  _popupCloseClickHandler(evt) {
+    evt.preventDefault();
+    const data = Object.assign({}, copyFilm(this.data));
+    this._callback.popupClose(data);
   }
 
   _setPopupWatchlistClickHandler() {
@@ -290,6 +283,13 @@ class Popup extends SmartView {
     this.getElement()
       .querySelector(`.film-details__comment-input`)
       .addEventListener(`keydown`, this._commentSubmitHandler);
+  }
+
+  setPopupCloseHandler(callback) {
+    this._callback.popupClose = callback;
+    this.getElement()
+      .querySelector(`.film-details__close-btn`)
+      .addEventListener(`click`, this._popupCloseClickHandler);
   }
 }
 
