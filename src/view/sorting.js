@@ -26,6 +26,7 @@ class Sorting extends Abstract {
     if (evt.target.tagName !== `A`) {
       return;
     }
+    console.log(evt.target)
     this.getElement().querySelectorAll(`.sort__button--active`).forEach((e) => e.classList.remove(`sort__button--active`));
     evt.target.classList.add(`sort__button--active`);
     this._callback.sortTypeChange(evt.target.dataset.sortType);

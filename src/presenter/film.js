@@ -81,7 +81,10 @@ class Film {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
       this._closePopup();
-      this._changeData(this._filmPopupComponent.data);
+      this._changeData(
+          UserAction.UPDATE_FILM,
+          UpdateType.PATCH,
+          this._filmPopupComponent.data);
       document.removeEventListener(`keydown`, this._handleEscKeyDown);
     }
   }
@@ -96,7 +99,7 @@ class Film {
     updatedFilm.userDetails.watchlist = !this._film.userDetails.watchlist;
     this._changeData(
         UserAction.UPDATE_FILM,
-        UpdateType.MINOR,
+        UpdateType.PATCH,
         updatedFilm);
   }
 
@@ -105,7 +108,7 @@ class Film {
     updatedFilm.userDetails.alreadyWatched = !this._film.userDetails.alreadyWatched;
     this._changeData(
         UserAction.UPDATE_FILM,
-        UpdateType.MINOR,
+        UpdateType.PATCH,
         updatedFilm);
   }
 
@@ -114,20 +117,23 @@ class Film {
     updatedFilm.userDetails.favorite = !this._film.userDetails.favorite;
     this._changeData(
         UserAction.UPDATE_FILM,
-        UpdateType.MINOR,
+        UpdateType.PATCH,
         updatedFilm);
   }
 
   _handleCloseButtonClick(updatedFilm) {
     this._closePopup();
-    this._changeData(updatedFilm);
+    this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.PATCH,
+        updatedFilm);
     document.removeEventListener(`keydown`, this._handleEscKeyDown);
   }
 
   _submitCommentHandler(updatedFilm) {
     this._changeData(
         UserAction.UPDATE_FILM,
-        UpdateType.MINOR,
+        UpdateType.PATCH,
         updatedFilm);
   }
 }
