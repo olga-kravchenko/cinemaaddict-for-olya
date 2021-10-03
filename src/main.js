@@ -24,4 +24,4 @@ render(header, new UserView(films), RenderPosition.BEFORE_END);
 render(main, new MenuView(filters), RenderPosition.BEFORE_END);
 render(statistics, new FilmsQuantityView(films.length), RenderPosition.BEFORE_END);
 
-filmBoardPresenter.init(films);
+filmBoardPresenter.init();
