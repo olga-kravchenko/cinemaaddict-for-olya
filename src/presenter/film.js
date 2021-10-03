@@ -1,6 +1,7 @@
 import FilmView from "../view/film";
 import PopupView from "../view/popup";
 import {render, RenderPosition, remove, replace} from "../utils/render";
+import {UpdateType, UserAction} from "../constants";
 
 class Film {
   constructor(container, changeData) {
@@ -93,19 +94,28 @@ class Film {
   _handleWatchlistClick() {
     const updatedFilm = Object.assign({}, this._film);
     updatedFilm.userDetails.watchlist = !this._film.userDetails.watchlist;
-    this._changeData(updatedFilm);
+    this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
+        updatedFilm);
   }
 
   _handleAlreadyWatchedClick() {
     const updatedFilm = Object.assign({}, this._film);
     updatedFilm.userDetails.alreadyWatched = !this._film.userDetails.alreadyWatched;
-    this._changeData(updatedFilm);
+    this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
+        updatedFilm);
   }
 
   _handleFavoriteClick() {
     const updatedFilm = Object.assign({}, this._film);
     updatedFilm.userDetails.favorite = !this._film.userDetails.favorite;
-    this._changeData(updatedFilm);
+    this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
+        updatedFilm);
   }
 
   _handleCloseButtonClick(updatedFilm) {
@@ -115,7 +125,10 @@ class Film {
   }
 
   _submitCommentHandler(updatedFilm) {
-    this._changeData(updatedFilm);
+    this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
+        updatedFilm);
   }
 }
 

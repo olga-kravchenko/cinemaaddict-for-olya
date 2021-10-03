@@ -35,15 +35,6 @@ const convertFormat = (milliseconds) => {
   return format;
 };
 
-const updateElementInArrayByIndex = (array, updatedElement) => {
-  const index = array.findIndex((element) => element.id === updatedElement.id);
-  if (index === -1) {
-    return array;
-  }
-  array[index] = updatedElement;
-  return array;
-};
-
 const sortFilmsByDate = (filmA, filmB) => {
   return dayjs(filmA.filmInfo.date).diff(dayjs(filmB.filmInfo.date));
 };
@@ -59,4 +50,4 @@ const copyFilm = (initialFilm) => {
   return updatedFilm;
 };
 
-export {getRandomNumber, formatTime, convertFormat, updateElementInArrayByIndex, sortFilmsByDate, sortFilmsByRating, copyFilm};
+export {getRandomNumber, formatTime, convertFormat, sortFilmsByDate, sortFilmsByRating, copyFilm};
