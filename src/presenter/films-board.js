@@ -12,8 +12,9 @@ import {SortType} from "../constants";
 const FILM_QUANTITY_PER_STEP = 5;
 
 class FilmsBoard {
-  constructor(container) {
+  constructor(container, filmsModel) {
     this._container = container;
+    this._filmsModel = filmsModel;
     this._renderedFilmsQuantity = FILM_QUANTITY_PER_STEP;
     this._filmPresenters = {};
     this._currentSortType = SortType.DEFAULT;
@@ -33,8 +34,11 @@ class FilmsBoard {
   init(films) {
     this._films = [...films];
     this._sourcedFilms = [...films];
-
     this._renderFilmsBoard();
+  }
+
+  _getFilmss() {
+    return this._filmsModel.getFilms();
   }
 
   _handleFilmChange(updatedFilm) {
