@@ -177,6 +177,7 @@ class Popup extends SmartView {
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._checkedTypeToggleHandler = this._checkedTypeToggleHandler.bind(this);
     this._commentAddHandler = this._commentAddHandler.bind(this);
+    this._commentDeleteHandler = this._commentDeleteHandler.bind(this);
 
     this.setHandlers();
   }
@@ -260,6 +261,14 @@ class Popup extends SmartView {
     this._callback.popupClose(data);
   }
 
+  _commentDeleteHandler(evt) {
+    const index = evt.target.closest(`li`).id;
+    const newFilm = copyFilm(this.data);
+    newFilm.comments.splice(index, 1);
+    IdToMap.delete(index);
+    this._callback.popupDelite(this.data);
+  }
+
   _setPopupWatchlistClickHandler() {
     this.getElement()
       .querySelector(`#watchlist`)
@@ -290,6 +299,13 @@ class Popup extends SmartView {
     this.getElement()
       .querySelector(`.film-details__close-btn`)
       .addEventListener(`click`, this._popupCloseClickHandler);
+  }
+
+  setCommentDeleteHandler(callback) {
+    this._callback.popupDelite = callback;
+    this.getElement()
+      .querySelectorAll(`.film-details__comment-delete`)
+      .forEach((e) => e.addEventListener(`click`, this._commentDeleteHandler));
   }
 }
 

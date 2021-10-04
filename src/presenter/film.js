@@ -19,6 +19,7 @@ class Film {
     this._handleCloseButtonClick = this._handleCloseButtonClick.bind(this);
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
     this._handlerAddComment = this._handlerAddComment.bind(this);
+    this._handlerDeleteComment = this._handlerDeleteComment.bind(this);
   }
 
   initOrUpdate(film) {
@@ -37,6 +38,7 @@ class Film {
 
     this._filmPopupComponent.setPopupCloseHandler(this._handleCloseButtonClick);
     this._filmPopupComponent.setCommentAddHandler(this._handlerAddComment);
+    this._filmPopupComponent.setCommentDeleteHandler(this._handlerDeleteComment);
 
     if (prevFilmComponent === null || prevPopupComponent === null) {
       render(this._container, this._filmComponent, RenderPosition.BEFORE_END);
@@ -131,6 +133,14 @@ class Film {
   }
 
   _handlerAddComment(updatedFilm) {
+    this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.PATCH,
+        updatedFilm);
+  }
+
+
+  _handlerDeleteComment(updatedFilm) {
     this._changeData(
         UserAction.UPDATE_FILM,
         UpdateType.PATCH,
