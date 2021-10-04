@@ -176,7 +176,7 @@ class Popup extends SmartView {
     this._alreadyWatchedClickHandler = this._alreadyWatchedClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._checkedTypeToggleHandler = this._checkedTypeToggleHandler.bind(this);
-    this._commentSubmitHandler = this._commentSubmitHandler.bind(this);
+    this._commentAddHandler = this._commentAddHandler.bind(this);
 
     this.setHandlers();
   }
@@ -235,7 +235,7 @@ class Popup extends SmartView {
     this.updateState(updatedFilm, false);
   }
 
-  _commentSubmitHandler(evt) {
+  _commentAddHandler(evt) {
     const commentText = evt.target.value;
     if (evt.ctrlKey && evt.key === `Enter` && commentText && this._emotionState) {
       evt.preventDefault();
@@ -278,11 +278,11 @@ class Popup extends SmartView {
       .addEventListener(`change`, this._favoriteClickHandler);
   }
 
-  setFormSubmitHandler(callback) {
+  setCommentAddHandler(callback) {
     this._callback.formSubmit = callback;
     this.getElement()
       .querySelector(`.film-details__comment-input`)
-      .addEventListener(`keydown`, this._commentSubmitHandler);
+      .addEventListener(`keydown`, this._commentAddHandler);
   }
 
   setPopupCloseHandler(callback) {

@@ -18,7 +18,7 @@ class Film {
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleCloseButtonClick = this._handleCloseButtonClick.bind(this);
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
-    this._submitCommentHandler = this._submitCommentHandler.bind(this);
+    this._handlerAddComment = this._handlerAddComment.bind(this);
   }
 
   initOrUpdate(film) {
@@ -36,7 +36,7 @@ class Film {
     this._filmComponent.setFavoriteClickHandler(this._handleFavoriteClick);
 
     this._filmPopupComponent.setPopupCloseHandler(this._handleCloseButtonClick);
-    this._filmPopupComponent.setFormSubmitHandler(this._submitCommentHandler);
+    this._filmPopupComponent.setCommentAddHandler(this._handlerAddComment);
 
     if (prevFilmComponent === null || prevPopupComponent === null) {
       render(this._container, this._filmComponent, RenderPosition.BEFORE_END);
@@ -130,7 +130,7 @@ class Film {
     document.removeEventListener(`keydown`, this._handleEscKeyDown);
   }
 
-  _submitCommentHandler(updatedFilm) {
+  _handlerAddComment(updatedFilm) {
     this._changeData(
         UserAction.UPDATE_FILM,
         UpdateType.PATCH,
