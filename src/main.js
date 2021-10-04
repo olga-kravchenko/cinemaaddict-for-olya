@@ -6,6 +6,7 @@ import {generateFilm} from "./mock/film";
 import {generateFilters} from "./mock/filter";
 import FilmsBoardPresenter from "./presenter/films-board";
 import FilmsModel from "./model/film";
+import FilterModel from "./model/filter";
 
 const FILMS_QUANTITY = 22;
 
@@ -14,6 +15,8 @@ const filters = generateFilters(films);
 
 const filmsModel = new FilmsModel();
 filmsModel.setFilms(films);
+
+const filterModel = new FilterModel();
 
 const header = document.querySelector(`.header`);
 const main = document.querySelector(`.main`);
