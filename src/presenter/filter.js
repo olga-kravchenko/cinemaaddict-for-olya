@@ -6,8 +6,8 @@ import {UpdateType, FilterType} from "../constants";
 import {filter} from "../utils/filter";
 
 export default class Filter {
-  constructor(filterContainer, filterModel, filmsModel, filmBoardPresenter) {
-    this._filterContainer = filterContainer;
+  constructor(menuContainer, filterModel, filmsModel, filmBoardPresenter) {
+    this._menuContainer = menuContainer;
     this._filterModel = filterModel;
     this._filmsModel = filmsModel;
     this._filmBoardPresenter = filmBoardPresenter;
@@ -30,11 +30,12 @@ export default class Filter {
     const prevFilterComponent = this._menuComponent;
 
     this._menuComponent = new MenuView(filters, this._currentFilter);
+    this._statsComponent = new StatsView();
     this._menuComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
     this._menuComponent.setStatsClickHandler(this._handleStatsClickChange);
 
     if (prevFilterComponent === null) {
-      render(this._filterContainer, this._menuComponent, RenderPosition.BEFORE_END);
+      render(this._menuContainer, this._menuComponent, RenderPosition.BEFORE_END);
       return;
     }
 
@@ -55,8 +56,8 @@ export default class Filter {
   }
 
   _handleStatsClickChange() {
-    console.log(`Stats`);
     this._filmBoardPresenter._clearFilmsBoard();
+    render(this._menuContainer, this._statsComponent, RenderPosition.BEFORE_END);
   }
 
   _getFilters() {
@@ -66,23 +67,23 @@ export default class Filter {
       {
         type: FilterType.ALL,
         name: `All movies`,
-        quantity: filter[FilterType.ALL](films).length
+        quantity: filter[FilterType.ALL](films).length,
       },
       {
         type: FilterType.WATCHLIST,
         name: `Watchlist`,
-        quantity: filter[FilterType.WATCHLIST](films).length
+        quantity: filter[FilterType.WATCHLIST](films).length,
       },
       {
         type: FilterType.HISTORY,
         name: `History`,
-        quantity: filter[FilterType.HISTORY](films).length
+        quantity: filter[FilterType.HISTORY](films).length,
       },
       {
         type: FilterType.FAVORITES,
         name: `Favorites`,
-        quantity: filter[FilterType.FAVORITES](films).length
-      }
+        quantity: filter[FilterType.FAVORITES](films).length,
+      },
     ];
   }
 }
