@@ -20,11 +20,11 @@ const header = document.querySelector(`.header`);
 const main = document.querySelector(`.main`);
 const statistics = document.querySelector(`.footer__statistics`);
 
-
 render(header, new UserView(films), RenderPosition.BEFORE_END);
-// render(main, new MenuView(filters, `All movies`), RenderPosition.BEFORE_END);
-const filmBoardPresenter = new FilmsBoardPresenter(main, filmsModel);
+
+const filmBoardPresenter = new FilmsBoardPresenter(main, filmsModel, filterModel);
 const filterPresenter = new FilterPresenter(main, filterModel, filmsModel);
+
 filterPresenter.init();
 filmBoardPresenter.init();
 

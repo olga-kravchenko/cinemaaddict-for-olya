@@ -8,13 +8,15 @@ import FilmPresenter from "./film";
 import {remove, render, RenderPosition} from "../utils/render";
 import {sortFilmsByDate, sortFilmsByRating} from "../utils/util";
 import {SortType, UserAction, UpdateType} from "../constants";
+import {filter} from "../utils/filter";
 
 const FILM_QUANTITY_PER_STEP = 5;
 
 class FilmsBoard {
-  constructor(container, filmsModel) {
+  constructor(container, filmsModel, filterModel) {
     this._container = container;
     this._filmsModel = filmsModel;
+    this._filterModel = filterModel;
     this._renderedFilmsQuantity = FILM_QUANTITY_PER_STEP;
     this._filmPresenters = {};
     this._currentSortType = SortType.DEFAULT;
@@ -34,6 +36,7 @@ class FilmsBoard {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
     this._filmsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
   }
 
   init() {
@@ -41,13 +44,17 @@ class FilmsBoard {
   }
 
   _getFilms() {
+    const filterType = this._filterModel.getFilter();
+    const films = this._filmsModel.getFilms();
+    const filteredFilms = filter[filterType](films);
+
     switch (this._currentSortType) {
       case SortType.DATE:
-        return this._filmsModel.getFilms().slice().sort(sortFilmsByDate).reverse();
+        return filteredFilms.slice().sort(sortFilmsByDate).reverse();
       case SortType.RATING:
-        return this._filmsModel.getFilms().slice().sort(sortFilmsByRating).reverse();
+        return filteredFilms.slice().sort(sortFilmsByRating).reverse();
     }
-    return this._filmsModel.getFilms();
+    return filteredFilms;
   }
 
   _handleViewAction(actionType, updateType, update) {
@@ -93,7 +100,7 @@ class FilmsBoard {
     }
     this._currentSortType = sortType;
     this._clearFilmsBoard({resetRenderedFilmQuantity: true, resetSortType: false});
-    this._rerenderFilmsBoard();
+    this._renderFilmsBoard();
   }
 
   _renderSorting() {
@@ -150,21 +157,9 @@ class FilmsBoard {
     }
   }
 
-  _rerenderFilmsBoard() {
-    const films = this._getFilms();
-    const filmQuantity = films.length;
-    if (!filmQuantity) {
-      this._renderNoFilms();
-      return;
-    }
-    this._renderFilms(films.slice(0, Math.min(filmQuantity, FILM_QUANTITY_PER_STEP)));
-    if (filmQuantity > this._renderedFilmsQuantity) {
-      this._renderShowMoreButton();
-    }
-  }
-
   _clearFilmsBoard({resetRenderedFilmQuantity = false, resetSortType = false} = {}) {
     const taskCount = this._getFilms().length;
+    remove(this._sortingComponent);
     Object
       .values(this._filmPresenters)
       .forEach((presenter) => presenter.destroy());

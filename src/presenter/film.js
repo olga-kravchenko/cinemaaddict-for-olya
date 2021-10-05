@@ -139,7 +139,6 @@ class Film {
         updatedFilm);
   }
 
-
   _handlerDeleteComment(updatedFilm) {
     this._changeData(
         UserAction.UPDATE_FILM,
