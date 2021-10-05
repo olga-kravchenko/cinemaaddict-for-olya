@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import he from "he";
 import {copyFilm, formatTime, convertFormat} from "../utils/util";
 import {EMOTIONS} from "../constants";
 import SmartView from "./smart";
@@ -32,7 +33,7 @@ const createCommentsTemplate = (newComments) => {
         <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
       </span>
       <div>
-        <p class="film-details__comment-text">${comment}</p>
+        <p class="film-details__comment-text">${he.encode(comment)}</p>
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${author}</span>
           <span class="film-details__comment-day">${format}</span>
@@ -265,7 +266,6 @@ class Popup extends SmartView {
     const id = evt.target.closest(`li`).id;
     const newFilm = copyFilm(this.data);
     newFilm.comments = newFilm.comments.filter((commentId) => commentId !== id);
-    // newFilm.comments.splice(id, 1);
     IdToMap.delete(id);
     this._callback.popupDelite(newFilm);
   }
