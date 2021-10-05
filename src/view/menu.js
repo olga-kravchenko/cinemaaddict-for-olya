@@ -41,11 +41,14 @@ class Menu extends Abstract {
 
     this.getElement().querySelectorAll(`.main-navigation__item--active`)
       .forEach((e) => e.classList.remove(`main-navigation__item--active`));
-    // evt.target.classList.add(`main-navigation__item--active`);
+    evt.target.classList.add(`main-navigation__item--active`);
     this._callback.filterTypeChange(evt.target.dataset.filterType);
   }
 
-  _statsClickHandler() {
+  _statsClickHandler(evt) {
+    this.getElement().querySelectorAll(`.main-navigation__item--active`)
+      .forEach((e) => e.classList.remove(`main-navigation__item--active`));
+    evt.target.classList.add(`main-navigation__item--active`);
     this._callback.statsClick();
   }
 

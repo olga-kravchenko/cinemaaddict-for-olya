@@ -56,7 +56,8 @@ export default class Filter {
   }
 
   _handleStatsClickChange() {
-    this._filmBoardPresenter._clearFilmsBoard();
+    this._currentFilter = null;
+    this._filmBoardPresenter.destroy();
     render(this._menuContainer, this._statsComponent, RenderPosition.BEFORE_END);
   }
 
