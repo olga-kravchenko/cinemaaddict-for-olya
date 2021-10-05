@@ -262,11 +262,12 @@ class Popup extends SmartView {
   }
 
   _commentDeleteHandler(evt) {
-    const index = evt.target.closest(`li`).id;
+    const id = evt.target.closest(`li`).id;
     const newFilm = copyFilm(this.data);
-    newFilm.comments.splice(index, 1);
-    IdToMap.delete(index);
-    this._callback.popupDelite(this.data);
+    newFilm.comments = newFilm.comments.filter((commentId) => commentId !== id);
+    // newFilm.comments.splice(id, 1);
+    IdToMap.delete(id);
+    this._callback.popupDelite(newFilm);
   }
 
   _setPopupWatchlistClickHandler() {
