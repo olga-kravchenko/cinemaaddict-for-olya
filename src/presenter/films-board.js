@@ -61,8 +61,6 @@ class FilmsBoard {
     this._clearFilmsBoard({resetRenderedFilmQuantity: true, resetSortType: true});
     remove(this._filmListComponent);
     remove(this._contentContainerComponent);
-    this._filmsModel.removeObserver(this._handleModelEvent);
-    this._filterModel.removeObserver(this._handleModelEvent);
   }
 
   _handleViewAction(actionType, updateType, update) {

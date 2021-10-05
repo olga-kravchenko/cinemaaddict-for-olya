@@ -12,6 +12,7 @@ export default class Filter {
     this._filmsModel = filmsModel;
     this._filmBoardPresenter = filmBoardPresenter;
     this._currentFilter = null;
+    this._statsComponent = null;
 
     this._menuComponent = null;
 
@@ -30,7 +31,7 @@ export default class Filter {
     const prevFilterComponent = this._menuComponent;
 
     this._menuComponent = new MenuView(filters, this._currentFilter);
-    this._statsComponent = new StatsView();
+
     this._menuComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
     this._menuComponent.setStatsClickHandler(this._handleStatsClickChange);
 
@@ -52,12 +53,20 @@ export default class Filter {
       return;
     }
 
+    if (this._statsComponent) {
+      remove(this._statsComponent);
+      this.init();
+      this._filmBoardPresenter.init();
+      this._statsComponent = null;
+    }
     this._filterModel.setFilter(UpdateType.MAJOR, filterType);
   }
 
   _handleStatsClickChange() {
     this._currentFilter = null;
+    this._statsComponent = new StatsView();
     this._filmBoardPresenter.destroy();
+
     render(this._menuContainer, this._statsComponent, RenderPosition.BEFORE_END);
   }
 
