@@ -25,10 +25,10 @@ const UpdateType = {
 };
 
 const FilterType = {
-  ALL: `All movies`,
-  WATCHLIST: `Watchlist`,
-  HISTORY: `History`,
-  FAVORITES: `Favorites`,
+  ALL: `all`,
+  WATCHLIST: `watchlist`,
+  HISTORY: `history`,
+  FAVORITES: `favorites`,
 };
 
 export {UserStatus, EMOTIONS, SortType, UserAction, UpdateType, FilterType};
