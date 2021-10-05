@@ -23,7 +23,7 @@ const statistics = document.querySelector(`.footer__statistics`);
 render(header, new UserView(films), RenderPosition.BEFORE_END);
 
 const filmBoardPresenter = new FilmsBoardPresenter(main, filmsModel, filterModel);
-const filterPresenter = new FilterPresenter(main, filterModel, filmsModel);
+const filterPresenter = new FilterPresenter(main, filterModel, filmsModel, filmBoardPresenter);
 
 filterPresenter.init();
 filmBoardPresenter.init();
