@@ -1,9 +1,73 @@
 import SmartView from "./smart";
+import Chart from "chart.js";
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+
+const renderStatisticChart = (statisticCtx) => {
+  const BAR_HEIGHT = 50;
+  statisticCtx.height = BAR_HEIGHT * 5;
+
+  return new Chart(statisticCtx, {
+    plugins: [ChartDataLabels],
+    type: `horizontalBar`,
+    data: {
+      labels: [`Sci-Fi`, `Animation`, `Fantasy`, `Comedy`, `TV Series`],
+      datasets: [{
+        data: [11, 8, 7, 4, 3],
+        backgroundColor: `#ffe800`,
+        hoverBackgroundColor: `#ffe800`,
+        anchor: `start`,
+      }],
+    },
+    options: {
+      plugins: {
+        datalabels: {
+          font: {
+            size: 20,
+          },
+          color: `#ffffff`,
+          anchor: `start`,
+          align: `start`,
+          offset: 40,
+        },
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            fontColor: `#ffffff`,
+            padding: 100,
+            fontSize: 20,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false,
+          },
+          barThickness: 24,
+        }],
+        xAxes: [{
+          ticks: {
+            display: false,
+            beginAtZero: true,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false,
+          },
+        }],
+      },
+      legend: {
+        display: false,
+      },
+      tooltips: {
+        enabled: false,
+      },
+    },
+  });
+};
 
 const createStatisticStatesTemplate = () => {
   const stateNames = [`All time`, `Today`, `Week`, `Month`, `Year`];
   const statisticsStates = stateNames.map((name) => `
-   <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-${name.toLowerCase()}" value="${name.toLowerCase()}" ${name === `All time` ? `checked` : `` }>
+   <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-${name.toLowerCase()}" value="${name.toLowerCase()}" ${name === `All time` ? `checked` : ``}>
       <label for="statistic-${name.toLowerCase()}" class="statistic__filters-label">${name}</label>
   `);
   return statisticsStates.join(``);
@@ -52,15 +116,34 @@ class Stats extends SmartView {
   constructor(films) {
     super();
     this._films = films;
+
+    this._statisticCart = null;
+    this._setCharts();
   }
 
+  removeElement() {
+    super.removeElement();
+
+    if (this._statisticCart !== null) {
+      this._statisticCart = null;
+    }
+  }
 
   getTemplate() {
     return createStatsPageTemplate(this._films);
   }
 
+  restoreHandlers() {
+    this._setCharts();
+  }
+
   _setCharts() {
-    // Нужно отрисовать два графика
+    if (this._statisticCart !== null) {
+      this._statisticCart = null;
+    }
+
+    const statisticCtx = this.getElement().querySelector(`.statistic__chart`);
+    this._statisticCart = renderStatisticChart(statisticCtx);
   }
 }
 
