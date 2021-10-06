@@ -20,7 +20,7 @@ const header = document.querySelector(`.header`);
 const main = document.querySelector(`.main`);
 const statistics = document.querySelector(`.footer__statistics`);
 
-render(header, new UserView(films), RenderPosition.BEFORE_END);
+render(header, new UserView(filmsModel.getFilms()), RenderPosition.BEFORE_END);
 
 const filmBoardPresenter = new FilmsBoardPresenter(main, filmsModel, filterModel);
 const menuPresenter = new MenuPresenter(main, filterModel, filmsModel, filmBoardPresenter);

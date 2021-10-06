@@ -1,18 +1,21 @@
+import dayjs from "dayjs";
 import SmartView from "./smart";
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import {getUserStatus, calculateGenres, calculateDuration, getPopularGenre} from "../utils/stats";
 
-const renderStatisticChart = (statisticCtx) => {
+const renderStatisticChart = (statisticCtx, films) => {
   const BAR_HEIGHT = 50;
-  statisticCtx.height = BAR_HEIGHT * 5;
+  const genres = calculateGenres(films);
+  statisticCtx.height = BAR_HEIGHT * Object.values(genres).length;
 
   return new Chart(statisticCtx, {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
     data: {
-      labels: [`Sci-Fi`, `Animation`, `Fantasy`, `Comedy`, `TV Series`],
+      labels: Object.keys(genres),
       datasets: [{
-        data: [11, 8, 7, 4, 3],
+        data: Object.values(genres),
         backgroundColor: `#ffe800`,
         hoverBackgroundColor: `#ffe800`,
         anchor: `start`,
@@ -74,14 +77,20 @@ const createStatisticStatesTemplate = () => {
 };
 
 const createStatsPageTemplate = (films) => {
-  console.log(films);
   const statisticStates = createStatisticStatesTemplate();
+  const status = getUserStatus(films);
+  const watchedFilms = films.filter((film) => film.userDetails.watchlist);
+  const minutes = calculateDuration(watchedFilms);
+  const h = Math.floor((minutes / 60));
+  const m = minutes % 60;
+  const popularGenre = getPopularGenre(films);
+
   return `
   <section class="statistic">
     <p class="statistic__rank">
       Your rank
       <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-      <span class="statistic__rank-label">Sci-Fighter</span>
+      <span class="statistic__rank-label">${status}</span>
     </p>
 
     <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
@@ -93,16 +102,18 @@ const createStatsPageTemplate = (films) => {
     <ul class="statistic__text-list">
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">You watched</h4>
-        <p class="statistic__item-text">22 <span class="statistic__item-description">movies</span></p>
+        <p class="statistic__item-text">${watchedFilms.length} <span class="statistic__item-description">movies</span></p>
       </li>
+      ${watchedFilms.length ? `
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">Total duration</h4>
-        <p class="statistic__item-text">130 <span class="statistic__item-description">h</span> 22 <span class="statistic__item-description">m</span></p>
+        <p class="statistic__item-text">${h} <span class="statistic__item-description">h</span> ${m} <span class="statistic__item-description">m</span></p>
       </li>
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">Top genre</h4>
-        <p class="statistic__item-text">Sci-Fi</p>
-      </li>
+        <p class="statistic__item-text">${popularGenre}</p>
+      </li>` : ``}
+
     </ul>
 
     <div class="statistic__chart-wrap">
@@ -114,8 +125,7 @@ const createStatsPageTemplate = (films) => {
 
 class Stats extends SmartView {
   constructor(films) {
-    super();
-    this._films = films;
+    super(films);
 
     this._statisticCart = null;
     this._setCharts();
@@ -130,7 +140,7 @@ class Stats extends SmartView {
   }
 
   getTemplate() {
-    return createStatsPageTemplate(this._films);
+    return createStatsPageTemplate(this.data);
   }
 
   restoreHandlers() {
@@ -143,7 +153,7 @@ class Stats extends SmartView {
     }
 
     const statisticCtx = this.getElement().querySelector(`.statistic__chart`);
-    this._statisticCart = renderStatisticChart(statisticCtx);
+    this._statisticCart = renderStatisticChart(statisticCtx, this.data);
   }
 }
 

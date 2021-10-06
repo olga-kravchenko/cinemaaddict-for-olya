@@ -111,4 +111,4 @@ const generateFilm = () => {
   };
 };
 
-export {generateFilm, IdToMap};
+export {generateFilm, IdToMap, GENRES};
