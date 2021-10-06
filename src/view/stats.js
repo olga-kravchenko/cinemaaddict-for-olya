@@ -3,7 +3,7 @@ import Abstract from "./abstract";
 const createStatisticStatesTemplate = () => {
   const stateNames = [`All time`, `Today`, `Week`, `Month`, `Year`];
   const statisticsStates = stateNames.map((name) => `
-   <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-${name.toLowerCase()}" value="${name.toLowerCase()}">
+   <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-${name.toLowerCase()}" value="${name.toLowerCase()}" ${name === `All time` ? `checked` : `` }>
       <label for="statistic-${name.toLowerCase()}" class="statistic__filters-label">${name}</label>
   `);
   return statisticsStates.join(``);

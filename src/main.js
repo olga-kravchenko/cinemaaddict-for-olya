@@ -5,7 +5,7 @@ import {generateFilm} from "./mock/film";
 import FilmsBoardPresenter from "./presenter/films-board";
 import FilmsModel from "./model/film";
 import FilterModel from "./model/filter";
-import FilterPresenter from "./presenter/filter";
+import MenuPresenter from "./presenter/menu";
 
 const FILMS_QUANTITY = 22;
 
@@ -23,9 +23,9 @@ const statistics = document.querySelector(`.footer__statistics`);
 render(header, new UserView(films), RenderPosition.BEFORE_END);
 
 const filmBoardPresenter = new FilmsBoardPresenter(main, filmsModel, filterModel);
-const filterPresenter = new FilterPresenter(main, filterModel, filmsModel, filmBoardPresenter);
+const menuPresenter = new MenuPresenter(main, filterModel, filmsModel, filmBoardPresenter);
 
-filterPresenter.init();
+menuPresenter.init();
 filmBoardPresenter.init();
 
 render(statistics, new FilmsQuantityView(films.length), RenderPosition.BEFORE_END);

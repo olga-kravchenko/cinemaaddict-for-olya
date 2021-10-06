@@ -12,12 +12,6 @@ const SortType = {
   RATING: `rating`
 };
 
-const UserAction = {
-  UPDATE_FILM: `UPDATE_FILM`,
-  ADD_COMMENT: `ADD_COMMENT`,
-  DELETE_COMMENT: `DELETE_COMMENT`
-};
-
 const UpdateType = {
   PATCH: `PATCH`,
   MINOR: `MINOR`,
@@ -31,4 +25,4 @@ const FilterType = {
   FAVORITES: `favorites`,
 };
 
-export {UserStatus, EMOTIONS, SortType, UserAction, UpdateType, FilterType};
+export {UserStatus, EMOTIONS, SortType, UpdateType, FilterType};

@@ -24,7 +24,7 @@ class Menu extends Abstract {
     this._filters = filters;
     this._currentFilterType = currentFilterType;
 
-    this._filterTypeChangeHandler = this._filterTypeChangeHandler.bind(this);
+    this._filterTypeClickHandler = this._filterTypeClickHandler.bind(this);
     this._statsClickHandler = this._statsClickHandler.bind(this);
   }
 
@@ -32,7 +32,7 @@ class Menu extends Abstract {
     return createMenuTemplate(this._filters, this._currentFilterType);
   }
 
-  _filterTypeChangeHandler(evt) {
+  _filterTypeClickHandler(evt) {
     evt.preventDefault();
 
     if (evt.target.tagName !== `A`) {
@@ -52,10 +52,10 @@ class Menu extends Abstract {
     this._callback.statsClick();
   }
 
-  setFilterTypeChangeHandler(callback) {
+  setFilterTypeClickHandler(callback) {
     this._callback.filterTypeChange = callback;
     this.getElement().querySelector(`.main-navigation__items`)
-      .addEventListener(`click`, this._filterTypeChangeHandler);
+      .addEventListener(`click`, this._filterTypeClickHandler);
   }
 
   setStatsClickHandler(callback) {

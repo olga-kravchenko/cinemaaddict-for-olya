@@ -5,7 +5,7 @@ import {render, replace, remove} from "../utils/render";
 import {UpdateType, FilterType} from "../constants";
 import {filter} from "../utils/filter";
 
-export default class Filter {
+export default class Menu {
   constructor(menuContainer, filterModel, filmsModel, filmBoardPresenter) {
     this._menuContainer = menuContainer;
     this._filterModel = filterModel;
@@ -13,12 +13,11 @@ export default class Filter {
     this._filmBoardPresenter = filmBoardPresenter;
     this._currentFilter = null;
     this._statsComponent = null;
-
     this._menuComponent = null;
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
-    this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
-    this._handleStatsClickChange = this._handleStatsClickChange.bind(this);
+    this._handleFilterTypeClick = this._handleFilterTypeClick.bind(this);
+    this._handleStatsClick = this._handleStatsClick.bind(this);
 
     this._filmsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
@@ -26,14 +25,13 @@ export default class Filter {
 
   init() {
     this._currentFilter = this._filterModel.getFilter();
-
     const filters = this._getFilters();
     const prevFilterComponent = this._menuComponent;
 
     this._menuComponent = new MenuView(filters, this._currentFilter);
 
-    this._menuComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
-    this._menuComponent.setStatsClickHandler(this._handleStatsClickChange);
+    this._menuComponent.setFilterTypeClickHandler(this._handleFilterTypeClick);
+    this._menuComponent.setStatsClickHandler(this._handleStatsClick);
 
     if (prevFilterComponent === null) {
       render(this._menuContainer, this._menuComponent, RenderPosition.BEFORE_END);
@@ -48,11 +46,10 @@ export default class Filter {
     this.init();
   }
 
-  _handleFilterTypeChange(filterType) {
+  _handleFilterTypeClick(filterType) {
     if (this._currentFilter === filterType) {
       return;
     }
-
     if (this._statsComponent) {
       remove(this._statsComponent);
       this.init();
@@ -62,17 +59,15 @@ export default class Filter {
     this._filterModel.setFilter(UpdateType.MAJOR, filterType);
   }
 
-  _handleStatsClickChange() {
+  _handleStatsClick() {
     this._currentFilter = null;
     this._statsComponent = new StatsView();
     this._filmBoardPresenter.destroy();
-
     render(this._menuContainer, this._statsComponent, RenderPosition.BEFORE_END);
   }
 
   _getFilters() {
     const films = this._filmsModel.getFilms();
-
     return [
       {
         type: FilterType.ALL,

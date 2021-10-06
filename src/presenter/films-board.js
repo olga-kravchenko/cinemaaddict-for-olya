@@ -7,7 +7,7 @@ import ShowMoreButtonView from "../view/show-more-button";
 import FilmPresenter from "./film";
 import {remove, render, RenderPosition} from "../utils/render";
 import {sortFilmsByDate, sortFilmsByRating} from "../utils/util";
-import {SortType, UserAction, UpdateType} from "../constants";
+import {SortType, UpdateType} from "../constants";
 import {filter} from "../utils/filter";
 
 const FILM_QUANTITY_PER_STEP = 5;
@@ -33,7 +33,7 @@ class FilmsBoard {
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
-    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
+    this._handleSortTypeClick = this._handleSortTypeClick.bind(this);
 
     this._filmsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
@@ -41,6 +41,8 @@ class FilmsBoard {
 
   init() {
     this._renderFilmsBoard();
+    this._filmsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
   }
 
   _getFilms() {
@@ -61,20 +63,18 @@ class FilmsBoard {
     this._clearFilmsBoard({resetRenderedFilmQuantity: true, resetSortType: true});
     remove(this._filmListComponent);
     remove(this._contentContainerComponent);
+    this._filmsModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
   }
 
-  _handleViewAction(actionType, updateType, update) {
-    switch (actionType) {
-      case UserAction.UPDATE_FILM:
-        this._filmsModel.updateFilm(updateType, update);
-        break;
-    }
+  _handleViewAction(updateType, updatedFilm) {
+    this._filmsModel.updateFilm(updateType, updatedFilm);
   }
 
-  _handleModelEvent(updateType, data) {
+  _handleModelEvent(updateType, film) {
     switch (updateType) {
       case UpdateType.PATCH:
-        this._filmPresenters[data.id].initOrUpdate(data);
+        this._filmPresenters[film.id].initOrUpdate(film);
         break;
       case UpdateType.MINOR:
         this._clearFilmsBoard();
@@ -88,19 +88,19 @@ class FilmsBoard {
   }
 
   _handleShowMoreButtonClick() {
-    const filmCount = this._getFilms().length;
-    const newRenderedFilmCount = Math.min(filmCount, this._renderedFilmsQuantity + FILM_QUANTITY_PER_STEP);
+    const filmQuantity = this._getFilms().length;
+    const newRenderedFilmCount = Math.min(filmQuantity, this._renderedFilmsQuantity + FILM_QUANTITY_PER_STEP);
     const films = this._getFilms().slice(this._renderedFilmsQuantity, newRenderedFilmCount);
 
     this._renderFilms(films);
     this._renderedFilmsQuantity = newRenderedFilmCount;
 
-    if (this._renderedFilmsQuantity >= filmCount) {
+    if (this._renderedFilmsQuantity >= filmQuantity) {
       remove(this._showMoreButtonComponent);
     }
   }
 
-  _handleSortTypeChange(sortType) {
+  _handleSortTypeClick(sortType) {
     if (this._currentSortType === sortType) {
       return;
     }
@@ -114,7 +114,7 @@ class FilmsBoard {
       this._sortingComponent = null;
     }
     this._sortingComponent = new SortingView(this._currentSortType);
-    this._sortingComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
+    this._sortingComponent.setSortTypeChangeHandler(this._handleSortTypeClick);
     render(this._container, this._sortingComponent, RenderPosition.BEFORE_END);
   }
 
@@ -164,7 +164,7 @@ class FilmsBoard {
   }
 
   _clearFilmsBoard({resetRenderedFilmQuantity = false, resetSortType = false} = {}) {
-    const taskCount = this._getFilms().length;
+    const filmQuantity = this._getFilms().length;
     remove(this._sortingComponent);
     Object
       .values(this._filmPresenters)
@@ -175,7 +175,7 @@ class FilmsBoard {
     if (resetRenderedFilmQuantity) {
       this._renderedFilmsQuantity = FILM_QUANTITY_PER_STEP;
     } else {
-      this._renderedFilmsQuantity = Math.min(taskCount, this._renderedFilmsQuantity);
+      this._renderedFilmsQuantity = Math.min(filmQuantity, this._renderedFilmsQuantity);
     }
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;

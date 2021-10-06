@@ -1,7 +1,7 @@
 import FilmView from "../view/film";
 import PopupView from "../view/popup";
 import {render, RenderPosition, remove, replace} from "../utils/render";
-import {UpdateType, UserAction} from "../constants";
+import {UpdateType} from "../constants";
 
 class Film {
   constructor(container, changeData) {
@@ -84,7 +84,6 @@ class Film {
       evt.preventDefault();
       this._closePopup();
       this._changeData(
-          UserAction.UPDATE_FILM,
           UpdateType.PATCH,
           this._filmPopupComponent.data);
       document.removeEventListener(`keydown`, this._handleEscKeyDown);
@@ -100,7 +99,6 @@ class Film {
     const updatedFilm = Object.assign({}, this._film);
     updatedFilm.userDetails.watchlist = !this._film.userDetails.watchlist;
     this._changeData(
-        UserAction.UPDATE_FILM,
         UpdateType.PATCH,
         updatedFilm);
   }
@@ -109,7 +107,6 @@ class Film {
     const updatedFilm = Object.assign({}, this._film);
     updatedFilm.userDetails.alreadyWatched = !this._film.userDetails.alreadyWatched;
     this._changeData(
-        UserAction.UPDATE_FILM,
         UpdateType.PATCH,
         updatedFilm);
   }
@@ -118,7 +115,6 @@ class Film {
     const updatedFilm = Object.assign({}, this._film);
     updatedFilm.userDetails.favorite = !this._film.userDetails.favorite;
     this._changeData(
-        UserAction.UPDATE_FILM,
         UpdateType.PATCH,
         updatedFilm);
   }
@@ -126,7 +122,6 @@ class Film {
   _handleCloseButtonClick(updatedFilm) {
     this._closePopup();
     this._changeData(
-        UserAction.UPDATE_FILM,
         UpdateType.PATCH,
         updatedFilm);
     document.removeEventListener(`keydown`, this._handleEscKeyDown);
@@ -134,14 +129,12 @@ class Film {
 
   _handlerAddComment(updatedFilm) {
     this._changeData(
-        UserAction.UPDATE_FILM,
         UpdateType.PATCH,
         updatedFilm);
   }
 
   _handlerDeleteComment(updatedFilm) {
     this._changeData(
-        UserAction.UPDATE_FILM,
         UpdateType.PATCH,
         updatedFilm);
   }

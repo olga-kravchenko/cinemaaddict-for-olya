@@ -267,7 +267,7 @@ class Popup extends SmartView {
     const newFilm = copyFilm(this.data);
     newFilm.comments = newFilm.comments.filter((commentId) => commentId !== id);
     IdToMap.delete(id);
-    this._callback.popupDelite(newFilm);
+    this._callback.popupDelete(newFilm);
   }
 
   _setPopupWatchlistClickHandler() {
@@ -303,7 +303,7 @@ class Popup extends SmartView {
   }
 
   setCommentDeleteHandler(callback) {
-    this._callback.popupDelite = callback;
+    this._callback.popupDelete = callback;
     this.getElement()
       .querySelectorAll(`.film-details__comment-delete`)
       .forEach((e) => e.addEventListener(`click`, this._commentDeleteHandler));
