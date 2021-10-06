@@ -1,4 +1,4 @@
-import Abstract from "./abstract";
+import SmartView from "./smart";
 
 const createStatisticStatesTemplate = () => {
   const stateNames = [`All time`, `Today`, `Week`, `Month`, `Year`];
@@ -9,7 +9,8 @@ const createStatisticStatesTemplate = () => {
   return statisticsStates.join(``);
 };
 
-const createStatsPageTemplate = () => {
+const createStatsPageTemplate = (films) => {
+  console.log(films);
   const statisticStates = createStatisticStatesTemplate();
   return `
   <section class="statistic">
@@ -47,9 +48,19 @@ const createStatsPageTemplate = () => {
   </section>`;
 };
 
-class Stats extends Abstract {
+class Stats extends SmartView {
+  constructor(films) {
+    super();
+    this._films = films;
+  }
+
+
   getTemplate() {
-    return createStatsPageTemplate();
+    return createStatsPageTemplate(this._films);
+  }
+
+  _setCharts() {
+    // Нужно отрисовать два графика
   }
 }
 
