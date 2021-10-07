@@ -84,7 +84,7 @@ class Film {
       evt.preventDefault();
       this._closePopup();
       this._changeData(
-          UpdateType.MAJOR,
+          UpdateType.PATCH,
           UserAction.UPDATE_FILMS,
           this._filmPopupComponent.data);
       document.removeEventListener(`keydown`, this._handleEscKeyDown);
@@ -101,7 +101,7 @@ class Film {
     const updatedFilm = Object.assign({}, this._film);
     updatedFilm.userDetails.watchlist = !this._film.userDetails.watchlist;
     this._changeData(
-        UpdateType.MAJOR,
+        UpdateType.PATCH,
         UserAction.UPDATE_FILMS,
         updatedFilm);
   }
@@ -110,7 +110,7 @@ class Film {
     const updatedFilm = Object.assign({}, this._film);
     updatedFilm.userDetails.alreadyWatched = !this._film.userDetails.alreadyWatched;
     this._changeData(
-        UpdateType.MAJOR,
+        UpdateType.PATCH,
         UserAction.UPDATE_FILMS,
         updatedFilm);
   }
@@ -119,7 +119,7 @@ class Film {
     const updatedFilm = Object.assign({}, this._film);
     updatedFilm.userDetails.favorite = !this._film.userDetails.favorite;
     this._changeData(
-        UpdateType.MAJOR,
+        UpdateType.PATCH,
         UserAction.UPDATE_FILMS,
         updatedFilm);
   }
@@ -127,7 +127,7 @@ class Film {
   _handleCloseButtonClick(updatedFilm) {
     this._closePopup();
     this._changeData(
-        UpdateType.MAJOR,
+        UpdateType.PATCH,
         UserAction.UPDATE_FILMS,
         updatedFilm);
     document.removeEventListener(`keydown`, this._handleEscKeyDown);
@@ -135,14 +135,14 @@ class Film {
 
   _handlerAddComment(updatedFilm) {
     this._changeData(
-        UpdateType.MAJOR,
+        UpdateType.PATCH,
         UserAction.UPDATE_FILMS,
         updatedFilm);
   }
 
   _handlerDeleteComment(updatedFilm) {
     this._changeData(
-        UpdateType.MAJOR,
+        UpdateType.PATCH,
         UserAction.UPDATE_FILMS,
         updatedFilm);
   }

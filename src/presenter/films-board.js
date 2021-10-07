@@ -7,16 +7,17 @@ import ShowMoreButtonView from "../view/show-more-button";
 import FilmPresenter from "./film";
 import {remove, render, RenderPosition} from "../utils/render";
 import {sortFilmsByDate, sortFilmsByRating} from "../utils/util";
-import {SortType, UpdateType, UserAction} from "../constants";
+import {FilterType, SortType, UpdateType, UserAction} from "../constants";
 import {filter} from "../utils/filter";
 
 const FILM_QUANTITY_PER_STEP = 5;
 
 class FilmsBoard {
-  constructor(container, filmsModel, filterModel) {
+  constructor(container, filmsModel, filterModel, statsComponent) {
     this._container = container;
     this._filmsModel = filmsModel;
     this._filterModel = filterModel;
+    this._statsComponent = statsComponent;
     this._renderedFilmsQuantity = FILM_QUANTITY_PER_STEP;
     this._filmPresenters = {};
     this._currentSortType = SortType.DEFAULT;
@@ -68,11 +69,18 @@ class FilmsBoard {
   }
 
   _handleViewAction(updateType, actionType, updatedFilm) {
-    this._filmsModel.updateFilm(updateType, updatedFilm);
+    // this._filmsModel.updateFilm(updateType, updatedFilm);
 
     switch (actionType) {
       case UserAction.UPDATE_FILMS:
+        if (this._filterModel.getFilter() === FilterType.ALL) {
+          updateType = UpdateType.PATCH;
+        } else {
+          updateType = UpdateType.MAJOR;
+        }
         this._filmsModel.updateFilm(updateType, updatedFilm);
+        console.log(this._filmsModel.getFilms());
+        this._statsComponent.updateState(this._filmsModel.getFilms(), true);
         break;
       // case UserAction.ADD_TASK:
       //   this._tasksModel.addTask(updateType, update);

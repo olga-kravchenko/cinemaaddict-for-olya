@@ -23,9 +23,9 @@ const statistics = document.querySelector(`.footer__statistics`);
 
 const statsComponent = new StatsView(filmsModel.getFilms());
 render(header, new UserView(filmsModel.getFilms()), RenderPosition.BEFORE_END);
-statsComponent.hide();
+// statsComponent.hide();
 
-const filmBoardPresenter = new FilmsBoardPresenter(main, filmsModel, filterModel);
+const filmBoardPresenter = new FilmsBoardPresenter(main, filmsModel, filterModel, statsComponent);
 const menuPresenter = new MenuPresenter(main, filterModel, filmsModel, filmBoardPresenter);
 
 menuPresenter.init();
