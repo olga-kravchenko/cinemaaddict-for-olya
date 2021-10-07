@@ -3,6 +3,39 @@ import SmartView from "./smart";
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import {getUserStatus, calculateGenres, calculateDuration, getPopularGenre} from "../utils/stats";
+import {FilterType} from "../constants";
+import {filter} from "../utils/filter";
+
+const Period = {
+  ALL_TIME: `all-time`,
+  TODAY: `today`,
+  WEEK: `week`,
+  MONTH: `month`,
+  YEAR: `year`
+};
+
+const FilterPeriod = {
+  [Period.ALL_TIME]: (films) => films,
+  [Period.TODAY]: (films) => films.filter((film) => {
+    const today = dayjs();
+    return today.diff(dayjs(film.userDetails.watchingDate), `day`) === 0;
+  }),
+  [Period.WEEK]: (films) => films.filter((film) => {
+    const today = dayjs();
+    const daysInAWeek = 7;
+    return today.diff(dayjs(film.userDetails.watchingDate), `day`) <= daysInAWeek;
+  }),
+  [Period.MONTH]: (films) => films.filter((film) => {
+    const today = dayjs();
+    const daysInAMonth = 30;
+    return today.diff(dayjs(film.userDetails.watchingDate), `day`) <= daysInAMonth;
+  }),
+  [Period.YEAR]: (films) => films.filter((film) => {
+    const today = dayjs();
+    const daysInAYear = 365;
+    return today.diff(dayjs(film.userDetails.watchingDate), `year`) <= daysInAYear;
+  }),
+};
 
 const renderStatisticChart = (statisticCtx, films) => {
   const BAR_HEIGHT = 50;
@@ -67,20 +100,12 @@ const renderStatisticChart = (statisticCtx, films) => {
   });
 };
 
-const createStatisticStatesTemplate = () => {
-  const stateNames = [`All time`, `Today`, `Week`, `Month`, `Year`];
-  const statisticsStates = stateNames.map((name) => `
-   <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-${name.toLowerCase()}" value="${name.toLowerCase()}" ${name === `All time` ? `checked` : ``}>
-      <label for="statistic-${name.toLowerCase()}" class="statistic__filters-label">${name}</label>
-  `);
-  return statisticsStates.join(``);
-};
 
-const createStatsPageTemplate = (films) => {
-  const statisticStates = createStatisticStatesTemplate();
+const createStatsPageTemplate = (films, activePeriod) => {
+  films = filter[FilterType.HISTORY](films);
   const status = getUserStatus(films);
-  const watchedFilms = films.filter((film) => film.userDetails.alreadyWatched);
-  const minutes = calculateDuration(watchedFilms);
+  films = FilterPeriod[activePeriod](films);
+  const minutes = calculateDuration(films);
   const h = Math.floor((minutes / 60));
   const m = minutes % 60;
   const popularGenre = getPopularGenre(films);
@@ -96,15 +121,28 @@ const createStatsPageTemplate = (films) => {
     <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
       <p class="statistic__filters-description">Show stats:</p>
 
-      ${statisticStates}
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="all-time" ${activePeriod === Period.ALL_TIME ? `checked` : ``}>
+      <label for="statistic-all-time" class="statistic__filters-label">All time</label>
+
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-today" value="today" ${activePeriod === Period.TODAY ? `checked` : ``}>
+      <label for="statistic-today" class="statistic__filters-label">Today</label>
+
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-week" value="week" ${activePeriod === Period.WEEK ? `checked` : ``}>
+      <label for="statistic-week" class="statistic__filters-label">Week</label>
+
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-month" value="month" ${activePeriod === Period.MONTH ? `checked` : ``}>
+      <label for="statistic-month" class="statistic__filters-label">Month</label>
+
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-year" value="year" ${activePeriod === Period.YEAR ? `checked` : ``}>
+      <label for="statistic-year" class="statistic__filters-label">Year</label>
     </form>
 
     <ul class="statistic__text-list">
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">You watched</h4>
-        <p class="statistic__item-text">${watchedFilms.length} <span class="statistic__item-description">movies</span></p>
+        <p class="statistic__item-text">${films.length} <span class="statistic__item-description">movies</span></p>
       </li>
-      ${watchedFilms.length ? `
+      ${films.length ? `
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">Total duration</h4>
         <p class="statistic__item-text">${h} <span class="statistic__item-description">h</span> ${m} <span class="statistic__item-description">m</span></p>
@@ -127,8 +165,11 @@ class Stats extends SmartView {
   constructor(films) {
     super(films);
 
+    this._acvitePeriod = Period.ALL_TIME;
     this._statisticCart = null;
     this._setCharts();
+    this._handlePeriodChange = this._handlePeriodChange.bind(this);
+    this.setHandlePeriodChange();
   }
 
   removeElement() {
@@ -140,13 +181,13 @@ class Stats extends SmartView {
   }
 
   getTemplate() {
-    return createStatsPageTemplate(this.data);
+    return createStatsPageTemplate(this.data, this._acvitePeriod);
   }
 
   restoreHandlers() {
     this._setCharts();
+    this.setHandlePeriodChange();
   }
-
 
   hide() {
     this.getElement().classList.add(`visually-hidden`);
@@ -156,13 +197,22 @@ class Stats extends SmartView {
     this.getElement().classList.remove(`visually-hidden`);
   }
 
+  _handlePeriodChange(evt) {
+    this._acvitePeriod = evt.target.value;
+    this.updateState(this.data, true);
+  }
+
+  setHandlePeriodChange() {
+    this.getElement().querySelector(`.statistic__filters`).addEventListener(`change`, this._handlePeriodChange);
+  }
+
   _setCharts() {
     if (this._statisticCart !== null) {
       this._statisticCart = null;
     }
 
     const statisticCtx = this.getElement().querySelector(`.statistic__chart`);
-    this._statisticCart = renderStatisticChart(statisticCtx, this.data);
+    this._statisticCart = renderStatisticChart(statisticCtx, FilterPeriod[this._acvitePeriod](this.data));
   }
 }
 

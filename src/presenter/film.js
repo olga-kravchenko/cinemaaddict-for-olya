@@ -2,6 +2,7 @@ import FilmView from "../view/film";
 import PopupView from "../view/popup";
 import {render, RenderPosition, remove, replace} from "../utils/render";
 import {UpdateType, UserAction} from "../constants";
+import dayjs from "dayjs";
 
 class Film {
   constructor(container, changeData) {
@@ -97,9 +98,9 @@ class Film {
   }
 
   _handleWatchlistClick() {
-
     const updatedFilm = Object.assign({}, this._film);
     updatedFilm.userDetails.watchlist = !this._film.userDetails.watchlist;
+    updatedFilm.userDetails.watchingDate = dayjs().toDate();
     this._changeData(
         UpdateType.PATCH,
         UserAction.UPDATE_FILMS,
@@ -109,6 +110,7 @@ class Film {
   _handleAlreadyWatchedClick() {
     const updatedFilm = Object.assign({}, this._film);
     updatedFilm.userDetails.alreadyWatched = !this._film.userDetails.alreadyWatched;
+    updatedFilm.userDetails.watchingDate = dayjs().toDate();
     this._changeData(
         UpdateType.PATCH,
         UserAction.UPDATE_FILMS,
@@ -118,6 +120,7 @@ class Film {
   _handleFavoriteClick() {
     const updatedFilm = Object.assign({}, this._film);
     updatedFilm.userDetails.favorite = !this._film.userDetails.favorite;
+    updatedFilm.userDetails.watchingDate = dayjs().toDate();
     this._changeData(
         UpdateType.PATCH,
         UserAction.UPDATE_FILMS,

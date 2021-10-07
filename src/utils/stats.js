@@ -19,8 +19,7 @@ const getUserStatus = (films) => {
 };
 
 const calculateGenres = (films) => {
-  const watchedFilms = films.filter((film) => film.userDetails.alreadyWatched);
-  const watchedFilmsGenres = watchedFilms.map((e) => e.filmInfo.genres);
+  const watchedFilmsGenres = films.map((e) => e.filmInfo.genres);
   const genres = watchedFilmsGenres.reduce((r, e) => (r.push(...e), r), []);
   const result = {};
   genres.forEach((a) => {
