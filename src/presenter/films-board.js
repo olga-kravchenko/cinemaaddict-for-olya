@@ -8,7 +8,7 @@ import FilmPresenter from "./film";
 import {remove, render, RenderPosition} from "../utils/render";
 import {sortFilmsByDate, sortFilmsByRating} from "../utils/util";
 import {FilterType, SortType, UpdateType, UserAction} from "../constants";
-import {filter} from "../utils/filter";
+import {Filter} from "../utils/filter";
 
 const FILM_QUANTITY_PER_STEP = 5;
 
@@ -49,7 +49,7 @@ class FilmsBoard {
   _getFilms() {
     const filterType = this._filterModel.getFilter();
     const films = this._filmsModel.getFilms();
-    const filteredFilms = filter[filterType](films);
+    const filteredFilms = Filter[filterType](films);
 
     switch (this._currentSortType) {
       case SortType.DATE:
@@ -77,7 +77,7 @@ class FilmsBoard {
           updateType = UpdateType.MAJOR;
         }
         this._filmsModel.updateFilm(updateType, updatedFilm);
-        this._statsComponent.updateState(this._filmsModel.getFilms(), true);
+        this._statsComponent.updateState(this._filmsModel.getFilms(), false);
         this._statsComponent.hide();
         break;
     }

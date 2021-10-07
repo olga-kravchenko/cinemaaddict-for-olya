@@ -247,7 +247,6 @@ class Popup extends SmartView {
       comment.comment = commentText;
       comment.date = dayjs().toDate();
       comment.emotion = this._emotionState;
-
       const newFilm = copyFilm(this.data);
       newFilm.comments.push(comment.id);
       IdToMap.set(comment.id, comment);

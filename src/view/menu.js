@@ -34,11 +34,9 @@ class Menu extends Abstract {
 
   _filterTypeClickHandler(evt) {
     evt.preventDefault();
-
     if (evt.target.tagName !== `A`) {
       return;
     }
-
     this.getElement().querySelectorAll(`.main-navigation__item--active`)
       .forEach((e) => e.classList.remove(`main-navigation__item--active`));
     evt.target.classList.add(`main-navigation__item--active`);

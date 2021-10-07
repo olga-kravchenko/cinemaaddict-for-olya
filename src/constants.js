@@ -1,3 +1,5 @@
+const MINUTE_QUANTITY_IN_HOUR = 60;
+
 const UserStatus = {
   NOVICE: `Novice`,
   FAN: `Fan`,
@@ -27,8 +29,14 @@ const FilterType = {
 
 const UserAction = {
   UPDATE_FILMS: `UPDATE_FILMS`,
-  ADD_COMMENT: `ADD_COMMENT`,
-  DELETE_COMMENT: `DELETE_COMMENT`
 };
 
-export {UserStatus, EMOTIONS, SortType, UpdateType, FilterType, UserAction};
+const TimePeriod = {
+  ALL_TIME: `all-time`,
+  TODAY: `today`,
+  WEEK: `week`,
+  MONTH: `month`,
+  YEAR: `year`
+};
+
+export {UserStatus, EMOTIONS, SortType, UpdateType, FilterType, UserAction, TimePeriod, MINUTE_QUANTITY_IN_HOUR};
