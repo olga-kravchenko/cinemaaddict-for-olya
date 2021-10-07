@@ -1,18 +1,17 @@
 import MenuView from "../view/menu";
-import StatsView from "../view/stats";
 import {RenderPosition} from "../utils/render";
 import {render, replace, remove} from "../utils/render";
 import {UpdateType, FilterType} from "../constants";
 import {filter} from "../utils/filter";
 
 export default class Menu {
-  constructor(menuContainer, filterModel, filmsModel, filmBoardPresenter) {
+  constructor(menuContainer, filterModel, filmsModel, filmBoardPresenter, statsComponent) {
     this._menuContainer = menuContainer;
     this._filterModel = filterModel;
     this._filmsModel = filmsModel;
     this._filmBoardPresenter = filmBoardPresenter;
     this._currentFilter = null;
-    this._statsComponent = null;
+    this._statsComponent = statsComponent;
     this._menuComponent = null;
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
@@ -50,21 +49,18 @@ export default class Menu {
     if (this._currentFilter === filterType) {
       return;
     }
-    if (this._statsComponent) {
-      remove(this._statsComponent);
+    if (!this._statsComponent.getElement().classList.contains(`visually-hidden`)) {
+      this._statsComponent.hide();
       this.init();
       this._filmBoardPresenter.init();
-      this._statsComponent = null;
     }
     this._filterModel.setFilter(UpdateType.MAJOR, filterType);
   }
 
   _handleStatsClick() {
-    // const films = this._filmsModel.getFilms();
+    this._statsComponent.show();
     this._filmBoardPresenter.destroy();
     this._currentFilter = null;
-    // this._statsComponent = new StatsView(films);
-    // render(this._menuContainer, this._statsComponent, RenderPosition.BEFORE_END);
   }
 
   _getFilters() {

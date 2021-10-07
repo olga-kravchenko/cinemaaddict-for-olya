@@ -69,8 +69,6 @@ class FilmsBoard {
   }
 
   _handleViewAction(updateType, actionType, updatedFilm) {
-    // this._filmsModel.updateFilm(updateType, updatedFilm);
-
     switch (actionType) {
       case UserAction.UPDATE_FILMS:
         if (this._filterModel.getFilter() === FilterType.ALL) {
@@ -79,15 +77,9 @@ class FilmsBoard {
           updateType = UpdateType.MAJOR;
         }
         this._filmsModel.updateFilm(updateType, updatedFilm);
-        console.log(this._filmsModel.getFilms());
         this._statsComponent.updateState(this._filmsModel.getFilms(), true);
+        this._statsComponent.hide();
         break;
-      // case UserAction.ADD_TASK:
-      //   this._tasksModel.addTask(updateType, update);
-      //   break;
-      // case UserAction.DELETE_TASK:
-      //   this._tasksModel.deleteTask(updateType, update);
-      //   break;
     }
   }
 
