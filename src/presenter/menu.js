@@ -60,11 +60,11 @@ export default class Menu {
   }
 
   _handleStatsClick() {
-    const films = this._filmsModel.getFilms();
+    // const films = this._filmsModel.getFilms();
     this._filmBoardPresenter.destroy();
     this._currentFilter = null;
-    this._statsComponent = new StatsView(films);
-    render(this._menuContainer, this._statsComponent, RenderPosition.BEFORE_END);
+    // this._statsComponent = new StatsView(films);
+    // render(this._menuContainer, this._statsComponent, RenderPosition.BEFORE_END);
   }
 
   _getFilters() {

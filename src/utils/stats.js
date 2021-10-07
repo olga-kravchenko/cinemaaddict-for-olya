@@ -5,7 +5,7 @@ const FAN_MIN_QUANTITY = 11;
 const MOVIE_BUFF_MIN_QUANTITY = 21;
 
 const getUserStatus = (films) => {
-  const quantityWatchedFilms = films.filter((film) => film.userDetails.watchlist).length;
+  const quantityWatchedFilms = films.filter((film) => film.userDetails.alreadyWatched).length;
   let status = ``;
 
   if (quantityWatchedFilms >= NOVICE_MIN_QUANTITY && quantityWatchedFilms < FAN_MIN_QUANTITY) {
@@ -19,7 +19,7 @@ const getUserStatus = (films) => {
 };
 
 const calculateGenres = (films) => {
-  const watchedFilms = films.filter((film) => film.userDetails.watchlist);
+  const watchedFilms = films.filter((film) => film.userDetails.alreadyWatched);
   const watchedFilmsGenres = watchedFilms.map((e) => e.filmInfo.genres);
   const genres = watchedFilmsGenres.reduce((r, e) => (r.push(...e), r), []);
   const result = {};

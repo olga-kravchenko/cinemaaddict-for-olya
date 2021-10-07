@@ -79,7 +79,7 @@ const createStatisticStatesTemplate = () => {
 const createStatsPageTemplate = (films) => {
   const statisticStates = createStatisticStatesTemplate();
   const status = getUserStatus(films);
-  const watchedFilms = films.filter((film) => film.userDetails.watchlist);
+  const watchedFilms = films.filter((film) => film.userDetails.alreadyWatched);
   const minutes = calculateDuration(watchedFilms);
   const h = Math.floor((minutes / 60));
   const m = minutes % 60;
@@ -145,6 +145,15 @@ class Stats extends SmartView {
 
   restoreHandlers() {
     this._setCharts();
+  }
+
+
+  hide() {
+    this.getElement().classList.add(`visually-hidden`);
+  }
+
+  show() {
+    this.getElement().classList.remove(`visually-hidden`);
   }
 
   _setCharts() {

@@ -25,4 +25,10 @@ const FilterType = {
   FAVORITES: `favorites`,
 };
 
-export {UserStatus, EMOTIONS, SortType, UpdateType, FilterType};
+const UserAction = {
+  UPDATE_FILMS: `UPDATE_FILMS`,
+  ADD_COMMENT: `ADD_COMMENT`,
+  DELETE_COMMENT: `DELETE_COMMENT`
+};
+
+export {UserStatus, EMOTIONS, SortType, UpdateType, FilterType, UserAction};

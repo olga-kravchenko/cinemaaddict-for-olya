@@ -7,7 +7,7 @@ import ShowMoreButtonView from "../view/show-more-button";
 import FilmPresenter from "./film";
 import {remove, render, RenderPosition} from "../utils/render";
 import {sortFilmsByDate, sortFilmsByRating} from "../utils/util";
-import {SortType, UpdateType} from "../constants";
+import {SortType, UpdateType, UserAction} from "../constants";
 import {filter} from "../utils/filter";
 
 const FILM_QUANTITY_PER_STEP = 5;
@@ -67,8 +67,20 @@ class FilmsBoard {
     this._filterModel.removeObserver(this._handleModelEvent);
   }
 
-  _handleViewAction(updateType, updatedFilm) {
+  _handleViewAction(updateType, actionType, updatedFilm) {
     this._filmsModel.updateFilm(updateType, updatedFilm);
+
+    switch (actionType) {
+      case UserAction.UPDATE_FILMS:
+        this._filmsModel.updateFilm(updateType, updatedFilm);
+        break;
+      // case UserAction.ADD_TASK:
+      //   this._tasksModel.addTask(updateType, update);
+      //   break;
+      // case UserAction.DELETE_TASK:
+      //   this._tasksModel.deleteTask(updateType, update);
+      //   break;
+    }
   }
 
   _handleModelEvent(updateType, film) {
