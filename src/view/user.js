@@ -18,6 +18,9 @@ class User extends SmartView {
   getTemplate() {
     return createUserTemplate(this.data);
   }
+
+  restoreHandlers() {
+  }
 }
 
 export default User;

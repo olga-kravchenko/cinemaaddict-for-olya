@@ -24,7 +24,6 @@ const getAllGenresWithQuantity = (films) => {
   // const allGenres = watchedFilmsGenres.reduce((a, b) => {
   //   return a.concat(b);
   // });
-  console.log(allGenres);
   const genresWithQuantity = {};
   allGenres.forEach((genre) => {
     genresWithQuantity[genre] = genresWithQuantity[genre] + 1 || 1;
