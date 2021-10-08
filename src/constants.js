@@ -29,6 +29,8 @@ const FilterType = {
 
 const UserAction = {
   UPDATE_FILMS: `UPDATE_FILMS`,
+  ADD_COMMENT: `ADD_COMMENT`,
+  DELETE_COMMENT: `DELETE_COMMENT`,
 };
 
 const TimePeriod = {

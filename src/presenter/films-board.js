@@ -80,6 +80,12 @@ class FilmsBoard {
         this._statsComponent.updateState(this._filmsModel.getFilms(), false);
         this._statsComponent.hide();
         break;
+      case UserAction.ADD_COMMENT:
+        this._filmsModel.updateFilm(updateType, updatedFilm);
+        break;
+      case UserAction.DELETE_COMMENT:
+        this._filmsModel.updateFilm(updateType, updatedFilm);
+        break;
     }
   }
 

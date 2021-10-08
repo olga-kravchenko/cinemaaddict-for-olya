@@ -139,14 +139,14 @@ class Film {
   _handlerAddComment(updatedFilm) {
     this._changeData(
         UpdateType.PATCH,
-        UserAction.UPDATE_FILMS,
+        UserAction.ADD_COMMENT,
         updatedFilm);
   }
 
   _handlerDeleteComment(updatedFilm) {
     this._changeData(
         UpdateType.PATCH,
-        UserAction.UPDATE_FILMS,
+        UserAction.DELETE_COMMENT,
         updatedFilm);
   }
 }
