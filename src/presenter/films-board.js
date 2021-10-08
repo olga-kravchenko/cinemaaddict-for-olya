@@ -13,11 +13,12 @@ import {Filter} from "../utils/filter";
 const FILM_QUANTITY_PER_STEP = 5;
 
 class FilmsBoard {
-  constructor(container, filmsModel, filterModel, statsComponent) {
+  constructor(container, filmsModel, filterModel, statsComponent, userComponent) {
     this._container = container;
     this._filmsModel = filmsModel;
     this._filterModel = filterModel;
     this._statsComponent = statsComponent;
+    this._userComponent = userComponent;
     this._renderedFilmsQuantity = FILM_QUANTITY_PER_STEP;
     this._filmPresenters = {};
     this._currentSortType = SortType.DEFAULT;
@@ -71,6 +72,7 @@ class FilmsBoard {
         updateType = this._filterModel.getFilter() !== FilterType.ALL ? UpdateType.MAJOR : UpdateType.PATCH;
         this._filmsModel.updateFilm(updateType, updatedFilm);
         this._statsComponent.updateState(this._filmsModel.getFilms(), false);
+        this._userComponent.updateState(this._filmsModel.getFilms(), true);
         break;
       case UserAction.ADD_COMMENT:
       case UserAction.DELETE_COMMENT:

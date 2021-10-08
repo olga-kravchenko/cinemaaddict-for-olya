@@ -1,4 +1,4 @@
-import Abstract from "./abstract";
+import SmartView from "./smart";
 import {getUserStatus} from "../utils/stats";
 
 const createUserTemplate = (films) => {
@@ -10,14 +10,13 @@ const createUserTemplate = (films) => {
     </section>`;
 };
 
-class User extends Abstract {
+class User extends SmartView {
   constructor(films) {
-    super();
-    this._films = films;
+    super(films);
   }
 
   getTemplate() {
-    return createUserTemplate(this._films);
+    return createUserTemplate(this.data);
   }
 }
 
