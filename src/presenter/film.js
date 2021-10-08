@@ -14,13 +14,16 @@ class Film {
     this._filmPopupComponent = null;
 
     this._handleFilmCardClick = this._handleFilmCardClick.bind(this);
+
     this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
     this._handleAlreadyWatchedClick = this._handleAlreadyWatchedClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
+
     this._handleCloseButtonClick = this._handleCloseButtonClick.bind(this);
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
-    this._handlerAddComment = this._handlerAddComment.bind(this);
-    this._handlerDeleteComment = this._handlerDeleteComment.bind(this);
+
+    this._handleAddComment = this._handleAddComment.bind(this);
+    this._handleDeleteComment = this._handleDeleteComment.bind(this);
   }
 
   initOrUpdate(film) {
@@ -38,10 +41,10 @@ class Film {
     this._filmComponent.setFavoriteClickHandler(this._handleFavoriteClick);
 
     this._filmPopupComponent.setPopupCloseHandler(this._handleCloseButtonClick);
-    this._filmPopupComponent.setCommentAddHandler(this._handlerAddComment);
-    this._filmPopupComponent.setCommentDeleteHandler(this._handlerDeleteComment);
+    this._filmPopupComponent.setCommentAddHandler(this._handleAddComment);
+    this._filmPopupComponent.setCommentDeleteHandler(this._handleDeleteComment);
 
-    if (prevFilmComponent === null || prevPopupComponent === null) {
+    if (prevFilmComponent === null) {
       render(this._container, this._filmComponent, RenderPosition.BEFORE_END);
       return;
     }
@@ -50,10 +53,7 @@ class Film {
       if (this._body.contains(prevPopupComponent.getElement())) {
         const currentScroll = this._body.querySelector(`.film-details`).scrollTop;
         replace(this._filmPopupComponent, prevPopupComponent);
-        this._filmPopupComponent.getElement()
-          .scrollTo(0, currentScroll);
-        replace(this._filmComponent, prevFilmComponent);
-        return;
+        this._filmPopupComponent.getElement().scrollTo(0, currentScroll);
       }
       replace(this._filmComponent, prevFilmComponent);
     }
@@ -68,7 +68,6 @@ class Film {
   }
 
   _showPopup() {
-    this._body.classList.add(`hide-overflow`);
     if (!document.querySelector(`.film-details`)) {
       this._body.classList.add(`hide-overflow`);
       this._body.appendChild(this._filmPopupComponent.getElement());
@@ -108,30 +107,22 @@ class Film {
 
   _handleFavoriteClick() {
     const updatedFilm = Object.assign({}, this._film);
+    updatedFilm.userDetails.favorite = !this._film.userDetails.favorite;
     this._changeData(UpdateType.PATCH, UserAction.UPDATE_FILMS, updatedFilm);
   }
 
   _handleCloseButtonClick(updatedFilm) {
     this._closePopup();
-    this._changeData(
-        UpdateType.PATCH,
-        UserAction.UPDATE_FILMS,
-        updatedFilm);
+    this._changeData(UpdateType.PATCH, UserAction.UPDATE_FILMS, updatedFilm);
     document.removeEventListener(`keydown`, this._handleEscKeyDown);
   }
 
-  _handlerAddComment(updatedFilm) {
-    this._changeData(
-        UpdateType.PATCH,
-        UserAction.ADD_COMMENT,
-        updatedFilm);
+  _handleAddComment(updatedFilm) {
+    this._changeData(UpdateType.PATCH, UserAction.ADD_COMMENT, updatedFilm);
   }
 
-  _handlerDeleteComment(updatedFilm) {
-    this._changeData(
-        UpdateType.PATCH,
-        UserAction.DELETE_COMMENT,
-        updatedFilm);
+  _handleDeleteComment(updatedFilm) {
+    this._changeData(UpdateType.PATCH, UserAction.DELETE_COMMENT, updatedFilm);
   }
 }
 

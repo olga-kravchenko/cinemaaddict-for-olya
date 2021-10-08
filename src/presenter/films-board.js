@@ -35,9 +35,6 @@ class FilmsBoard {
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleSortTypeClick = this._handleSortTypeClick.bind(this);
-
-    this._filmsModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
   }
 
   init() {
@@ -71,18 +68,11 @@ class FilmsBoard {
   _handleViewAction(updateType, actionType, updatedFilm) {
     switch (actionType) {
       case UserAction.UPDATE_FILMS:
-        if (this._filterModel.getFilter() === FilterType.ALL) {
-          updateType = UpdateType.PATCH;
-        } else {
-          updateType = UpdateType.MAJOR;
-        }
+        updateType = this._filterModel.getFilter() !== FilterType.ALL ? UpdateType.MAJOR : UpdateType.PATCH;
         this._filmsModel.updateFilm(updateType, updatedFilm);
         this._statsComponent.updateState(this._filmsModel.getFilms(), false);
-        this._statsComponent.hide();
         break;
       case UserAction.ADD_COMMENT:
-        this._filmsModel.updateFilm(updateType, updatedFilm);
-        break;
       case UserAction.DELETE_COMMENT:
         this._filmsModel.updateFilm(updateType, updatedFilm);
         break;

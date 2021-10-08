@@ -7,9 +7,9 @@ class Filters extends Observer {
     this._activeFilter = FilterType.ALL;
   }
 
-  setFilter(updateType, filter) {
+  setFilter(updatedType, filter) {
     this._activeFilter = filter;
-    this._notify(updateType, filter);
+    this._notify(updatedType, filter);
   }
 
   getFilter() {
