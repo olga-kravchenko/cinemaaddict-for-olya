@@ -6,8 +6,9 @@ import {FilterType, TimePeriod, MINUTE_QUANTITY_IN_HOUR} from "../constants";
 import {Filter, FilterTimePeriod} from "../utils/filter";
 
 const renderStatisticChart = (statisticCtx, films) => {
+  console.log(films);
   const BAR_HEIGHT = 50;
-  const genres = getAllGenresWithQuantity(films);
+  const genres = films.length ? getAllGenresWithQuantity(films) : {};
   statisticCtx.height = BAR_HEIGHT * Object.values(genres).length;
 
   return new Chart(statisticCtx, {

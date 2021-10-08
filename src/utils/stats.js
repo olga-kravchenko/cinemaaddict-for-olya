@@ -1,28 +1,33 @@
-import {UserStatus} from "../constants";
+import {FilterType, UserStatus} from "../constants";
+import {Filter} from "./filter";
 
 const NOVICE_MIN_QUANTITY = 1;
 const FAN_MIN_QUANTITY = 11;
 const MOVIE_BUFF_MIN_QUANTITY = 21;
 
 const getUserStatus = (films) => {
-  const quantityWatchedFilms = films.filter((film) => film.userDetails.alreadyWatched).length;
+  const watchedFilmsQuantity = Filter[FilterType.HISTORY](films).length;
   let status = ``;
-  if (quantityWatchedFilms >= NOVICE_MIN_QUANTITY && quantityWatchedFilms < FAN_MIN_QUANTITY) {
+  if (watchedFilmsQuantity >= NOVICE_MIN_QUANTITY && watchedFilmsQuantity < FAN_MIN_QUANTITY) {
     status = UserStatus.NOVICE;
-  } else if (quantityWatchedFilms >= FAN_MIN_QUANTITY && quantityWatchedFilms < MOVIE_BUFF_MIN_QUANTITY) {
+  } else if (watchedFilmsQuantity >= FAN_MIN_QUANTITY && watchedFilmsQuantity < MOVIE_BUFF_MIN_QUANTITY) {
     status = UserStatus.FAN;
-  } else if (quantityWatchedFilms >= MOVIE_BUFF_MIN_QUANTITY) {
+  } else if (watchedFilmsQuantity >= MOVIE_BUFF_MIN_QUANTITY) {
     status = UserStatus.MOVIE_BUFF;
   }
   return status;
 };
 
 const getAllGenresWithQuantity = (films) => {
-  const watchedFilmsGenres = films.map((e) => e.filmInfo.genres);
+  const watchedFilmsGenres = films.map((f) => f.filmInfo.genres);
   const allGenres = watchedFilmsGenres.reduce((r, e) => (r.push(...e), r), []);
+  // const allGenres = watchedFilmsGenres.reduce((a, b) => {
+  //   return a.concat(b);
+  // });
+  console.log(allGenres);
   const genresWithQuantity = {};
-  allGenres.forEach((a) => {
-    genresWithQuantity[a] = genresWithQuantity[a] + 1 || 1;
+  allGenres.forEach((genre) => {
+    genresWithQuantity[genre] = genresWithQuantity[genre] + 1 || 1;
   });
   return genresWithQuantity;
 };

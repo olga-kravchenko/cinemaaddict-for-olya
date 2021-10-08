@@ -83,10 +83,7 @@ class Film {
   _handleEscKeyDown(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       this._closePopup();
-      this._changeData(
-          UpdateType.PATCH,
-          UserAction.UPDATE_FILMS,
-          this._filmPopupComponent.data);
+      this._changeData(UpdateType.PATCH, UserAction.UPDATE_FILMS, this._filmPopupComponent.data);
       document.removeEventListener(`keydown`, this._handleEscKeyDown);
     }
   }
@@ -99,29 +96,19 @@ class Film {
   _handleWatchlistClick() {
     const updatedFilm = Object.assign({}, this._film);
     updatedFilm.userDetails.watchlist = !this._film.userDetails.watchlist;
-    this._changeData(
-        UpdateType.PATCH,
-        UserAction.UPDATE_FILMS,
-        updatedFilm);
+    this._changeData(UpdateType.PATCH, UserAction.UPDATE_FILMS, updatedFilm);
   }
 
   _handleAlreadyWatchedClick() {
     const updatedFilm = Object.assign({}, this._film);
     updatedFilm.userDetails.alreadyWatched = !this._film.userDetails.alreadyWatched;
-    updatedFilm.userDetails.watchingDate = dayjs().toDate();
-    this._changeData(
-        UpdateType.PATCH,
-        UserAction.UPDATE_FILMS,
-        updatedFilm);
+    updatedFilm.userDetails.watchingDate = updatedFilm.userDetails.alreadyWatched === true ? dayjs().toDate() : ``;
+    this._changeData(UpdateType.PATCH, UserAction.UPDATE_FILMS, updatedFilm);
   }
 
   _handleFavoriteClick() {
     const updatedFilm = Object.assign({}, this._film);
-    updatedFilm.userDetails.favorite = !this._film.userDetails.favorite;
-    this._changeData(
-        UpdateType.PATCH,
-        UserAction.UPDATE_FILMS,
-        updatedFilm);
+    this._changeData(UpdateType.PATCH, UserAction.UPDATE_FILMS, updatedFilm);
   }
 
   _handleCloseButtonClick(updatedFilm) {

@@ -53,9 +53,9 @@ class FilmsBoard {
 
     switch (this._currentSortType) {
       case SortType.DATE:
-        return filteredFilms.slice().sort(sortFilmsByDate).reverse();
+        return [...filteredFilms].sort(sortFilmsByDate).reverse();
       case SortType.RATING:
-        return filteredFilms.slice().sort(sortFilmsByRating).reverse();
+        return [...filteredFilms].sort(sortFilmsByRating).reverse();
     }
     return filteredFilms;
   }

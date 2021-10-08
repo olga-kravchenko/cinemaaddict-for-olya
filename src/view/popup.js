@@ -224,7 +224,7 @@ class Popup extends SmartView {
   _alreadyWatchedClickHandler() {
     const updatedFilm = copyFilm(this.data);
     updatedFilm.userDetails.alreadyWatched = !this.data.userDetails.alreadyWatched;
-    updatedFilm.userDetails.watchingDate = dayjs().toDate();
+    updatedFilm.userDetails.watchingDate = updatedFilm.userDetails.alreadyWatched === true ? dayjs().toDate() : ``;
     this.updateState(updatedFilm, false);
   }
 
