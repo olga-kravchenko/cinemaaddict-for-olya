@@ -3,8 +3,8 @@ import FilmsQuantityView from "./view/films-quantity";
 import {RenderPosition, render} from "./utils/render";
 import {generateFilm} from "./mock/film";
 import FilmsBoardPresenter from "./presenter/films-board";
-import FilmsModel from "./model/film";
-import FilterModel from "./model/filter";
+import FilmsModel from "./model/films";
+import FilterModel from "./model/filters";
 import MenuPresenter from "./presenter/menu";
 import StatsView from "./view/stats";
 

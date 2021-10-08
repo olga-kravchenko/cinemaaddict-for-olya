@@ -4,7 +4,7 @@ import {render, replace, remove} from "../utils/render";
 import {UpdateType, FilterType} from "../constants";
 import {Filter} from "../utils/filter";
 
-export default class Menu {
+class Menu {
   constructor(menuContainer, filterModel, filmsModel, filmBoardPresenter, statsComponent) {
     this._menuContainer = menuContainer;
     this._filterModel = filterModel;
@@ -86,3 +86,5 @@ export default class Menu {
     ];
   }
 }
+
+export default Menu;

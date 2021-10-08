@@ -107,11 +107,11 @@ class FilmsBoard {
 
   _handleShowMoreButtonClick() {
     const filmQuantity = this._getFilms().length;
-    const newRenderedFilmCount = Math.min(filmQuantity, this._renderedFilmsQuantity + FILM_QUANTITY_PER_STEP);
-    const films = this._getFilms().slice(this._renderedFilmsQuantity, newRenderedFilmCount);
+    const newRenderedFilmQuantity = Math.min(filmQuantity, this._renderedFilmsQuantity + FILM_QUANTITY_PER_STEP);
+    const films = this._getFilms().slice(this._renderedFilmsQuantity, newRenderedFilmQuantity);
 
     this._renderFilms(films);
-    this._renderedFilmsQuantity = newRenderedFilmCount;
+    this._renderedFilmsQuantity = newRenderedFilmQuantity;
 
     if (this._renderedFilmsQuantity >= filmQuantity) {
       remove(this._showMoreButtonComponent);
