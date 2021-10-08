@@ -199,7 +199,6 @@ class Popup extends SmartView {
   }
 
   _checkedTypeToggleHandler(evt) {
-    evt.preventDefault();
     let type = ``;
     if (evt.target.tagName === `INPUT`) {
       const inputs = document.querySelectorAll(`.film-details__emoji-item`);
@@ -216,22 +215,20 @@ class Popup extends SmartView {
     this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`change`, this._checkedTypeToggleHandler);
   }
 
-  _watchlistClickHandler(evt) {
-    evt.preventDefault();
+  _watchlistClickHandler() {
     const updatedFilm = copyFilm(this.data);
     updatedFilm.userDetails.watchlist = !this.data.userDetails.watchlist;
     this.updateState(updatedFilm, false);
   }
 
-  _alreadyWatchedClickHandler(evt) {
-    evt.preventDefault();
+  _alreadyWatchedClickHandler() {
     const updatedFilm = copyFilm(this.data);
     updatedFilm.userDetails.alreadyWatched = !this.data.userDetails.alreadyWatched;
+    updatedFilm.userDetails.watchingDate = dayjs().toDate();
     this.updateState(updatedFilm, false);
   }
 
-  _favoriteClickHandler(evt) {
-    evt.preventDefault();
+  _favoriteClickHandler() {
     const updatedFilm = copyFilm(this.data);
     updatedFilm.userDetails.favorite = !this.data.userDetails.favorite;
     this.updateState(updatedFilm, false);
@@ -240,7 +237,6 @@ class Popup extends SmartView {
   _commentAddHandler(evt) {
     const commentText = evt.target.value;
     if (evt.ctrlKey && evt.key === `Enter` && commentText && this._emotionState) {
-      evt.preventDefault();
       const comment = {};
       comment.id = nanoid();
       comment.author = `You`;
@@ -255,8 +251,7 @@ class Popup extends SmartView {
     }
   }
 
-  _popupCloseClickHandler(evt) {
-    evt.preventDefault();
+  _popupCloseClickHandler() {
     const data = Object.assign({}, copyFilm(this.data));
     this._callback.popupClose(data);
   }

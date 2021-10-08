@@ -82,7 +82,6 @@ class Film {
 
   _handleEscKeyDown(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
-      evt.preventDefault();
       this._closePopup();
       this._changeData(
           UpdateType.PATCH,
@@ -100,7 +99,6 @@ class Film {
   _handleWatchlistClick() {
     const updatedFilm = Object.assign({}, this._film);
     updatedFilm.userDetails.watchlist = !this._film.userDetails.watchlist;
-    updatedFilm.userDetails.watchingDate = dayjs().toDate();
     this._changeData(
         UpdateType.PATCH,
         UserAction.UPDATE_FILMS,
@@ -120,7 +118,6 @@ class Film {
   _handleFavoriteClick() {
     const updatedFilm = Object.assign({}, this._film);
     updatedFilm.userDetails.favorite = !this._film.userDetails.favorite;
-    updatedFilm.userDetails.watchingDate = dayjs().toDate();
     this._changeData(
         UpdateType.PATCH,
         UserAction.UPDATE_FILMS,

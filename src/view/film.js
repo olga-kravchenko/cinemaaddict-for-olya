@@ -62,18 +62,15 @@ class Film extends Abstract {
     this._callback.popupClick();
   }
 
-  _watchlistClickHandler(evt) {
-    evt.preventDefault();
+  _watchlistClickHandler() {
     this._callback.watchlistClick();
   }
 
-  _alreadyWatchedClickHandler(evt) {
-    evt.preventDefault();
+  _alreadyWatchedClickHandler() {
     this._callback.alreadyWatchedClick();
   }
 
-  _favoriteClickHandler(evt) {
-    evt.preventDefault();
+  _favoriteClickHandler() {
     this._callback.favoriteClick();
   }
 
