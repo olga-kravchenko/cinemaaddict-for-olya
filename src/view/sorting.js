@@ -22,7 +22,6 @@ class Sorting extends Abstract {
   }
 
   _sortTypeChangeHandler(evt) {
-    evt.preventDefault();
     if (evt.target.tagName !== `A`) {
       return;
     }

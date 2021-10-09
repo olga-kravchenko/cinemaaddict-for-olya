@@ -6,13 +6,13 @@ const FAN_MIN_QUANTITY = 11;
 const MOVIE_BUFF_MIN_QUANTITY = 21;
 
 const getUserStatus = (films) => {
-  const watchedFilmsQuantity = Filter[FilterType.HISTORY](films).length;
+  const watchedFilmQuantity = Filter[FilterType.HISTORY](films).length;
   let status = ``;
-  if (watchedFilmsQuantity >= NOVICE_MIN_QUANTITY && watchedFilmsQuantity < FAN_MIN_QUANTITY) {
+  if (watchedFilmQuantity >= NOVICE_MIN_QUANTITY && watchedFilmQuantity < FAN_MIN_QUANTITY) {
     status = UserStatus.NOVICE;
-  } else if (watchedFilmsQuantity >= FAN_MIN_QUANTITY && watchedFilmsQuantity < MOVIE_BUFF_MIN_QUANTITY) {
+  } else if (watchedFilmQuantity >= FAN_MIN_QUANTITY && watchedFilmQuantity < MOVIE_BUFF_MIN_QUANTITY) {
     status = UserStatus.FAN;
-  } else if (watchedFilmsQuantity >= MOVIE_BUFF_MIN_QUANTITY) {
+  } else if (watchedFilmQuantity >= MOVIE_BUFF_MIN_QUANTITY) {
     status = UserStatus.MOVIE_BUFF;
   }
   return status;

@@ -57,8 +57,7 @@ class Film extends Abstract {
     return createFilmTemplate(this._film);
   }
 
-  _cardClickHandler(evt) {
-    evt.preventDefault();
+  _cardClickHandler() {
     this._callback.popupClick();
   }
 

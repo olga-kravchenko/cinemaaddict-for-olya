@@ -69,8 +69,8 @@ const IdToMap = new Map();
 
 const generateComments = () => {
   const comments = [];
-  const commentsQuantity = getRandomNumber(MIN_QUANTITY, MAX_QUANTITY);
-  for (let i = 0; i < commentsQuantity; i++) {
+  const commentQuantity = getRandomNumber(MIN_QUANTITY, MAX_QUANTITY);
+  for (let i = 0; i < commentQuantity; i++) {
     const comment = generateComment();
     IdToMap.set(comment.id, comment);
     comments.push(comment);

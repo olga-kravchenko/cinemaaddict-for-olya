@@ -15,7 +15,7 @@ class Films extends Observer {
   }
 
   updateFilm(updatedType, film) {
-    const index = this._films.findIndex((f) => f.id === f.id);
+    const index = this._films.findIndex((f) => f.id === film.id);
     if (index === -1) {
       throw new Error(`Can't update non-existing film`);
     }

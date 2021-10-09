@@ -1,5 +1,5 @@
 import UserView from "./view/user";
-import FilmsQuantityView from "./view/films-quantity";
+import FilmQuantityView from "./view/film-quantity";
 import {RenderPosition, render} from "./utils/render";
 import {generateFilm} from "./mock/film";
 import FilmsBoardPresenter from "./presenter/films-board";
@@ -8,9 +8,9 @@ import FilterModel from "./model/filters";
 import MenuPresenter from "./presenter/menu";
 import StatsView from "./view/stats";
 
-const FILMS_QUANTITY = 22;
+const FILM_QUANTITY = 22;
 
-const films = new Array(FILMS_QUANTITY).fill().map(generateFilm);
+const films = new Array(FILM_QUANTITY).fill().map(generateFilm);
 
 const filmsModel = new FilmsModel();
 filmsModel.setFilms(films);
@@ -34,4 +34,4 @@ menuPresenter.init();
 render(main, statsComponent, RenderPosition.BEFORE_END);
 filmBoardPresenter.init();
 
-render(statistics, new FilmsQuantityView(films.length), RenderPosition.BEFORE_END);
+render(statistics, new FilmQuantityView(films.length), RenderPosition.BEFORE_END);

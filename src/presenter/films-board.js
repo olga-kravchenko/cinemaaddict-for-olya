@@ -19,7 +19,7 @@ class FilmsBoard {
     this._filterModel = filterModel;
     this._statsComponent = statsComponent;
     this._userComponent = userComponent;
-    this._renderedFilmsQuantity = FILM_QUANTITY_PER_STEP;
+    this._renderedFilmQuantity = FILM_QUANTITY_PER_STEP;
     this._filmPresenters = {};
     this._currentSortType = SortType.DEFAULT;
 
@@ -99,13 +99,13 @@ class FilmsBoard {
 
   _handleShowMoreButtonClick() {
     const filmQuantity = this._getFilms().length;
-    const newRenderedFilmQuantity = Math.min(filmQuantity, this._renderedFilmsQuantity + FILM_QUANTITY_PER_STEP);
-    const films = this._getFilms().slice(this._renderedFilmsQuantity, newRenderedFilmQuantity);
+    const newRenderedFilmQuantity = Math.min(filmQuantity, this._renderedFilmQuantity + FILM_QUANTITY_PER_STEP);
+    const films = this._getFilms().slice(this._renderedFilmQuantity, newRenderedFilmQuantity);
 
     this._renderFilms(films);
-    this._renderedFilmsQuantity = newRenderedFilmQuantity;
+    this._renderedFilmQuantity = newRenderedFilmQuantity;
 
-    if (this._renderedFilmsQuantity >= filmQuantity) {
+    if (this._renderedFilmQuantity >= filmQuantity) {
       remove(this._showMoreButtonComponent);
     }
   }
@@ -168,7 +168,7 @@ class FilmsBoard {
     }
     this._renderFilmContainer();
     this._renderFilms(films.slice(0, Math.min(filmQuantity, FILM_QUANTITY_PER_STEP)));
-    if (filmQuantity > this._renderedFilmsQuantity) {
+    if (filmQuantity > this._renderedFilmQuantity) {
       this._renderShowMoreButton();
     }
   }
@@ -183,9 +183,9 @@ class FilmsBoard {
     remove(this._noFilmsComponent);
     remove(this._showMoreButtonComponent);
     if (resetRenderedFilmQuantity) {
-      this._renderedFilmsQuantity = FILM_QUANTITY_PER_STEP;
+      this._renderedFilmQuantity = FILM_QUANTITY_PER_STEP;
     } else {
-      this._renderedFilmsQuantity = Math.min(filmQuantity, this._renderedFilmsQuantity);
+      this._renderedFilmQuantity = Math.min(filmQuantity, this._renderedFilmQuantity);
     }
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;

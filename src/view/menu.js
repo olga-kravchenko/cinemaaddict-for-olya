@@ -33,7 +33,6 @@ class Menu extends Abstract {
   }
 
   _filterTypeClickHandler(evt) {
-    evt.preventDefault();
     if (evt.target.tagName !== `A`) {
       return;
     }
