@@ -106,7 +106,7 @@ const generateFilm = () => {
       favorite: STATES[getRandomNumber(0, STATES.length)],
     },
   };
-  film.userDetails.watchingDate = film.userDetails.alreadyWatched === true ? generateDay() : ``;
+  film.userDetails.watchingDate = film.userDetails.alreadyWatched ? generateDay() : ``;
   return film;
 };
 

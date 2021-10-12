@@ -120,7 +120,7 @@ class FilmsBoard {
   }
 
   _renderSorting() {
-    if (this._sortingComponent !== null) {
+    if (this._sortingComponent) {
       this._sortingComponent = null;
     }
     this._sortingComponent = new SortingView(this._currentSortType);
@@ -147,7 +147,7 @@ class FilmsBoard {
   }
 
   _renderShowMoreButton() {
-    if (this._showMoreButtonComponent !== null) {
+    if (this._showMoreButtonComponent) {
       this._showMoreButtonComponent = null;
     }
 

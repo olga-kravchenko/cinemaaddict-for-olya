@@ -44,7 +44,7 @@ class Film {
     this._filmPopupComponent.setCommentAddHandler(this._handleAddComment);
     this._filmPopupComponent.setCommentDeleteHandler(this._handleDeleteComment);
 
-    if (prevFilmComponent === null) {
+    if (!prevFilmComponent) {
       render(this._container, this._filmComponent, RenderPosition.BEFORE_END);
       return;
     }
@@ -101,7 +101,7 @@ class Film {
   _handleAlreadyWatchedClick() {
     const updatedFilm = Object.assign({}, this._film);
     updatedFilm.userDetails.alreadyWatched = !this._film.userDetails.alreadyWatched;
-    updatedFilm.userDetails.watchingDate = updatedFilm.userDetails.alreadyWatched === true ? dayjs().toDate() : ``;
+    updatedFilm.userDetails.watchingDate = updatedFilm.userDetails.alreadyWatched ? dayjs().toDate() : ``;
     this._changeData(UpdateType.PATCH, UserAction.UPDATE_FILMS, updatedFilm);
   }
 

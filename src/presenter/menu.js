@@ -29,7 +29,7 @@ class Menu {
     this._menuComponent = new MenuView(filters, this._currentFilter);
     this._menuComponent.setFilterTypeClickHandler(this._handleFilterTypeClick);
     this._menuComponent.setStatsClickHandler(this._handleStatsClick);
-    if (prevFilterComponent === null) {
+    if (!prevFilterComponent) {
       render(this._menuContainer, this._menuComponent, RenderPosition.BEFORE_END);
       return;
     }
