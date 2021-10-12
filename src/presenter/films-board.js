@@ -45,8 +45,8 @@ class FilmsBoard {
   }
 
   _getFilms() {
-    const filterType = this._filterModel.getFilter();
-    const films = this._filmsModel.getFilms();
+    const filterType = this._filterModel.filters;
+    const films = this._filmsModel.films;
     const filteredFilms = Filter[filterType](films);
 
     switch (this._currentSortType) {
@@ -69,10 +69,10 @@ class FilmsBoard {
   _handleViewAction(updateType, actionType, updatedFilm) {
     switch (actionType) {
       case UserAction.UPDATE_FILMS:
-        updateType = this._filterModel.getFilter() !== FilterType.ALL ? UpdateType.MAJOR : UpdateType.PATCH;
+        updateType = this._filterModel.filters !== FilterType.ALL ? UpdateType.MAJOR : UpdateType.PATCH;
         this._filmsModel.updateFilm(updateType, updatedFilm);
-        this._statsComponent.updateState(this._filmsModel.getFilms(), false);
-        this._userComponent.updateState(this._filmsModel.getFilms(), true);
+        this._statsComponent.updateState(this._filmsModel.films, false);
+        this._userComponent.updateState(this._filmsModel.films, true);
         break;
       case UserAction.ADD_COMMENT:
       case UserAction.DELETE_COMMENT:

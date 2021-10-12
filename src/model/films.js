@@ -6,11 +6,11 @@ class Films extends Observer {
     this._films = [];
   }
 
-  setFilms(films) {
+  set films(films) {
     this._films = [...films];
   }
 
-  getFilms() {
+  get films() {
     return this._films;
   }
 

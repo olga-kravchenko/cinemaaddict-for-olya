@@ -1,7 +1,7 @@
 import MenuView from "../view/menu";
 import {RenderPosition} from "../utils/render";
 import {render, replace, remove} from "../utils/render";
-import {UpdateType, FilterType} from "../constants";
+import {FilterType} from "../constants";
 import {Filter} from "../utils/filter";
 
 class Menu {
@@ -23,7 +23,7 @@ class Menu {
   }
 
   init() {
-    this._currentFilter = this._filterModel.getFilter();
+    this._currentFilter = this._filterModel.filters;
     const filters = this._getFilters();
     const prevFilterComponent = this._menuComponent;
     this._menuComponent = new MenuView(filters, this._currentFilter);
@@ -50,18 +50,18 @@ class Menu {
       this.init();
       this._filmBoardPresenter.init();
     }
-    this._filterModel.setFilter(UpdateType.MAJOR, filterType);
+    this._filterModel.filters = filterType;
   }
 
   _handleStatsClick() {
     this._statsComponent.show();
     this._filmBoardPresenter.destroy();
     this._currentFilter = null;
-    this._statsComponent.updateState(this._filmsModel.getFilms(), true);
+    this._statsComponent.updateState(this._filmsModel.films, true);
   }
 
   _getFilters() {
-    const films = this._filmsModel.getFilms();
+    const films = this._filmsModel.films;
     return [
       {
         type: FilterType.ALL,

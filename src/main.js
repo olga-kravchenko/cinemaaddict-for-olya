@@ -13,7 +13,7 @@ const FILM_QUANTITY = 22;
 const films = new Array(FILM_QUANTITY).fill().map(generateFilm);
 
 const filmsModel = new FilmsModel();
-filmsModel.setFilms(films);
+filmsModel.films = films;
 
 const filterModel = new FilterModel();
 
@@ -21,8 +21,8 @@ const header = document.querySelector(`.header`);
 const main = document.querySelector(`.main`);
 const statistics = document.querySelector(`.footer__statistics`);
 
-const statsComponent = new StatsView(filmsModel.getFilms());
-const userComponent = new UserView(filmsModel.getFilms());
+const statsComponent = new StatsView(filmsModel.films);
+const userComponent = new UserView(filmsModel.films);
 
 render(header, userComponent, RenderPosition.BEFORE_END);
 statsComponent.hide();

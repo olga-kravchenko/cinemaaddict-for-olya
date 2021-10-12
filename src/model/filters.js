@@ -1,5 +1,5 @@
 import Observer from "../utils/observer.js";
-import {FilterType} from "../constants";
+import {FilterType, UpdateType} from "../constants";
 
 class Filters extends Observer {
   constructor() {
@@ -7,12 +7,12 @@ class Filters extends Observer {
     this._activeFilter = FilterType.ALL;
   }
 
-  setFilter(updatedType, filter) {
+  set filters(filter) {
     this._activeFilter = filter;
-    this._notify(updatedType, filter);
+    this._notify(UpdateType.MAJOR, filter);
   }
 
-  getFilter() {
+  get filters() {
     return this._activeFilter;
   }
 }
