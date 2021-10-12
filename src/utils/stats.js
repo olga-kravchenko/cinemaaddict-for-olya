@@ -19,7 +19,7 @@ const getUserStatus = (films) => {
 };
 
 const getAllGenresWithQuantity = (films) => {
-  const watchedFilmsGenres = films.map((f) => f.filmInfo.genres);
+  const watchedFilmsGenres = films.map((film) => film.filmInfo.genres);
   const allGenres = watchedFilmsGenres.reduce((r, e) => (r.push(...e), r), []);
   // const allGenres = watchedFilmsGenres.reduce((a, b) => {
   //   return a.concat(b);
@@ -32,7 +32,7 @@ const getAllGenresWithQuantity = (films) => {
 };
 
 const calculateTotalDurationOfFilms = (films) => {
-  const duration = films.map((e) => e.filmInfo.duration);
+  const duration = films.map((film) => film.filmInfo.duration);
   let totalDuration = 0;
   for (let i = 0; i < duration.length; i++) {
     totalDuration += duration[i];

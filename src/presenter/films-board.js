@@ -44,7 +44,7 @@ class FilmsBoard {
     this._filterModel.addObserver(this._handleModelEvent);
   }
 
-  _getFilms() {
+  _getFilteredAndSortedFilms() {
     const filterType = this._filterModel.filters;
     const films = this._filmsModel.films;
     const filteredFilms = Filter[filterType](films);
@@ -98,9 +98,9 @@ class FilmsBoard {
   }
 
   _handleShowMoreButtonClick() {
-    const filmQuantity = this._getFilms().length;
+    const filmQuantity = this._getFilteredAndSortedFilms().length;
     const newRenderedFilmQuantity = Math.min(filmQuantity, this._renderedFilmQuantity + FILM_QUANTITY_PER_STEP);
-    const films = this._getFilms().slice(this._renderedFilmQuantity, newRenderedFilmQuantity);
+    const films = this._getFilteredAndSortedFilms().slice(this._renderedFilmQuantity, newRenderedFilmQuantity);
 
     this._renderFilms(films);
     this._renderedFilmQuantity = newRenderedFilmQuantity;
@@ -157,7 +157,7 @@ class FilmsBoard {
   }
 
   _renderFilmsBoard() {
-    const films = this._getFilms();
+    const films = this._getFilteredAndSortedFilms();
     const filmQuantity = films.length;
     this._renderSorting();
     render(this._container, this._contentContainerComponent, RenderPosition.BEFORE_END);
@@ -174,7 +174,7 @@ class FilmsBoard {
   }
 
   _clearFilmsBoard({resetRenderedFilmQuantity = false, resetSortType = false} = {}) {
-    const filmQuantity = this._getFilms().length;
+    const filmQuantity = this._getFilteredAndSortedFilms().length;
     remove(this._sortingComponent);
     Object
       .values(this._filmPresenters)
