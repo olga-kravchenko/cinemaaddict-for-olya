@@ -27,7 +27,6 @@ const convertFormat = (milliseconds) => {
   const months = Math.floor((milliseconds / (MONTH)));
   const years = Math.floor((milliseconds / (YEAR)));
 
-
   if (minutes <= 1) {
     format = `now`;
   } else if (minutes < MINUTE_QUANTITY_IN_HOUR) {
@@ -35,11 +34,11 @@ const convertFormat = (milliseconds) => {
   } else if (hours < HOUR_QUANTITY_IN_DAY) {
     format = `a few hour ago`;
   } else if (days < DAY_QUANTITY_IN_MONTH) {
-    format = `a ${days} days ago`;
+    format = `${days} days ago`;
   } else if (months < MONTH_QUANTITY_IN_YEAR) {
-    format = `a ${months} month ago`;
+    format = `${months} month ago`;
   } else if (months > MONTH_QUANTITY_IN_YEAR) {
-    format = `a ${years} years ago`;
+    format = `${years} years ago`;
   }
   return format;
 };
