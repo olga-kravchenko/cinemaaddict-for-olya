@@ -57,29 +57,24 @@ class Film extends Abstract {
     return createFilmTemplate(this._film);
   }
 
-  _cardClickHandler(evt) {
-    evt.preventDefault();
+  _cardClickHandler() {
     this._callback.popupClick();
   }
 
-  _watchlistClickHandler(evt) {
-    evt.preventDefault();
+  _watchlistClickHandler() {
     this._callback.watchlistClick();
   }
 
-  _alreadyWatchedClickHandler(evt) {
-    evt.preventDefault();
+  _alreadyWatchedClickHandler() {
     this._callback.alreadyWatchedClick();
   }
 
-  _favoriteClickHandler(evt) {
-    evt.preventDefault();
+  _favoriteClickHandler() {
     this._callback.favoriteClick();
   }
 
   setCardClickHandler(callback) {
     this._callback.popupClick = callback;
-
     this.getElement()
       .querySelector(`.film-card__poster`)
       .addEventListener(`click`, this._cardClickHandler);

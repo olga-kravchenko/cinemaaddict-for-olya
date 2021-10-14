@@ -12,8 +12,7 @@ class ShowMoreButton extends Abstract {
     return createShowMoreButtonTemplate();
   }
 
-  _clickHandler(evt) {
-    evt.preventDefault();
+  _clickHandler() {
     this._callback.click();
   }
 

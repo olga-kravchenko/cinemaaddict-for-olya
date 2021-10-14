@@ -1,23 +1,5 @@
-import {UserStatus} from "../constants";
-import Abstract from "./abstract";
-
-const NOVICE_MIN_QUANTITY = 1;
-const FAN_MIN_QUANTITY = 11;
-const MOVIE_BUFF_MIN_QUANTITY = 21;
-
-const getUserStatus = (films) => {
-  const quantityWatchedFilms = films.filter((film) => !film.userDetails.watchlist).length;
-  let status = ``;
-
-  if (quantityWatchedFilms >= NOVICE_MIN_QUANTITY && quantityWatchedFilms < FAN_MIN_QUANTITY) {
-    status = UserStatus.NOVICE;
-  } else if (quantityWatchedFilms >= FAN_MIN_QUANTITY && quantityWatchedFilms < MOVIE_BUFF_MIN_QUANTITY) {
-    status = UserStatus.FAN;
-  } else if (quantityWatchedFilms >= MOVIE_BUFF_MIN_QUANTITY) {
-    status = UserStatus.MOVIE_BUFF;
-  }
-  return status;
-};
+import SmartView from "./smart";
+import {getUserStatus} from "../utils/stats";
 
 const createUserTemplate = (films) => {
   const status = getUserStatus(films);
@@ -28,14 +10,16 @@ const createUserTemplate = (films) => {
     </section>`;
 };
 
-class User extends Abstract {
+class User extends SmartView {
   constructor(films) {
-    super();
-    this._films = films;
+    super(films);
   }
 
   getTemplate() {
-    return createUserTemplate(this._films);
+    return createUserTemplate(this.data);
+  }
+
+  restoreHandlers() {
   }
 }
 

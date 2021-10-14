@@ -1,6 +1,15 @@
 import dayjs from "dayjs";
 
 const MINUTE_QUANTITY_IN_HOUR = 60;
+const HOUR_QUANTITY_IN_DAY = 24;
+const DAY_QUANTITY_IN_MONTH = 30;
+const MONTH_QUANTITY_IN_YEAR = 12;
+
+const MINUTE = 1000 * 60;
+const HOUR = MINUTE * MINUTE_QUANTITY_IN_HOUR;
+const DAY = HOUR * HOUR_QUANTITY_IN_DAY;
+const MONTH = DAY * DAY_QUANTITY_IN_MONTH;
+const YEAR = MONTH * MONTH_QUANTITY_IN_YEAR;
 
 const getRandomNumber = (min, max) => Math.floor(Math.random() * (max - min) + min);
 
@@ -12,36 +21,26 @@ const formatTime = (minutes) => {
 
 const convertFormat = (milliseconds) => {
   let format = ``;
-  const minutes = Math.floor((milliseconds / (1000 * 60)));
-  const hours = Math.floor((milliseconds / (1000 * 60 * 60)));
-  const days = Math.floor((milliseconds / (1000 * 60 * 60 * 24)));
-  const months = Math.floor((milliseconds / (1000 * 60 * 60 * 24 * 30)));
-  const years = Math.floor((milliseconds / (1000 * 60 * 60 * 24 * 30 * 12)));
-
+  const minutes = Math.floor((milliseconds / (MINUTE)));
+  const hours = Math.floor((milliseconds / (HOUR)));
+  const days = Math.floor((milliseconds / (DAY)));
+  const months = Math.floor((milliseconds / (MONTH)));
+  const years = Math.floor((milliseconds / (YEAR)));
 
   if (minutes <= 1) {
     format = `now`;
-  } else if (minutes < 60) {
+  } else if (minutes < MINUTE_QUANTITY_IN_HOUR) {
     format = `a few minutes ago`;
-  } else if (hours < 24) {
+  } else if (hours < HOUR_QUANTITY_IN_DAY) {
     format = `a few hour ago`;
-  } else if (days < 30) {
-    format = `a ${days} days ago`;
-  } else if (months < 12) {
-    format = `a ${months} month ago`;
-  } else if (months > 12) {
-    format = `a ${years} years ago`;
+  } else if (days < DAY_QUANTITY_IN_MONTH) {
+    format = `${days} days ago`;
+  } else if (months < MONTH_QUANTITY_IN_YEAR) {
+    format = `${months} month ago`;
+  } else if (months > MONTH_QUANTITY_IN_YEAR) {
+    format = `${years} years ago`;
   }
   return format;
-};
-
-const updateElementInArrayByIndex = (array, updatedElement) => {
-  const index = array.findIndex((element) => element.id === updatedElement.id);
-  if (index === -1) {
-    return array;
-  }
-  array[index] = updatedElement;
-  return array;
 };
 
 const sortFilmsByDate = (filmA, filmB) => {
@@ -59,4 +58,4 @@ const copyFilm = (initialFilm) => {
   return updatedFilm;
 };
 
-export {getRandomNumber, formatTime, convertFormat, updateElementInArrayByIndex, sortFilmsByDate, sortFilmsByRating, copyFilm};
+export {getRandomNumber, formatTime, convertFormat, sortFilmsByDate, sortFilmsByRating, copyFilm};
