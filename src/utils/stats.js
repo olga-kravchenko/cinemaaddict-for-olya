@@ -20,24 +20,26 @@ const getUserStatus = (films) => {
 
 const getAllGenresWithQuantity = (films) => {
   const watchedFilmsGenres = films.map((film) => film.filmInfo.genres);
-  const allGenres = watchedFilmsGenres.reduce((r, e) => (r.push(...e), r), []);
-  // const allGenres = watchedFilmsGenres.reduce((a, b) => {
-  //   return a.concat(b);
-  // });
+  const allGenres = watchedFilmsGenres.flat();
+
   const genresWithQuantity = {};
   allGenres.forEach((genre) => {
     genresWithQuantity[genre] = genresWithQuantity[genre] + 1 || 1;
   });
+
+  const genresToQuantity = new Map();
+  allGenres.forEach((genre) => {
+    const quantity = genresToQuantity.has(genre) ? genresToQuantity.get(genre) + 1 : 1;
+    genresToQuantity.set(genre, quantity);
+  });
+  console.log(genresToQuantity);
+  console.log(genresWithQuantity);
   return genresWithQuantity;
 };
 
 const calculateTotalDurationOfFilms = (films) => {
   const duration = films.map((film) => film.filmInfo.duration);
-  let totalDuration = 0;
-  for (let i = 0; i < duration.length; i++) {
-    totalDuration += duration[i];
-  }
-  return totalDuration;
+  return films.length ? duration.reduce((a, b) => a + b) : 0;
 };
 
 const getPopularGenre = (films) => {
