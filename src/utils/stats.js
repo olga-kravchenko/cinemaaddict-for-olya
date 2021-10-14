@@ -32,9 +32,17 @@ const getAllGenresWithQuantity = (films) => {
     const quantity = genresToQuantity.has(genre) ? genresToQuantity.get(genre) + 1 : 1;
     genresToQuantity.set(genre, quantity);
   });
-  console.log(genresToQuantity);
-  console.log(genresWithQuantity);
   return genresWithQuantity;
+};
+
+const getAllGenresToQuantity = (films) => {
+  const allGenres = films.map((film) => film.filmInfo.genres).flat();
+  const genresToQuantity = new Map();
+  allGenres.forEach((genre) => {
+    const quantity = genresToQuantity.has(genre) ? genresToQuantity.get(genre) + 1 : 1;
+    genresToQuantity.set(genre, quantity);
+  });
+  return genresToQuantity;
 };
 
 const calculateTotalDurationOfFilms = (films) => {
@@ -43,9 +51,8 @@ const calculateTotalDurationOfFilms = (films) => {
 };
 
 const getPopularGenre = (films) => {
-  const genres = getAllGenresWithQuantity(films);
-  const value = Math.max.apply(Math, Object.values(genres));
-  return Object.keys(genres).find((key) => genres[key] === value);
+  const genresTwo = getAllGenresToQuantity(films);
+  return films.length ? [...genresTwo.entries()].reduce((a, e) => e[1] > a[1] ? e : a)[0] : 0;
 };
 
 export {getUserStatus, getAllGenresWithQuantity, calculateTotalDurationOfFilms, getPopularGenre};
