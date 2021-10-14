@@ -1,22 +1,24 @@
 import SmartView from "./smart";
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import {getUserStatus, getAllGenresWithQuantity, calculateTotalDurationOfFilms, getPopularGenre} from "../utils/stats";
+import {getUserStatus, getAllGenresToQuantity, calculateTotalDurationOfFilms, getPopularGenre} from "../utils/stats";
 import {FilterType, TimePeriod, MINUTE_QUANTITY_IN_HOUR} from "../constants";
 import {Filter, FilterTimePeriod} from "../utils/filter";
 
 const renderStatisticChart = (statisticCtx, films) => {
   const BAR_HEIGHT = 50;
-  const genres = films.length ? getAllGenresWithQuantity(films) : {};
-  statisticCtx.height = BAR_HEIGHT * Object.values(genres).length;
+  const genresTwo = getAllGenresToQuantity(films);
+  const genreNames = [...genresTwo.keys()];
+  const genreQuantity = [...genresTwo.values()];
+  statisticCtx.height = BAR_HEIGHT * genreQuantity.length;
 
   return new Chart(statisticCtx, {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
     data: {
-      labels: Object.keys(genres),
+      labels: genreNames,
       datasets: [{
-        data: Object.values(genres),
+        data: genreQuantity,
         backgroundColor: `#ffe800`,
         hoverBackgroundColor: `#ffe800`,
         anchor: `start`,
