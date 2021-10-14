@@ -3,13 +3,13 @@ import dayjs from "dayjs";
 
 const Filter = {
   [FilterType.ALL]: (films) => films,
-  [FilterType.WATCHLIST]: (films) => films.filter((f) => f.userDetails.watchlist),
-  [FilterType.HISTORY]: (films) => films.filter((f) => f.userDetails.alreadyWatched),
-  [FilterType.FAVORITES]: (films) => films.filter((f) => f.userDetails.favorite),
+  [FilterType.WATCHLIST]: (films) => films.filter((film) => film.userDetails.watchlist),
+  [FilterType.HISTORY]: (films) => films.filter((film) => film.userDetails.alreadyWatched),
+  [FilterType.FAVORITES]: (films) => films.filter((film) => film.userDetails.favorite),
 };
 
 const FilterTimePeriod = {
-  [TimePeriod.ALL_TIME]: (films) => films,
+  [TimePeriod.ALL_TIME]: (films) => films.filter((film) => film.userDetails.alreadyWatched),
   [TimePeriod.TODAY]: (films) => films.filter((film) => {
     const today = dayjs();
     return today.diff(dayjs(film.userDetails.watchingDate), `day`) === 0;

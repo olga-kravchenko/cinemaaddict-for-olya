@@ -30,12 +30,20 @@ const getAllGenresToQuantity = (films) => {
 
 const calculateTotalDurationOfFilms = (films) => {
   const duration = films.map((film) => film.filmInfo.duration);
-  return films.length ? duration.reduce((a, b) => a + b) : 0;
+  return films.length ?
+    duration.reduce((previousDuration, currentDuration) => previousDuration + currentDuration)
+    : 0;
 };
 
 const getPopularGenre = (films) => {
-  const genresTwo = getAllGenresToQuantity(films);
-  return films.length ? [...genresTwo.entries()].reduce((a, e) => e[1] > a[1] ? e : a)[0] : 0;
+  const genres = getAllGenresToQuantity(films);
+  return films.length ?
+    [...genres.entries()].reduce((previousGenre, currentGenre) => {
+      return currentGenre[1] > previousGenre[1] ?
+        currentGenre :
+        previousGenre;
+    })[0] :
+    0;
 };
 
 export {getUserStatus, getAllGenresToQuantity, calculateTotalDurationOfFilms, getPopularGenre};
