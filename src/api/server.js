@@ -1,11 +1,13 @@
+import FilmsModel from "../model/films";
+
 const Method = {
   GET: `GET`,
-  PUT: `PUT`
+  PUT: `PUT`,
 };
 
 const SuccessHTTPStatusRange = {
   MIN: 200,
-  MAX: 299
+  MAX: 299,
 };
 
 class Server {
@@ -16,24 +18,26 @@ class Server {
 
   getFilms() {
     return this._load({url: `movies`})
-      .then(Server.toJSON);
+      .then(Server.toJSON)
+      .then((tasks) => tasks.map(FilmsModel.adaptToClient));
   }
 
   updateFilms(film) {
     return this._load({
       url: `tasks/${film.id}`,
       method: Method.PUT,
-      body: JSON.stringify(film),
-      headers: new Headers({"Content-Type": `application/json`})
+      body: JSON.stringify(FilmsModel.adaptToServer(film)),
+      headers: new Headers({"Content-Type": `application/json`}),
     })
-      .then(Server.toJSON);
+      .then(Server.toJSON)
+      .then(FilmsModel.adaptToClient);
   }
 
   _load({
     url,
     method = Method.GET,
     body = null,
-    headers = new Headers()
+    headers = new Headers(),
   }) {
     headers.append(`Authorization`, this._authorization);
 
