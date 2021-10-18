@@ -71,6 +71,7 @@ class Film {
     if (!document.querySelector(`.film-details`)) {
       this._body.classList.add(`hide-overflow`);
       this._body.appendChild(this._filmPopupComponent.getElement());
+      document.addEventListener(`keydown`, this._handleEscKeyDown);
     }
   }
 
@@ -89,7 +90,6 @@ class Film {
 
   _handleFilmCardClick() {
     this._showPopup();
-    document.addEventListener(`keydown`, this._handleEscKeyDown);
   }
 
   _handleWatchlistClick() {
