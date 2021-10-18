@@ -7,10 +7,18 @@ import FilmsModel from "./model/films";
 import FilterModel from "./model/filters";
 import MenuPresenter from "./presenter/menu";
 import StatsView from "./view/stats";
+import Server from "./api/server";
 
 const FILM_QUANTITY = 22;
+const AUTHORIZATION = `Basic hiya87868vcs98v9696vinyls2j`;
+const END_POINT = `https://13.ecmascript.pages.academy/cinemaddict/`;
 
 const films = new Array(FILM_QUANTITY).fill().map(generateFilm);
+const server = new Server(END_POINT, AUTHORIZATION);
+
+server.getFilms().then((films) => {
+  console.log(films);
+});
 
 const filmsModel = new FilmsModel();
 filmsModel.films = films;
