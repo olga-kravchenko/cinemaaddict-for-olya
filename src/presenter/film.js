@@ -23,8 +23,8 @@ class Film {
     this._handleCloseButtonClick = this._handleCloseButtonClick.bind(this);
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
 
-    this._handleAddComment = this._handleAddComment.bind(this);
-    this._handleDeleteComment = this._handleDeleteComment.bind(this);
+    // this._handleAddComment = this._handleAddComment.bind(this);
+    // this._handleDeleteComment = this._handleDeleteComment.bind(this);
   }
 
   initOrUpdate(film) {
@@ -43,8 +43,8 @@ class Film {
 
     this._filmPopupComponent.setPopupCloseHandler(this._handleCloseButtonClick);
 
-    this._filmPopupComponent.setCommentAddHandler(this._handleAddComment);
-    this._filmPopupComponent.setCommentDeleteHandler(this._handleDeleteComment);
+    // this._filmPopupComponent.setCommentAddHandler(this._handleAddComment);
+    // this._filmPopupComponent.setCommentDeleteHandler(this._handleDeleteComment);
 
     if (!prevFilmComponent) {
       render(this._container, this._filmComponent, RenderPosition.BEFORE_END);
@@ -80,8 +80,8 @@ class Film {
           this._filmPopupComponent = new PopupView(this._film, filmComments);
 
           this._filmPopupComponent.setPopupCloseHandler(this._handleCloseButtonClick);
-          this._filmPopupComponent.setCommentAddHandler(this._handleAddComment);
-          this._filmPopupComponent.setCommentDeleteHandler(this._handleDeleteComment);
+          // this._filmPopupComponent.setCommentAddHandler(this._handleAddComment);
+          // this._filmPopupComponent.setCommentDeleteHandler(this._handleDeleteComment);
 
           this._body.classList.add(`hide-overflow`);
           this._body.appendChild(this._filmPopupComponent.getElement());
@@ -135,13 +135,13 @@ class Film {
     document.removeEventListener(`keydown`, this._handleEscKeyDown);
   }
 
-  _handleAddComment(updatedFilm) {
-    this._changeData(UpdateType.PATCH, UserAction.ADD_COMMENT, updatedFilm);
-  }
-
-  _handleDeleteComment(updatedFilm) {
-    this._changeData(UpdateType.PATCH, UserAction.DELETE_COMMENT, updatedFilm);
-  }
+  // _handleAddComment(updatedFilm) {
+  //   this._changeData(UpdateType.PATCH, UserAction.ADD_COMMENT, updatedFilm);
+  // }
+  //
+  // _handleDeleteComment(updatedFilm) {
+  //   this._changeData(UpdateType.PATCH, UserAction.DELETE_COMMENT, updatedFilm);
+  // }
 }
 
 export default Film;

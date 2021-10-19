@@ -198,6 +198,9 @@ class Popup extends SmartView {
 
   setHandlers() {
     this._setClickEmojiHandler();
+    this._setCommentAddHandler();
+    this._setCommentDeleteHandler();
+
     this._setPopupWatchlistClickHandler();
     this._setPopupAlreadyWatchedClickHandler();
     this._setPopupFavoriteClickHandler();
@@ -250,9 +253,10 @@ class Popup extends SmartView {
       comment.emotion = this._emotionState;
       const newFilm = copyFilm(this.data);
       newFilm.comments.push(comment.id);
-      IdToMap.set(comment.id, comment);
+      this._filmComments.push(comment);
       this._emotionState = null;
-      this._callback.formSubmit(newFilm);
+      this.updateState(newFilm, true
+      );
     }
   }
 
@@ -265,8 +269,8 @@ class Popup extends SmartView {
     const id = evt.target.closest(`li`).id;
     const newFilm = copyFilm(this.data);
     newFilm.comments = newFilm.comments.filter((commentId) => commentId !== id);
-    IdToMap.delete(id);
-    this._callback.popupDelete(newFilm);
+    this._filmComments = this._filmComments.filter((comment) => comment.id !== id);
+    this.updateState(newFilm, true);
   }
 
   _setPopupWatchlistClickHandler() {
@@ -287,8 +291,7 @@ class Popup extends SmartView {
       .addEventListener(`change`, this._favoriteClickHandler);
   }
 
-  setCommentAddHandler(callback) {
-    this._callback.formSubmit = callback;
+  _setCommentAddHandler() {
     this.getElement()
       .querySelector(`.film-details__comment-input`)
       .addEventListener(`keydown`, this._commentAddHandler);
@@ -301,8 +304,7 @@ class Popup extends SmartView {
       .addEventListener(`click`, this._popupCloseClickHandler);
   }
 
-  setCommentDeleteHandler(callback) {
-    this._callback.popupDelete = callback;
+  _setCommentDeleteHandler() {
     this.getElement()
       .querySelectorAll(`.film-details__comment-delete`)
       .forEach((e) => e.addEventListener(`click`, this._commentDeleteHandler));

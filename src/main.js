@@ -30,6 +30,6 @@ server.getFilms()
   .then((films) => {
     filmsModel.films = films;
   })
-  .catch(() => {
-    filmsModel.films = [];
-  });
+  // .catch(() => {
+  //   filmsModel.films = [];
+  // });
