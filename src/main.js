@@ -1,7 +1,6 @@
 import UserView from "./view/user";
 import FilmQuantityView from "./view/film-quantity";
 import {RenderPosition, render} from "./utils/render";
-import {generateFilm} from "./mock/film";
 import FilmsBoardPresenter from "./presenter/films-board";
 import FilmsModel from "./model/films";
 import FilterModel from "./model/filters";
@@ -9,19 +8,12 @@ import MenuPresenter from "./presenter/menu";
 import StatsView from "./view/stats";
 import Server from "./api/server";
 
-const FILM_QUANTITY = 22;
 const AUTHORIZATION = `Basic hiya87868vcs98v9696vinyls2j`;
 const END_POINT = `https://13.ecmascript.pages.academy/cinemaddict/`;
 
-const films = new Array(FILM_QUANTITY).fill().map(generateFilm);
 const server = new Server(END_POINT, AUTHORIZATION);
 
-server.getFilms().then((films) => {
-  console.log(films);
-});
-
 const filmsModel = new FilmsModel();
-filmsModel.films = films;
 
 const filterModel = new FilterModel();
 
@@ -42,4 +34,12 @@ menuPresenter.init();
 render(main, statsComponent, RenderPosition.BEFORE_END);
 filmBoardPresenter.init();
 
-render(statistics, new FilmQuantityView(films.length), RenderPosition.BEFORE_END);
+render(statistics, new FilmQuantityView(filmsModel.films.length), RenderPosition.BEFORE_END);
+
+server.getFilms()
+  .then((films) => {
+    filmsModel.films = films;
+  })
+  .catch(() => {
+    filmsModel.films = [];
+  });

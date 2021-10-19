@@ -1,4 +1,5 @@
 import Observer from "../utils/observer.js";
+import {UpdateType} from "../constants";
 
 class Films extends Observer {
   constructor() {
@@ -8,6 +9,8 @@ class Films extends Observer {
 
   set films(films) {
     this._films = [...films];
+
+    this._notify(UpdateType.INIT);
   }
 
   get films() {
