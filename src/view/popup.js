@@ -176,9 +176,11 @@ class Popup extends SmartView {
     this._filmComments = filmComments;
 
     this._popupCloseClickHandler = this._popupCloseClickHandler.bind(this);
+
     this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
     this._alreadyWatchedClickHandler = this._alreadyWatchedClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
+
     this._checkedTypeToggleHandler = this._checkedTypeToggleHandler.bind(this);
     this._commentAddHandler = this._commentAddHandler.bind(this);
     this._commentDeleteHandler = this._commentDeleteHandler.bind(this);

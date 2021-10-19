@@ -42,6 +42,7 @@ class Film {
     this._filmComponent.setFavoriteClickHandler(this._handleFavoriteClick);
 
     this._filmPopupComponent.setPopupCloseHandler(this._handleCloseButtonClick);
+
     this._filmPopupComponent.setCommentAddHandler(this._handleAddComment);
     this._filmPopupComponent.setCommentDeleteHandler(this._handleDeleteComment);
 
