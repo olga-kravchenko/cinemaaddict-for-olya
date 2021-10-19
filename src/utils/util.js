@@ -44,7 +44,7 @@ const convertFormat = (milliseconds) => {
 };
 
 const sortFilmsByDate = (filmA, filmB) => {
-  return dayjs(filmA.filmInfo.date).diff(dayjs(filmB.filmInfo.date));
+  return dayjs(filmA.filmInfo.release.date).diff(dayjs(filmB.filmInfo.release.date));
 };
 
 const sortFilmsByRating = (filmA, filmB) => {

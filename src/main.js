@@ -38,6 +38,7 @@ render(statistics, new FilmQuantityView(filmsModel.films.length), RenderPosition
 
 server.getFilms()
   .then((films) => {
+    console.log(films);
     filmsModel.films = films;
   })
   .catch(() => {

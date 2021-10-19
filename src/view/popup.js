@@ -83,7 +83,7 @@ const createPopupTemplate = ({filmInfo, comments, userDetails}) => {
   const releaseDate = dayjs(date).format(` DD MMMM YYYY`);
   const shownGeneres = genres.map((e) => `<span class="film-details__genre">${e}</span>`);
   const genreTitle = shownGeneres.length === 1 ? `Genre` : `Genres`;
-  const newComments = comments.map((id) => IdToMap.get(id));
+  const newComments = [];
 
   return `
     <section class="film-details">
@@ -94,7 +94,7 @@ const createPopupTemplate = ({filmInfo, comments, userDetails}) => {
           </div>
           <div class="film-details__info-wrap">
             <div class="film-details__poster">
-              <img class="film-details__poster-img" src="./images/posters/${poster}" alt="">
+              <img class="film-details__poster-img" src="${poster}" alt="">
               <p class="film-details__age">${ageRating}+</p>
             </div>
 

@@ -39,6 +39,10 @@ class Films extends Observer {
     adaptedFilm.filmInfo.genres = film.film_info.genre;
     adaptedFilm.filmInfo.release.country = film.film_info.release.release_country;
 
+    adaptedFilm.filmInfo.release.date = film.film_info.release.date !== null ?
+      new Date(film.film_info.release.date) :
+      film.film_info.release.date;
+
     delete adaptedFilm.film_info;
     delete adaptedFilm.user_details;
 
@@ -65,6 +69,9 @@ class Films extends Observer {
     adaptedFilm[`film_info`][`writers`] = film.filmInfo.screenwriters;
     adaptedFilm[`film_info`][`genre`] = film.filmInfo.genres;
     adaptedFilm[`film_info`].release[`release_country`] = film.filmInfo.release.country;
+    adaptedFilm[`film_info`].release.date = film.filmInfo.release.date !== null ?
+      film.filmInfo.release.date.toISOString() :
+      null;
 
     delete adaptedFilm.filmInfo;
     delete adaptedFilm.userDetails;
