@@ -24,7 +24,7 @@ class Server {
 
   updateFilms(film) {
     return this._load({
-      url: `tasks/${film.id}`,
+      url: `movies/${film.id}`,
       method: Method.PUT,
       body: JSON.stringify(FilmsModel.adaptToServer(film)),
       headers: new Headers({"Content-Type": `application/json`}),
@@ -33,18 +33,10 @@ class Server {
       .then(FilmsModel.adaptToClient);
   }
 
-  _load({
-    url,
-    method = Method.GET,
-    body = null,
-    headers = new Headers(),
-  }) {
+  _load({url, method = Method.GET, body = null, headers = new Headers()}) {
     headers.append(`Authorization`, this._authorization);
 
-    return fetch(
-        `${this._endPoint}/${url}`,
-        {method, body, headers}
-    )
+    return fetch(`${this._endPoint}/${url}`, {method, body, headers})
       .then(Server.checkStatus)
       .catch(Server.catchError);
   }
@@ -56,7 +48,6 @@ class Server {
     ) {
       throw new Error(`${response.status}: ${response.statusText}`);
     }
-
     return response;
   }
 

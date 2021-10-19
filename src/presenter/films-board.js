@@ -101,8 +101,6 @@ class FilmsBoard {
         this._isLoading = false;
         remove(this._loadingComponent);
         this._renderFilmsBoard();
-        this._clearFilmsBoard();
-        this._renderFilmsBoard();
         break;
     }
   }
@@ -177,13 +175,19 @@ class FilmsBoard {
     }
     const films = this._getFilteredAndSortedFilms();
     const filmQuantity = films.length;
+
+    if (filmQuantity) {
+      this._renderSorting();
+    } else {
+      remove(this._sortingComponent);
+    }
+
     render(this._container, this._contentContainerComponent, RenderPosition.BEFORE_END);
     render(this._contentContainerComponent, this._filmListComponent, RenderPosition.BEFORE_END);
     if (!filmQuantity) {
       this._renderNoFilms();
       return;
     }
-    this._renderSorting();
     this._renderFilmContainer();
     this._renderFilms(films.slice(0, Math.min(filmQuantity, FILM_QUANTITY_PER_STEP)));
     if (filmQuantity > this._renderedFilmQuantity) {
