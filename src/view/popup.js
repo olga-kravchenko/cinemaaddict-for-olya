@@ -26,7 +26,8 @@ const createFilmControlsTemplate = ({watchlist, alreadyWatched, favorite}) => {
 
 const createCommentsTemplate = (newComments) => {
   return newComments.map(({id, author, comment, date, emotion}) => {
-    const dayDifference = (dayjs(date).diff(dayjs().toDate()));
+    const commentDate = new Date(date);
+    const dayDifference = -(dayjs(commentDate).diff(dayjs().toDate()));
     const format = convertFormat(dayDifference);
     return `<li class="film-details__comment" id="${id}">
       <span class="film-details__comment-emoji">
@@ -63,7 +64,8 @@ const createEmojiListTemplate = () => `
       ${createEmojisTemplate()}
     </div>`;
 
-const createPopupTemplate = ({filmInfo, comments, userDetails}) => {
+const createPopupTemplate = (film, filmComments) => {
+  const {filmInfo, userDetails} = film;
   const {
     poster,
     title,
@@ -83,7 +85,8 @@ const createPopupTemplate = ({filmInfo, comments, userDetails}) => {
   const releaseDate = dayjs(date).format(` DD MMMM YYYY`);
   const shownGeneres = genres.map((e) => `<span class="film-details__genre">${e}</span>`);
   const genreTitle = shownGeneres.length === 1 ? `Genre` : `Genres`;
-  const newComments = [];
+  const commentQuantity = filmComments.length;
+  const comments = createCommentListTemplate(filmComments);
 
   return `
     <section class="film-details">
@@ -149,8 +152,8 @@ const createPopupTemplate = ({filmInfo, comments, userDetails}) => {
 
         <div class="film-details__bottom-container">
           <section class="film-details__comments-wrap">
-            <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
-            ${createCommentListTemplate(newComments)}
+            <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentQuantity}</span></h3>
+            ${comments}
 
             <div class="film-details__new-comment">
               <div class="film-details__add-emoji-label"></div>
@@ -167,9 +170,10 @@ const createPopupTemplate = ({filmInfo, comments, userDetails}) => {
 };
 
 class Popup extends SmartView {
-  constructor(film) {
+  constructor(film, filmComments = []) {
     super(film);
     this._emotionState = null;
+    this._filmComments = filmComments;
 
     this._popupCloseClickHandler = this._popupCloseClickHandler.bind(this);
     this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
@@ -183,7 +187,7 @@ class Popup extends SmartView {
   }
 
   getTemplate() {
-    return createPopupTemplate(this.data);
+    return createPopupTemplate(this.data, this._filmComments);
   }
 
   restoreHandlers() {

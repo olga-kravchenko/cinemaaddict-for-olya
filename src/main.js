@@ -27,7 +27,7 @@ const userComponent = new UserView(filmsModel.films);
 render(header, userComponent, RenderPosition.BEFORE_END);
 statsComponent.hide();
 
-const filmBoardPresenter = new FilmsBoardPresenter(main, filmsModel, filterModel, statsComponent, userComponent);
+const filmBoardPresenter = new FilmsBoardPresenter(main, filmsModel, filterModel, statsComponent, userComponent, server);
 const menuPresenter = new MenuPresenter(main, filterModel, filmsModel, filmBoardPresenter, statsComponent);
 
 menuPresenter.init();
@@ -38,7 +38,6 @@ render(statistics, new FilmQuantityView(filmsModel.films.length), RenderPosition
 
 server.getFilms()
   .then((films) => {
-    console.log(films);
     filmsModel.films = films;
   })
   .catch(() => {

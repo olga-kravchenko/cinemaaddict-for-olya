@@ -5,9 +5,10 @@ import {UpdateType, UserAction} from "../constants";
 import dayjs from "dayjs";
 
 class Film {
-  constructor(container, changeData) {
+  constructor(container, changeData, server) {
     this._container = container;
     this._changeData = changeData;
+    this._server = server;
     this._body = document.querySelector(`body`);
 
     this._filmComponent = null;
@@ -69,9 +70,25 @@ class Film {
 
   _showPopup() {
     if (!document.querySelector(`.film-details`)) {
-      this._body.classList.add(`hide-overflow`);
-      this._body.appendChild(this._filmPopupComponent.getElement());
-      document.addEventListener(`keydown`, this._handleEscKeyDown);
+      let filmComments;
+      this._server.getComments(this._film.id)
+        .then((comments) => {
+          filmComments = comments;
+        })
+        .then(() => {
+          this._filmPopupComponent = new PopupView(this._film, filmComments);
+
+          this._filmPopupComponent.setPopupCloseHandler(this._handleCloseButtonClick);
+          this._filmPopupComponent.setCommentAddHandler(this._handleAddComment);
+          this._filmPopupComponent.setCommentDeleteHandler(this._handleDeleteComment);
+
+          this._body.classList.add(`hide-overflow`);
+          this._body.appendChild(this._filmPopupComponent.getElement());
+          document.addEventListener(`keydown`, this._handleEscKeyDown);
+        })
+        .catch(() => {
+          filmComments = [];
+        });
     }
   }
 

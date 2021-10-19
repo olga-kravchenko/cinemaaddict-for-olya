@@ -14,12 +14,13 @@ import {Filter} from "../utils/filter";
 const FILM_QUANTITY_PER_STEP = 5;
 
 class FilmsBoard {
-  constructor(container, filmsModel, filterModel, statsComponent, userComponent) {
+  constructor(container, filmsModel, filterModel, statsComponent, userComponent, server) {
     this._container = container;
     this._filmsModel = filmsModel;
     this._filterModel = filterModel;
     this._statsComponent = statsComponent;
     this._userComponent = userComponent;
+    this._server = server;
     this._renderedFilmQuantity = FILM_QUANTITY_PER_STEP;
     this._filmPresenters = {};
     this._currentSortType = SortType.DEFAULT;
@@ -153,7 +154,7 @@ class FilmsBoard {
   }
 
   _renderFilm(film) {
-    const filmPresenter = new FilmPresenter(this._filmContainerComponent, this._handleViewAction);
+    const filmPresenter = new FilmPresenter(this._filmContainerComponent, this._handleViewAction, this._server);
     filmPresenter.initOrUpdate(film);
     this._filmPresenters[film.id] = filmPresenter;
   }

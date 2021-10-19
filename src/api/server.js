@@ -22,6 +22,11 @@ class Server {
       .then((tasks) => tasks.map(FilmsModel.adaptToClient));
   }
 
+  getComments(filmId) {
+    return this._load({url: `comments/${filmId}`})
+      .then(Server.toJSON);
+  }
+
   updateFilms(film) {
     return this._load({
       url: `movies/${film.id}`,
