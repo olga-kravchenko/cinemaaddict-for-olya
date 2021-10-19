@@ -2,6 +2,7 @@ import SmartView from "./smart";
 import {getUserStatus} from "../utils/stats";
 
 const createUserTemplate = (films) => {
+  console.log(films);
   const status = getUserStatus(films);
   return `
     <section class="header__profile profile">

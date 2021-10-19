@@ -31,6 +31,11 @@ class Films extends Observer {
     adaptedFilm.filmInfo = film.film_info;
     adaptedFilm.userDetails = film.user_details;
 
+    adaptedFilm.userDetails.alreadyWatched = film.user_details.already_watched;
+    adaptedFilm.userDetails.watchingDate = film.user_details.watching_date !== null ?
+      new Date(film.user_details.watching_date) :
+      film.user_details.watching_date;
+
     adaptedFilm.filmInfo.originalTitle = film.film_info.alternative_title;
     adaptedFilm.filmInfo.rating = film.film_info.total_rating;
     adaptedFilm.filmInfo.ageRating = film.film_info.age_rating;
@@ -45,6 +50,9 @@ class Films extends Observer {
 
     delete adaptedFilm.film_info;
     delete adaptedFilm.user_details;
+
+    delete adaptedFilm.userDetails.already_watched;
+    delete adaptedFilm.userDetails.watching_date;
 
     delete adaptedFilm.filmInfo.alternative_title;
     delete adaptedFilm.filmInfo.total_rating;
@@ -61,6 +69,11 @@ class Films extends Observer {
     const adaptedFilm = Object.assign({}, film);
     adaptedFilm[`film_info`] = film.filmInfo;
     adaptedFilm[`user_details`] = film.userDetails;
+
+    adaptedFilm[`user_details`][`already_watched`] = film.userDetails.alreadyWatched;
+    adaptedFilm[`user_details`][`watching_date`] = film.userDetails.watchingDate !== null ?
+      film.userDetails.watchingDate.toISOString() :
+      null;
 
     adaptedFilm[`film_info`][`alternative_title`] = film.filmInfo.originalTitle;
     adaptedFilm[`film_info`][`total_rating`] = film.filmInfo.rating;

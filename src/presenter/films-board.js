@@ -6,21 +6,25 @@ import LoadingView from "../view/loading.js";
 import FilmsContainerView from "../view/films-container";
 import ShowMoreButtonView from "../view/show-more-button";
 import FilmPresenter from "./film";
+import FilmQuantityView from "../view/film-quantity";
 import {remove, render, RenderPosition} from "../utils/render";
 import {sortFilmsByDate, sortFilmsByRating} from "../utils/util";
 import {FilterType, SortType, UpdateType, UserAction} from "../constants";
 import {Filter} from "../utils/filter";
+import UserView from "../view/user";
 
 const FILM_QUANTITY_PER_STEP = 5;
 
 class FilmsBoard {
-  constructor(container, filmsModel, filterModel, statsComponent, userComponent, server) {
+  constructor(container, filmsModel, filterModel, statsComponent, server) {
     this._container = container;
     this._filmsModel = filmsModel;
     this._filterModel = filterModel;
     this._statsComponent = statsComponent;
-    this._userComponent = userComponent;
+
     this._server = server;
+    this._header = document.querySelector(`.header`);
+    this._footer = document.querySelector(`.footer__statistics`);
     this._renderedFilmQuantity = FILM_QUANTITY_PER_STEP;
     this._filmPresenters = {};
     this._currentSortType = SortType.DEFAULT;
@@ -28,6 +32,8 @@ class FilmsBoard {
 
     this._sortingComponent = null;
     this._showMoreButtonComponent = null;
+    this._userComponent = null;
+    this._filmQuantityComponent = null;
 
     this._contentContainerComponent = new ContentView();
     this._filmListComponent = new FilmsView();
@@ -128,6 +134,14 @@ class FilmsBoard {
     this._renderFilmsBoard();
   }
 
+  _renderUser(films) {
+    if (this._userComponent) {
+      this._userComponent = null;
+    }
+    this._userComponent = new UserView(films);
+    render(this._header, this._userComponent, RenderPosition.BEFORE_END);
+  }
+
   _renderSorting() {
     if (this._sortingComponent) {
       this._sortingComponent = null;
@@ -169,6 +183,14 @@ class FilmsBoard {
     render(this._filmListComponent, this._showMoreButtonComponent, RenderPosition.BEFORE_END);
   }
 
+  _renderFilmQuantity(films) {
+    if (this._filmQuantityComponent) {
+      this._filmQuantityComponent = null;
+    }
+    this._filmQuantityComponent = new FilmQuantityView(films.length);
+    render(this._footer, this._filmQuantityComponent, RenderPosition.BEFORE_END);
+  }
+
   _renderFilmsBoard() {
     if (this._isLoading) {
       this._renderLoading();
@@ -176,13 +198,12 @@ class FilmsBoard {
     }
     const films = this._getFilteredAndSortedFilms();
     const filmQuantity = films.length;
-
+    this._renderUser(this._filmsModel.films);
     if (filmQuantity) {
       this._renderSorting();
     } else {
       remove(this._sortingComponent);
     }
-
     render(this._container, this._contentContainerComponent, RenderPosition.BEFORE_END);
     render(this._contentContainerComponent, this._filmListComponent, RenderPosition.BEFORE_END);
     if (!filmQuantity) {
@@ -194,6 +215,7 @@ class FilmsBoard {
     if (filmQuantity > this._renderedFilmQuantity) {
       this._renderShowMoreButton();
     }
+    this._renderFilmQuantity(this._filmsModel.films);
   }
 
   _clearFilmsBoard({resetRenderedFilmQuantity = false, resetSortType = false} = {}) {
@@ -203,6 +225,8 @@ class FilmsBoard {
       .forEach((presenter) => presenter.destroy());
     this._filmPresenters = {};
     remove(this._loadingComponent);
+    remove(this._userComponent);
+    remove(this._filmQuantityComponent);
     remove(this._noFilmsComponent);
     remove(this._sortingComponent);
     remove(this._showMoreButtonComponent);
