@@ -74,8 +74,7 @@ const createPopupTemplate = ({filmInfo, comments, userDetails}) => {
     director,
     screenwriters,
     actors,
-    date,
-    country,
+    release: {date, country},
     genres,
     ageRating,
   } = filmInfo;

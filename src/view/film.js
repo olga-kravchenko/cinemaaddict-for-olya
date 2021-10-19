@@ -13,7 +13,7 @@ const formatDescription = (description) => {
 
 const createFilmTemplate = ({filmInfo, comments, userDetails}) => {
   const {watchlist, alreadyWatched, favorite} = userDetails;
-  const {poster, title, rating, duration, description, date, genres} = filmInfo;
+  const {poster, title, rating, duration, description, release: {date}, genres} = filmInfo;
   const shownGenre = genres[0];
   const formattedDuration = formatTime(duration);
   const releaseDate = dayjs(date).format(`YYYY`);
@@ -31,7 +31,7 @@ const createFilmTemplate = ({filmInfo, comments, userDetails}) => {
         <span class="film-card__duration">${formattedDuration}</span>
         <span class="film-card__genre">${shownGenre}</span>
       </p>
-      <img src="./images/posters/${poster}" alt="" class="film-card__poster">
+      <img src="${poster}" alt="" class="film-card__poster">
       <p class="film-card__description">${formattedDescription}</p>
       <a class="film-card__comments">${comments.length} comments</a>
       <div class="film-card__controls">
