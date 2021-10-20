@@ -3,8 +3,8 @@ import he from "he";
 import {copyFilm, formatTime, convertFormat} from "../utils/util";
 import {EMOTIONS} from "../constants";
 import SmartView from "./smart";
-import {IdToMap} from "../mock/film";
 import {nanoid} from "nanoid";
+import {replace} from "../utils/render";
 
 const createFilmControlsTemplate = ({watchlist, alreadyWatched, favorite}) => {
   const isCheckedWatchlist = watchlist ? `checked` : ``;
@@ -255,8 +255,9 @@ class Popup extends SmartView {
       newFilm.comments.push(comment.id);
       this._filmComments.push(comment);
       this._emotionState = null;
-      this.updateState(newFilm, true
-      );
+      const currentScroll = document.querySelector(`.film-details`).scrollTop;
+      this.updateState(newFilm, true);
+      this.getElement().scrollTo(0, currentScroll);
     }
   }
 
@@ -270,7 +271,9 @@ class Popup extends SmartView {
     const newFilm = copyFilm(this.data);
     newFilm.comments = newFilm.comments.filter((commentId) => commentId !== id);
     this._filmComments = this._filmComments.filter((comment) => comment.id !== id);
+    const currentScroll = document.querySelector(`.film-details`).scrollTop;
     this.updateState(newFilm, true);
+    this.getElement().scrollTo(0, currentScroll);
   }
 
   _setPopupWatchlistClickHandler() {
