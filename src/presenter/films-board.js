@@ -80,7 +80,9 @@ class FilmsBoard {
     switch (actionType) {
       case UserAction.UPDATE_FILMS:
         updateType = this._filterModel.filters !== FilterType.ALL ? UpdateType.MAJOR : UpdateType.PATCH;
-        this._filmsModel.updateFilm(updateType, updatedFilm);
+        this._server.updateFilms(updatedFilm).then((response) => {
+          this._filmsModel.updateFilm(updateType, response);
+        });
         this._statsComponent.updateState(this._filmsModel.films, false);
         this._userComponent.updateState(this._filmsModel.films, true);
         break;

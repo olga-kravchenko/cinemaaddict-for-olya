@@ -119,7 +119,7 @@ class Film {
   _handleAlreadyWatchedClick() {
     const updatedFilm = Object.assign({}, this._film);
     updatedFilm.userDetails.alreadyWatched = !this._film.userDetails.alreadyWatched;
-    updatedFilm.userDetails.watchingDate = updatedFilm.userDetails.alreadyWatched ? dayjs().toDate() : ``;
+    updatedFilm.userDetails.watchingDate = dayjs().toDate();
     this._changeData(UpdateType.PATCH, UserAction.UPDATE_FILMS, updatedFilm);
   }
 

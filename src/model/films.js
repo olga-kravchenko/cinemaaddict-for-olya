@@ -72,7 +72,7 @@ class Films extends Observer {
 
     adaptedFilm[`user_details`][`already_watched`] = film.userDetails.alreadyWatched;
     adaptedFilm[`user_details`][`watching_date`] = film.userDetails.watchingDate !== null ?
-      film.userDetails.watchingDate.toISOString() :
+      (film.userDetails.watchingDate).toISOString() :
       null;
 
     adaptedFilm[`film_info`][`alternative_title`] = film.filmInfo.originalTitle;
