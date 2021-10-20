@@ -8,28 +8,26 @@ import Server from "./api/server";
 
 const AUTHORIZATION = `Basic hiya87868vcs98v9696vinyls2j`;
 const END_POINT = `https://13.ecmascript.pages.academy/cinemaddict/`;
+const main = document.querySelector(`.main`);
 
 const server = new Server(END_POINT, AUTHORIZATION);
 const filmsModel = new FilmsModel();
 const filterModel = new FilterModel();
-
-const main = document.querySelector(`.main`);
-
 const statsComponent = new StatsView(filmsModel.films);
-statsComponent.hide();
-
 const filmBoardPresenter = new FilmsBoardPresenter(main, filmsModel, filterModel, statsComponent, server);
 const menuPresenter = new MenuPresenter(main, filterModel, filmsModel, filmBoardPresenter, statsComponent);
 
-menuPresenter.init();
-render(main, statsComponent, RenderPosition.BEFORE_END);
+statsComponent.hide();
 filmBoardPresenter.init();
-
 
 server.getFilms()
   .then((films) => {
     filmsModel.films = films;
+    render(main, statsComponent, RenderPosition.BEFORE_END);
+    menuPresenter.init();
   })
-  // .catch(() => {
-  //   filmsModel.films = [];
-  // });
+  .catch(() => {
+    filmsModel.films = [];
+    menuPresenter.init();
+    render(main, statsComponent, RenderPosition.BEFORE_END);
+  });
