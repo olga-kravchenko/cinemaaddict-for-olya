@@ -3,6 +3,7 @@ import FilmsModel from "../model/films";
 const Method = {
   GET: `GET`,
   PUT: `PUT`,
+  DELETE: `DELETE`,
 };
 
 const SuccessHTTPStatusRange = {
@@ -25,6 +26,10 @@ class Server {
   getComments(filmId) {
     return this._load({url: `comments/${filmId}`})
       .then(Server.toJSON);
+  }
+
+  deleteComments(id) {
+    return this._load({url: `comments/${id}`, method: Method.DELETE});
   }
 
   updateFilms(film) {

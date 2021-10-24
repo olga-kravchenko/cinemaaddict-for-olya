@@ -22,6 +22,7 @@ class Film {
 
     this._handleCloseButtonClick = this._handleCloseButtonClick.bind(this);
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
+    this._handleCommentDeleteClick = this._handleCommentDeleteClick.bind(this);
   }
 
   initOrUpdate(film) {
@@ -39,6 +40,7 @@ class Film {
     this._filmComponent.setFavoriteClickHandler(this._handleFavoriteClick);
 
     this._filmPopupComponent.setPopupCloseHandler(this._handleCloseButtonClick);
+    this._filmPopupComponent.setCommentDeleteHandler(this._handleCommentDeleteClick);
 
     if (!prevFilmComponent) {
       render(this._container, this._filmComponent, RenderPosition.BEFORE_END);
@@ -73,6 +75,7 @@ class Film {
         .then(() => {
           this._filmPopupComponent = new PopupView(this._film, filmComments);
           this._filmPopupComponent.setPopupCloseHandler(this._handleCloseButtonClick);
+          this._filmPopupComponent.setCommentDeleteHandler(this._handleCommentDeleteClick);
           this._body.classList.add(`hide-overflow`);
           this._body.appendChild(this._filmPopupComponent.getElement());
           document.addEventListener(`keydown`, this._handleEscKeyDown);
@@ -123,6 +126,10 @@ class Film {
     this._closePopup();
     this._changeData(UpdateType.PATCH, UserAction.UPDATE_FILMS, updatedFilm);
     document.removeEventListener(`keydown`, this._handleEscKeyDown);
+  }
+
+  _handleCommentDeleteClick(id) {
+    this._server.deleteComments(id);
   }
 }
 

@@ -4,7 +4,6 @@ import {copyFilm, formatTime, convertFormat} from "../utils/util";
 import {EMOTIONS} from "../constants";
 import SmartView from "./smart";
 import {nanoid} from "nanoid";
-import {replace} from "../utils/render";
 
 const createFilmControlsTemplate = ({watchlist, alreadyWatched, favorite}) => {
   const isCheckedWatchlist = watchlist ? `checked` : ``;
@@ -268,6 +267,7 @@ class Popup extends SmartView {
 
   _commentDeleteHandler(evt) {
     const id = evt.target.closest(`li`).id;
+    this._callback.deleteComment(id);
     const newFilm = copyFilm(this.data);
     newFilm.comments = newFilm.comments.filter((commentId) => commentId !== id);
     this._filmComments = this._filmComments.filter((comment) => comment.id !== id);
@@ -311,6 +311,10 @@ class Popup extends SmartView {
     this.getElement()
       .querySelectorAll(`.film-details__comment-delete`)
       .forEach((e) => e.addEventListener(`click`, this._commentDeleteHandler));
+  }
+
+  setCommentDeleteHandler(callback) {
+    this._callback.deleteComment = callback;
   }
 }
 
