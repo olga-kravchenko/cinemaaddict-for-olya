@@ -266,14 +266,16 @@ class Popup extends SmartView {
   }
 
   _commentDeleteHandler(evt) {
-    const id = evt.target.closest(`li`).id;
-    this._callback.deleteComment(id);
-    const newFilm = copyFilm(this.data);
-    newFilm.comments = newFilm.comments.filter((commentId) => commentId !== id);
-    this._filmComments = this._filmComments.filter((comment) => comment.id !== id);
-    const currentScroll = document.querySelector(`.film-details`).scrollTop;
-    this.updateState(newFilm, true);
-    this.getElement().scrollTo(0, currentScroll);
+    if (evt.target.classList.contains(`film-details__comment-delete`)) {
+      const id = evt.target.closest(`li`).id;
+      this._callback.deleteComment(id);
+      const newFilm = copyFilm(this.data);
+      newFilm.comments = newFilm.comments.filter((commentId) => commentId !== id);
+      this._filmComments = this._filmComments.filter((comment) => comment.id !== id);
+      const currentScroll = document.querySelector(`.film-details`).scrollTop;
+      this.updateState(newFilm, true);
+      this.getElement().scrollTo(0, currentScroll);
+    }
   }
 
   _setPopupWatchlistClickHandler() {
@@ -308,9 +310,10 @@ class Popup extends SmartView {
   }
 
   _setCommentDeleteHandler() {
-    this.getElement()
-      .querySelectorAll(`.film-details__comment-delete`)
-      .forEach((e) => e.addEventListener(`click`, this._commentDeleteHandler));
+    const comments = this.getElement().querySelector(`.film-details__comments-list`);
+    if (comments) {
+      comments.addEventListener(`click`, this._commentDeleteHandler);
+    }
   }
 
   setCommentDeleteHandler(callback) {

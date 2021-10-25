@@ -23,11 +23,11 @@ filmBoardPresenter.init();
 server.getFilms()
   .then((films) => {
     filmsModel.films = films;
-    render(main, statsComponent, RenderPosition.BEFORE_END);
-    menuPresenter.init();
   })
   .catch(() => {
     filmsModel.films = [];
+  })
+  .finally(() => {
     menuPresenter.init();
     render(main, statsComponent, RenderPosition.BEFORE_END);
   });
