@@ -12,6 +12,7 @@ import {sortFilmsByDate, sortFilmsByRating} from "../utils/util";
 import {FilterType, SortType, UpdateType, UserAction} from "../constants";
 import {Filter} from "../utils/filter";
 import UserView from "../view/user";
+import FilmsModel from "../model/films";
 
 const FILM_QUANTITY_PER_STEP = 5;
 
@@ -76,27 +77,33 @@ class FilmsBoard {
     this._filterModel.removeObserver(this._handleModelEvent);
   }
 
-  _handleViewAction(updateType, actionType, updatedFilm) {
+  _handleViewAction(updateType, actionType, updatedFilm, newComment) {
     switch (actionType) {
       case UserAction.UPDATE_FILMS:
         updateType = this._filterModel.filters !== FilterType.ALL ? UpdateType.MAJOR : UpdateType.PATCH;
-        this._server.updateFilms(updatedFilm).then((response) => {
+        this._server.updateFilm(updatedFilm).then((response) => {
           this._filmsModel.updateFilm(updateType, response);
         });
         this._statsComponent.updateState(this._filmsModel.films, false);
         this._userComponent.updateState(this._filmsModel.films, true);
         break;
       case UserAction.ADD_COMMENT:
+        this._server.addComment(updatedFilm, newComment)
+          .then((response) => {
+            const {movie, comments} = response;
+            this._filmsModel.updateFilm(updateType, FilmsModel.adaptToClient(movie), comments);
+          });
+        break;
       case UserAction.DELETE_COMMENT:
         this._filmsModel.updateFilm(updateType, updatedFilm);
         break;
     }
   }
 
-  _handleModelEvent(updateType, film) {
+  _handleModelEvent(updateType, film, comments) {
     switch (updateType) {
       case UpdateType.PATCH:
-        this._filmPresenters[film.id].initOrUpdate(film);
+        this._filmPresenters[film.id].initOrUpdate(film, comments);
         break;
       case UpdateType.MINOR:
         this._clearFilmsBoard();

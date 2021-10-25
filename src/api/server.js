@@ -1,8 +1,10 @@
 import FilmsModel from "../model/films";
+import {commentAdaptToServer} from "../utils/util";
 
 const Method = {
   GET: `GET`,
   PUT: `PUT`,
+  POST: `POST`,
   DELETE: `DELETE`,
 };
 
@@ -32,7 +34,19 @@ class Server {
     return this._load({url: `comments/${id}`, method: Method.DELETE});
   }
 
-  updateFilms(film) {
+  addComment(film, newComment) {
+    const adaptedCommentToServer = commentAdaptToServer(newComment);
+    // const adaptedCommentToClient = commentAdaptToClient(newComment);
+    return this._load({
+      url: `comments/${film.id}`,
+      method: Method.POST,
+      body: JSON.stringify(adaptedCommentToServer),
+      headers: new Headers({"Content-Type": `application/json`}),
+    })
+      .then(Server.toJSON);
+  }
+
+  updateFilm(film) {
     return this._load({
       url: `movies/${film.id}`,
       method: Method.PUT,

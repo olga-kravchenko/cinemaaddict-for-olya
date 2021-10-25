@@ -58,4 +58,18 @@ const copyFilm = (initialFilm) => {
   return updatedFilm;
 };
 
-export {getRandomNumber, formatTime, convertFormat, sortFilmsByDate, sortFilmsByRating, copyFilm};
+const commentAdaptToServer = (comment) => {
+  const adaptedComment = Object.assign({}, comment);
+  adaptedComment.date = comment.date.toISOString();
+
+  return adaptedComment;
+};
+
+const commentAdaptToClient = (comment) => {
+  const adaptedComment = Object.assign({}, comment);
+  adaptedComment.date = new Date(comment.date);
+
+  return adaptedComment;
+};
+
+export {getRandomNumber, formatTime, convertFormat, sortFilmsByDate, sortFilmsByRating, copyFilm, commentAdaptToServer, commentAdaptToClient};

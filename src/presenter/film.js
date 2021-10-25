@@ -22,17 +22,19 @@ class Film {
 
     this._handleCloseButtonClick = this._handleCloseButtonClick.bind(this);
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
+
     this._handleCommentDeleteClick = this._handleCommentDeleteClick.bind(this);
+    this._handleCommentAddClick = this._handleCommentAddClick.bind(this);
   }
 
-  initOrUpdate(film) {
+  initOrUpdate(film, comments = []) {
     this._film = film;
 
     const prevFilmComponent = this._filmComponent;
     const prevPopupComponent = this._filmPopupComponent;
 
     this._filmComponent = new FilmView(film);
-    this._filmPopupComponent = new PopupView(film);
+    this._filmPopupComponent = new PopupView(film, comments);
 
     this._filmComponent.setCardClickHandler(this._handleFilmCardClick);
     this._filmComponent.setWatchlistClickHandler(this._handleWatchlistClick);
@@ -41,13 +43,15 @@ class Film {
 
     this._filmPopupComponent.setPopupCloseHandler(this._handleCloseButtonClick);
     this._filmPopupComponent.setCommentDeleteHandler(this._handleCommentDeleteClick);
+    this._filmPopupComponent.setCommentAddHandler(this._handleCommentAddClick);
 
     if (!prevFilmComponent) {
       render(this._container, this._filmComponent, RenderPosition.BEFORE_END);
       return;
     }
 
-    if (this._container.getElement().contains(prevFilmComponent.getElement())) {
+    const isPrevFilm = this._container.getElement().contains(prevFilmComponent.getElement());
+    if (isPrevFilm) {
       if (this._body.contains(prevPopupComponent.getElement())) {
         const currentScroll = this._body.querySelector(`.film-details`).scrollTop;
         replace(this._filmPopupComponent, prevPopupComponent);
@@ -76,6 +80,7 @@ class Film {
           this._filmPopupComponent = new PopupView(this._film, filmComments);
           this._filmPopupComponent.setPopupCloseHandler(this._handleCloseButtonClick);
           this._filmPopupComponent.setCommentDeleteHandler(this._handleCommentDeleteClick);
+          this._filmPopupComponent.setCommentAddHandler(this._handleCommentAddClick);
           this._body.classList.add(`hide-overflow`);
           this._body.appendChild(this._filmPopupComponent.getElement());
           document.addEventListener(`keydown`, this._handleEscKeyDown);
@@ -131,6 +136,14 @@ class Film {
   _handleCommentDeleteClick(id) {
     this._server.deleteComments(id);
   }
+
+  _handleCommentAddClick(updatedFilm, newComment) {
+    this._changeData(UpdateType.PATCH, UserAction.ADD_COMMENT, updatedFilm, newComment);
+  }
+
+  // _handleCommentUpdate(updatedFilm) {
+  //   this._changeData(UpdateType.PATCH, UserAction.UPDATE_FILMS, updatedFilm);
+  // }
 }
 
 export default Film;
