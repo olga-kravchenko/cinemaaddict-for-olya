@@ -250,9 +250,6 @@ class Popup extends SmartView {
       this._callback.addComment(this.data, comment);
       this._filmComments.push(comment);
       this._emotionState = null;
-      // const currentScroll = document.querySelector(`.film-details`).scrollTop;
-      // this.updateState(this.data, true);
-      // this.getElement().scrollTo(0, currentScroll);
     }
   }
 
@@ -264,13 +261,10 @@ class Popup extends SmartView {
   _commentDeleteHandler(evt) {
     if (evt.target.classList.contains(`film-details__comment-delete`)) {
       const id = evt.target.closest(`li`).id;
-      this._callback.deleteComment(id);
       const newFilm = copyFilm(this.data);
       newFilm.comments = newFilm.comments.filter((commentId) => commentId !== id);
       this._filmComments = this._filmComments.filter((comment) => comment.id !== id);
-      const currentScroll = document.querySelector(`.film-details`).scrollTop;
-      this.updateState(newFilm, true);
-      this.getElement().scrollTo(0, currentScroll);
+      this._callback.deleteComment(id, newFilm);
     }
   }
 

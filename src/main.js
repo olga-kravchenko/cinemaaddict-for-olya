@@ -6,7 +6,7 @@ import MenuPresenter from "./presenter/menu";
 import StatsView from "./view/stats";
 import Server from "./api/server";
 
-const AUTHORIZATION = `Basic hiya87868vcs98v9696vinyls2j`;
+const AUTHORIZATION = `Basic hiya87868v96vkjkjinyls2j`;
 const END_POINT = `https://13.ecmascript.pages.academy/cinemaddict/`;
 const main = document.querySelector(`.main`);
 

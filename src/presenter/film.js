@@ -76,6 +76,9 @@ class Film {
         .then((comments) => {
           filmComments = comments;
         })
+        .catch(() => {
+          filmComments = [];
+        })
         .then(() => {
           this._filmPopupComponent = new PopupView(this._film, filmComments);
           this._filmPopupComponent.setPopupCloseHandler(this._handleCloseButtonClick);
@@ -84,9 +87,6 @@ class Film {
           this._body.classList.add(`hide-overflow`);
           this._body.appendChild(this._filmPopupComponent.getElement());
           document.addEventListener(`keydown`, this._handleEscKeyDown);
-        })
-        .catch(() => {
-          filmComments = [];
         });
     }
   }
@@ -133,17 +133,17 @@ class Film {
     document.removeEventListener(`keydown`, this._handleEscKeyDown);
   }
 
-  _handleCommentDeleteClick(id) {
+  _handleCommentDeleteClick(id, newFilm) {
+    const currentScroll = document.querySelector(`.film-details`).scrollTop;
     this._server.deleteComments(id);
+    this._filmPopupComponent.updateState(newFilm, true);
+    this._filmPopupComponent.setPopupCloseHandler(this._handleCloseButtonClick);
+    this._filmPopupComponent.getElement().scrollTo(0, currentScroll);
   }
 
   _handleCommentAddClick(updatedFilm, newComment) {
     this._changeData(UpdateType.PATCH, UserAction.ADD_COMMENT, updatedFilm, newComment);
   }
-
-  // _handleCommentUpdate(updatedFilm) {
-  //   this._changeData(UpdateType.PATCH, UserAction.UPDATE_FILMS, updatedFilm);
-  // }
 }
 
 export default Film;
