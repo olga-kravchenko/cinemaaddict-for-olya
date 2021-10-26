@@ -22,7 +22,7 @@ const createFilmControlsTemplate = ({watchlist, alreadyWatched, favorite}) => {
     </section>`;
 };
 
-const createCommentsTemplate = (newComments) => {
+const createCommentsTemplate = (newComments, isDeleting) => {
   return newComments.map(({id, author, comment, date, emotion}) => {
     const commentDate = new Date(date);
     const dayDifference = -(dayjs(commentDate).diff(dayjs().toDate()));
@@ -36,34 +36,36 @@ const createCommentsTemplate = (newComments) => {
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${author}</span>
           <span class="film-details__comment-day">${format}</span>
-          <button class="film-details__comment-delete">Delete</button>
+          <button class="film-details__comment-delete" ${isDeleting ? `disabled` : ``}>
+            ${isDeleting ? `Deleting...` : `Delete`}
+          </button>
         </p>
       </div>
     </li>`;
   }).join(``);
 };
 
-const createCommentListTemplate = (newComments) => `
+const createCommentListTemplate = (newComments, isDeleting) => `
     ${newComments.length !== 0 ? `
     <ul class="film-details__comments-list">
-      ${createCommentsTemplate(newComments)}
+      ${createCommentsTemplate(newComments, isDeleting)}
     </ul>` :
     ``}`;
 
-const createEmojisTemplate = () => EMOTIONS.map((emotion) => `
-    <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emotion}" value="${emotion}">
+const createEmojisTemplate = (isSaving) => EMOTIONS.map((emotion) => `
+    <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emotion}" value="${emotion}" ${isSaving ? `disabled` : ``}>
     <label class="film-details__emoji-label" for="emoji-${emotion}">
       <img src="./images/emoji/${emotion}.png" width="30" height="30" alt="emoji">
     </label>`)
   .join(``);
 
-const createEmojiListTemplate = () => `
+const createEmojiListTemplate = (isSaving) => `
     <div class="film-details__emoji-list">
-      ${createEmojisTemplate()}
+      ${createEmojisTemplate(isSaving)}
     </div>`;
 
 const createPopupTemplate = (film, filmComments) => {
-  const {filmInfo, userDetails} = film;
+  const {filmInfo, userDetails, isSaving, isDeleting} = film;
   const {
     poster,
     title,
@@ -84,7 +86,7 @@ const createPopupTemplate = (film, filmComments) => {
   const shownGeneres = genres.map((e) => `<span class="film-details__genre">${e}</span>`);
   const genreTitle = shownGeneres.length === 1 ? `Genre` : `Genres`;
   const commentQuantity = filmComments.length;
-  const comments = createCommentListTemplate(filmComments);
+  const comments = createCommentListTemplate(filmComments, isDeleting);
 
   return `
     <section class="film-details">
@@ -157,9 +159,9 @@ const createPopupTemplate = (film, filmComments) => {
               <div class="film-details__add-emoji-label"></div>
 
               <label class="film-details__comment-label">
-                <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
+                <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment" ${isSaving ? `disabled` : ``}></textarea>
               </label>
-              ${createEmojiListTemplate()}
+              ${createEmojiListTemplate(isSaving)}
             </div>
           </section>
         </div>
@@ -172,6 +174,9 @@ class Popup extends SmartView {
     super(film);
     this._emotionState = null;
     this._filmComments = filmComments;
+
+    this.data.isSaving = false;
+    this.data.isDeleting = false;
 
     this._popupCloseClickHandler = this._popupCloseClickHandler.bind(this);
 
@@ -259,7 +264,8 @@ class Popup extends SmartView {
   }
 
   _commentDeleteHandler(evt) {
-    if (evt.target.classList.contains(`film-details__comment-delete`)) {
+    let isDeleteButton = evt.target.classList.contains(`film-details__comment-delete`);
+    if (isDeleteButton) {
       const id = evt.target.closest(`li`).id;
       const newFilm = copyFilm(this.data);
       newFilm.comments = newFilm.comments.filter((commentId) => commentId !== id);
