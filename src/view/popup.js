@@ -36,7 +36,7 @@ const createCommentsTemplate = (newComments, isDeleting) => {
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${author}</span>
           <span class="film-details__comment-day">${format}</span>
-          <button class="film-details__comment-delete" ${isDeleting ? `disabled` : ``}>
+          <button class="film-details__comment-delete" ${isDeleting === id ? `disabled` : ``}>
             ${isDeleting ? `Deleting...` : `Delete`}
           </button>
         </p>
@@ -176,7 +176,7 @@ class Popup extends SmartView {
     this._filmComments = filmComments;
 
     this.data.isSaving = false;
-    this.data.isDeleting = false;
+    this.data.isDeleting = null;
 
     this._popupCloseClickHandler = this._popupCloseClickHandler.bind(this);
 
@@ -268,9 +268,9 @@ class Popup extends SmartView {
     if (isDeleteButton) {
       const id = evt.target.closest(`li`).id;
       const newFilm = copyFilm(this.data);
+      this._callback.deleteComment(id, this.data);
       newFilm.comments = newFilm.comments.filter((commentId) => commentId !== id);
       this._filmComments = this._filmComments.filter((comment) => comment.id !== id);
-      this._callback.deleteComment(id, newFilm);
     }
   }
 

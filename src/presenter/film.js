@@ -4,6 +4,11 @@ import {render, RenderPosition, remove, replace} from "../utils/render";
 import {UpdateType, UserAction} from "../constants";
 import dayjs from "dayjs";
 
+export const State = {
+  SAVING: `SAVING`,
+  DELETING: `DELETING`,
+};
+
 class Film {
   constructor(container, changeData, server) {
     this._container = container;
@@ -135,8 +140,13 @@ class Film {
 
   _handleCommentDeleteClick(id, newFilm) {
     const currentScroll = document.querySelector(`.film-details`).scrollTop;
+
+    this.setViewState(State.DELETING, newFilm, id);
+
     this._server.deleteComments(id);
-    this._filmPopupComponent.updateState(newFilm, true);
+
+    const updatedFilm = Object.assign(newFilm, {}, {isDeleting: null});
+    this._filmPopupComponent.updateState(updatedFilm, true);
     this._filmPopupComponent.setPopupCloseHandler(this._handleCloseButtonClick);
     this._filmPopupComponent.getElement().scrollTo(0, currentScroll);
   }
@@ -144,6 +154,23 @@ class Film {
   _handleCommentAddClick(updatedFilm, newComment) {
     this._changeData(UpdateType.PATCH, UserAction.ADD_COMMENT, updatedFilm, newComment);
   }
+
+  setViewState(state, film, id) {
+    switch (state) {
+      case State.SAVING:
+        this._filmPopupComponent.updateState({
+          isDisabled: true,
+          isSaving: true,
+        });
+        break;
+      case State.DELETING:
+        const currentScroll = document.querySelector(`.film-details`).scrollTop;
+        this._filmPopupComponent.updateState(Object.assign(film, {}, {isDeleting: id}), true);
+        this._filmPopupComponent.getElement().scrollTo(0, currentScroll);
+        break;
+    }
+  }
+
 }
 
 export default Film;
