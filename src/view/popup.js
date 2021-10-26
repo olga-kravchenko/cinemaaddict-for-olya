@@ -159,7 +159,7 @@ const createPopupTemplate = (film, filmComments) => {
               <div class="film-details__add-emoji-label"></div>
 
               <label class="film-details__comment-label">
-                <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment" ${isSaving ? `disabled` : ``}></textarea>
+                <textarea class="film-details__comment-input" placeholder="${isSaving ? `Saving...` : `Select reaction below and write comment here`}" name="comment" ${isSaving ? `disabled` : ``}></textarea>
               </label>
               ${createEmojiListTemplate(isSaving)}
             </div>

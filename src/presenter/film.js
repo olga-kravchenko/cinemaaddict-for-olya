@@ -144,19 +144,18 @@ class Film {
   }
 
   _handleCommentAddClick(updatedFilm, newComment) {
+    this.setViewState(State.SAVING, updatedFilm);
     this._changeData(UpdateType.PATCH, UserAction.ADD_COMMENT, updatedFilm, newComment);
   }
 
   setViewState(state, film, id) {
+    const currentScroll = document.querySelector(`.film-details`).scrollTop;
     switch (state) {
       case State.SAVING:
-        this._filmPopupComponent.updateState({
-          isDisabled: true,
-          isSaving: true,
-        });
+        this._filmPopupComponent.updateState(Object.assign(film, {isSaving: true}), true);
+        this._filmPopupComponent.getElement().scrollTo(0, currentScroll);
         break;
       case State.DELETING:
-        const currentScroll = document.querySelector(`.film-details`).scrollTop;
         this._filmPopupComponent.updateState(Object.assign(film, {idDeleting: id}), true);
         this._filmPopupComponent.getElement().scrollTo(0, currentScroll);
         break;

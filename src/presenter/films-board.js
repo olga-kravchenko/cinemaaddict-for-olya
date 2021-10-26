@@ -94,9 +94,6 @@ class FilmsBoard {
             this._filmsModel.updateFilm(updateType, FilmsModel.adaptToClient(movie), comments);
           });
         break;
-      case UserAction.DELETE_COMMENT:
-        this._filmsModel.updateFilm(updateType, updatedFilm);
-        break;
     }
   }
 
