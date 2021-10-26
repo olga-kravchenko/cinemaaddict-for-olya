@@ -22,7 +22,7 @@ const createFilmControlsTemplate = ({watchlist, alreadyWatched, favorite}) => {
     </section>`;
 };
 
-const createCommentsTemplate = (newComments, isDeleting) => {
+const createCommentsTemplate = (newComments, idDeleting) => {
   return newComments.map(({id, author, comment, date, emotion}) => {
     const commentDate = new Date(date);
     const dayDifference = -(dayjs(commentDate).diff(dayjs().toDate()));
@@ -36,8 +36,8 @@ const createCommentsTemplate = (newComments, isDeleting) => {
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${author}</span>
           <span class="film-details__comment-day">${format}</span>
-          <button class="film-details__comment-delete" ${isDeleting === id ? `disabled` : ``}>
-            ${isDeleting ? `Deleting...` : `Delete`}
+          <button class="film-details__comment-delete" ${idDeleting === id ? `disabled` : ``}>
+            ${idDeleting === id ? `Deleting...` : `Delete`}
           </button>
         </p>
       </div>
@@ -45,10 +45,10 @@ const createCommentsTemplate = (newComments, isDeleting) => {
   }).join(``);
 };
 
-const createCommentListTemplate = (newComments, isDeleting) => `
+const createCommentListTemplate = (newComments, idDeleting) => `
     ${newComments.length !== 0 ? `
     <ul class="film-details__comments-list">
-      ${createCommentsTemplate(newComments, isDeleting)}
+      ${createCommentsTemplate(newComments, idDeleting)}
     </ul>` :
     ``}`;
 
@@ -65,7 +65,7 @@ const createEmojiListTemplate = (isSaving) => `
     </div>`;
 
 const createPopupTemplate = (film, filmComments) => {
-  const {filmInfo, userDetails, isSaving, isDeleting} = film;
+  const {filmInfo, userDetails, isSaving, idDeleting} = film;
   const {
     poster,
     title,
@@ -86,7 +86,7 @@ const createPopupTemplate = (film, filmComments) => {
   const shownGeneres = genres.map((e) => `<span class="film-details__genre">${e}</span>`);
   const genreTitle = shownGeneres.length === 1 ? `Genre` : `Genres`;
   const commentQuantity = filmComments.length;
-  const comments = createCommentListTemplate(filmComments, isDeleting);
+  const comments = createCommentListTemplate(filmComments, idDeleting);
 
   return `
     <section class="film-details">
@@ -176,7 +176,7 @@ class Popup extends SmartView {
     this._filmComments = filmComments;
 
     this.data.isSaving = false;
-    this.data.isDeleting = null;
+    this.data.idDeleting = null;
 
     this._popupCloseClickHandler = this._popupCloseClickHandler.bind(this);
 
@@ -266,11 +266,20 @@ class Popup extends SmartView {
   _commentDeleteHandler(evt) {
     let isDeleteButton = evt.target.classList.contains(`film-details__comment-delete`);
     if (isDeleteButton) {
+      const currentScroll = document.querySelector(`.film-details`).scrollTop;
       const id = evt.target.closest(`li`).id;
-      const newFilm = copyFilm(this.data);
       this._callback.deleteComment(id, this.data);
+
+      const newFilm = copyFilm(this.data);
+      newFilm.idDeleting = null;
       newFilm.comments = newFilm.comments.filter((commentId) => commentId !== id);
       this._filmComments = this._filmComments.filter((comment) => comment.id !== id);
+      this.updateState(newFilm, true);
+
+      this.getElement()
+        .querySelector(`.film-details__close-btn`)
+        .addEventListener(`click`, this._popupCloseClickHandler);
+      this.getElement().scrollTo(0, currentScroll);
     }
   }
 

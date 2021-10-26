@@ -138,17 +138,9 @@ class Film {
     document.removeEventListener(`keydown`, this._handleEscKeyDown);
   }
 
-  _handleCommentDeleteClick(id, newFilm) {
-    const currentScroll = document.querySelector(`.film-details`).scrollTop;
-
-    this.setViewState(State.DELETING, newFilm, id);
-
+  _handleCommentDeleteClick(id, film) {
+    this.setViewState(State.DELETING, film, id);
     this._server.deleteComments(id);
-
-    const updatedFilm = Object.assign(newFilm, {}, {isDeleting: null});
-    this._filmPopupComponent.updateState(updatedFilm, true);
-    this._filmPopupComponent.setPopupCloseHandler(this._handleCloseButtonClick);
-    this._filmPopupComponent.getElement().scrollTo(0, currentScroll);
   }
 
   _handleCommentAddClick(updatedFilm, newComment) {
@@ -165,7 +157,7 @@ class Film {
         break;
       case State.DELETING:
         const currentScroll = document.querySelector(`.film-details`).scrollTop;
-        this._filmPopupComponent.updateState(Object.assign(film, {}, {isDeleting: id}), true);
+        this._filmPopupComponent.updateState(Object.assign(film, {idDeleting: id}), true);
         this._filmPopupComponent.getElement().scrollTo(0, currentScroll);
         break;
     }
