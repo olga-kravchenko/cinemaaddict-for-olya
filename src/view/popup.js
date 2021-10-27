@@ -65,7 +65,7 @@ const createEmojiListTemplate = (isSaving) => `
     </div>`;
 
 const createPopupTemplate = (film, filmComments) => {
-  const {filmInfo, userDetails, isSaving, idDeleting} = film;
+  const {filmInfo, userDetails, isSaving, idDeleting, newComment} = film;
   const {
     poster,
     title,
@@ -156,10 +156,12 @@ const createPopupTemplate = (film, filmComments) => {
             ${comments}
 
             <div class="film-details__new-comment">
-              <div class="film-details__add-emoji-label"></div>
+              <div class="film-details__add-emoji-label">
+               ${newComment.emotion ? `<img src="./images/emoji/${newComment.emotion}.png" width="55" height="55" alt="emoji-${newComment.emotion}">` : ``}
+              </div>
 
               <label class="film-details__comment-label">
-                <textarea class="film-details__comment-input" placeholder="${isSaving ? `Saving...` : `Select reaction below and write comment here`}" name="comment" ${isSaving ? `disabled` : ``}></textarea>
+                <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment" ${isSaving ? `disabled` : ``}>${newComment.comment ? newComment.comment : ``}</textarea>
               </label>
               ${createEmojiListTemplate(isSaving)}
             </div>
@@ -172,11 +174,14 @@ const createPopupTemplate = (film, filmComments) => {
 class Popup extends SmartView {
   constructor(film, filmComments = []) {
     super(film);
-    this._emotionState = null;
     this._filmComments = filmComments;
-
     this.data.isSaving = false;
     this.data.idDeleting = null;
+    this.data.newComment = {
+      emotion: null,
+      comment: null,
+    };
+    this._emotionState = this.data.newComment.emotion;
 
     this._popupCloseClickHandler = this._popupCloseClickHandler.bind(this);
 
@@ -200,6 +205,7 @@ class Popup extends SmartView {
   }
 
   setHandlers() {
+    this._setPopupCloseHandler();
     this._setClickEmojiHandler();
     this._setCommentAddHandler();
     this._setCommentDeleteHandler();
@@ -247,6 +253,7 @@ class Popup extends SmartView {
 
   _commentAddHandler(evt) {
     const commentText = evt.target.value;
+    this._emotionState = this._emotionState === null ? this.data.newComment.emotion : this._emotionState;
     if (evt.ctrlKey && evt.key === `Enter` && commentText && this._emotionState) {
       const newComment = {};
       newComment.comment = commentText;
@@ -294,18 +301,24 @@ class Popup extends SmartView {
       .addEventListener(`keydown`, this._commentAddHandler);
   }
 
-  setPopupCloseHandler(callback) {
-    this._callback.popupClose = callback;
-    this.getElement()
-      .querySelector(`.film-details__close-btn`)
-      .addEventListener(`click`, this._popupCloseClickHandler);
-  }
-
   _setCommentDeleteHandler() {
     const comments = this.getElement().querySelector(`.film-details__comments-list`);
     if (comments) {
       comments.addEventListener(`click`, this._commentDeleteHandler);
     }
+  }
+
+  _setPopupCloseHandler() {
+    this.getElement()
+      .querySelector(`.film-details__close-btn`)
+      .addEventListener(`click`, this._popupCloseClickHandler);
+  }
+
+  setPopupCloseHandler(callback) {
+    this._callback.popupClose = callback;
+    this.getElement()
+      .querySelector(`.film-details__close-btn`)
+      .addEventListener(`click`, this._popupCloseClickHandler);
   }
 
   setCommentDeleteHandler(callback) {

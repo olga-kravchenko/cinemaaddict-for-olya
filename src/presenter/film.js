@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 export const State = {
   SAVING: `SAVING`,
   DELETING: `DELETING`,
+  ABORTING: `ABORTING`,
 };
 
 class Film {
@@ -99,6 +100,7 @@ class Film {
   _closePopup() {
     this._body.classList.remove(`hide-overflow`);
     this._body.removeChild(this._filmPopupComponent.getElement());
+    document.removeEventListener(`keydown`, this._handleEscKeyDown);
   }
 
   _handleEscKeyDown(evt) {
@@ -135,7 +137,6 @@ class Film {
   _handleCloseButtonClick(updatedFilm) {
     this._closePopup();
     this._changeData(UpdateType.PATCH, UserAction.UPDATE_FILMS, updatedFilm);
-    document.removeEventListener(`keydown`, this._handleEscKeyDown);
   }
 
   _handleCommentDeleteClick(film, commentId, comments) {
@@ -146,16 +147,37 @@ class Film {
     this._changeData(UpdateType.PATCH, UserAction.ADD_COMMENT, updatedFilm, newComment);
   }
 
-  setViewState(state, film, id) {
+  setViewState(state, film, commentId, localComment) {
     const currentScroll = document.querySelector(`.film-details`).scrollTop;
+
+    const resetFormState = () => {
+      if (localComment) {
+        const comment = localComment.comment;
+        const emotion = localComment.emotion;
+        this._filmPopupComponent.updateState(Object.assign(film, {idDeleting: null, isSaving: false, newComment: {comment, emotion}}), true);
+      } else {
+        const newFilm = Object.assign(film, {idDeleting: null, isSaving: false});
+        newFilm.newComment.emotion = null;
+        newFilm.newComment.comment = null;
+        this._filmPopupComponent.updateState(newFilm, true);
+      }
+      this._filmPopupComponent.getElement().scrollTo(0, currentScroll);
+    };
     switch (state) {
       case State.SAVING:
-        this._filmPopupComponent.updateState(Object.assign(film, {isSaving: true}), true);
+        const newFilm = Object.assign(film, {isSaving: true});
+        newFilm.newComment.emotion = localComment.emotion;
+        newFilm.newComment.comment = localComment.comment;
+        this._filmPopupComponent.updateState(newFilm, true);
         this._filmPopupComponent.getElement().scrollTo(0, currentScroll);
         break;
       case State.DELETING:
-        this._filmPopupComponent.updateState(Object.assign(film, {idDeleting: id}), true);
+        this._filmPopupComponent.updateState(Object.assign(film, {idDeleting: commentId}), true);
         this._filmPopupComponent.getElement().scrollTo(0, currentScroll);
+        break;
+      case State.ABORTING:
+        this._filmComponent.shake(resetFormState);
+        this._filmPopupComponent.shake(resetFormState);
         break;
     }
   }

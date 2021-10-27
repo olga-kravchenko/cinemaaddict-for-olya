@@ -83,16 +83,23 @@ class FilmsBoard {
         updateType = this._filterModel.filters !== FilterType.ALL ? UpdateType.MAJOR : UpdateType.PATCH;
         this._server.updateFilm(updatedFilm).then((response) => {
           this._filmsModel.updateFilm(updateType, response);
-        });
-        this._statsComponent.updateState(this._filmsModel.films, false);
-        this._userComponent.updateState(this._filmsModel.films, true);
+          this._statsComponent.updateState(this._filmsModel.films, false);
+          this._userComponent.updateState(this._filmsModel.films, true);
+        })
+          .catch(() => {
+            this._filmPresenters[updatedFilm.id].setViewState(State.ABORTING);
+          });
+
         break;
       case UserAction.ADD_COMMENT:
-        this._filmPresenters[updatedFilm.id].setViewState(State.SAVING, updatedFilm);
+        this._filmPresenters[updatedFilm.id].setViewState(State.SAVING, updatedFilm, null, newComment);
         this._server.addComment(updatedFilm, newComment)
           .then((response) => {
             const {movie, comments} = response;
             this._filmsModel.addComment(updateType, FilmsModel.adaptToClient(movie), comments);
+          })
+          .catch(() => {
+            this._filmPresenters[updatedFilm.id].setViewState(State.ABORTING, updatedFilm, null, newComment);
           });
         break;
       case UserAction.DELETE_COMMENT:
@@ -100,6 +107,9 @@ class FilmsBoard {
         this._server.deleteComments(commentId)
           .then(() => {
             this._filmsModel.deleteComment(updateType, updatedFilm, commentId, updatedComments);
+          })
+          .catch(() => {
+            this._filmPresenters[updatedFilm.id].setViewState(State.ABORTING, updatedFilm);
           });
         break;
     }
@@ -109,10 +119,6 @@ class FilmsBoard {
     switch (updateType) {
       case UpdateType.PATCH:
         this._filmPresenters[film.id].initOrUpdate(film, comments);
-        break;
-      case UpdateType.MINOR:
-        this._clearFilmsBoard();
-        this._renderFilmsBoard();
         break;
       case UpdateType.MAJOR:
         this._clearFilmsBoard({resetRenderedFilmQuantity: true, resetSortType: true});

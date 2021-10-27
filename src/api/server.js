@@ -36,7 +36,6 @@ class Server {
 
   addComment(film, newComment) {
     const adaptedCommentToServer = commentAdaptToServer(newComment);
-    // const adaptedCommentToClient = commentAdaptToClient(newComment);
     return this._load({
       url: `comments/${film.id}`,
       method: Method.POST,
