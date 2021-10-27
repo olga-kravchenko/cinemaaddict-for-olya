@@ -88,10 +88,11 @@ class FilmsBoard {
         this._userComponent.updateState(this._filmsModel.films, true);
         break;
       case UserAction.ADD_COMMENT:
+        this._filmPresenters[updatedFilm.id].setViewState(State.SAVING, updatedFilm);
         this._server.addComment(updatedFilm, newComment)
           .then((response) => {
             const {movie, comments} = response;
-            this._filmsModel.updateFilm(updateType, FilmsModel.adaptToClient(movie), comments);
+            this._filmsModel.addComment(updateType, FilmsModel.adaptToClient(movie), comments);
           });
         break;
       case UserAction.DELETE_COMMENT:

@@ -143,7 +143,6 @@ class Film {
   }
 
   _handleCommentAddClick(updatedFilm, newComment) {
-    this.setViewState(State.SAVING, updatedFilm);
     this._changeData(UpdateType.PATCH, UserAction.ADD_COMMENT, updatedFilm, newComment);
   }
 

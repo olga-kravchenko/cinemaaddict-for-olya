@@ -248,13 +248,12 @@ class Popup extends SmartView {
   _commentAddHandler(evt) {
     const commentText = evt.target.value;
     if (evt.ctrlKey && evt.key === `Enter` && commentText && this._emotionState) {
-      const comment = {};
-      comment.comment = commentText;
-      comment.date = dayjs().toDate();
-      comment.emotion = this._emotionState;
-      this._callback.addComment(this.data, comment);
-      this._filmComments.push(comment);
+      const newComment = {};
+      newComment.comment = commentText;
+      newComment.date = dayjs().toDate();
+      newComment.emotion = this._emotionState;
       this._emotionState = null;
+      this._callback.addComment(this.data, newComment);
     }
   }
 
