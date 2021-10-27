@@ -138,9 +138,8 @@ class Film {
     document.removeEventListener(`keydown`, this._handleEscKeyDown);
   }
 
-  _handleCommentDeleteClick(id, film) {
-    this.setViewState(State.DELETING, film, id);
-    this._server.deleteComments(id);
+  _handleCommentDeleteClick(film, commentId, comments) {
+    this._changeData(UpdateType.PATCH, UserAction.DELETE_COMMENT, film, null, commentId, comments);
   }
 
   _handleCommentAddClick(updatedFilm, newComment) {

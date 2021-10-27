@@ -26,6 +26,23 @@ class Films extends Observer {
     this._notify(updatedType, film, comments);
   }
 
+  addComment() {
+
+  }
+
+  deleteComment(updatedType, film, id, comments) {
+    const index = this._films.findIndex((f) => f.id === film.id);
+    if (index === -1) {
+      throw new Error(`Can't update non-existing film`);
+    }
+
+    this._films[index] = film;
+    film.comments = film.comments.filter((commentId) => commentId !== id);
+    const newComments = comments.filter((comment) => comment.id !== id);
+
+    this._notify(updatedType, film, newComments);
+  }
+
   static adaptToClient(film) {
     const adaptedFilm = Object.assign({}, film);
     adaptedFilm.filmInfo = film.film_info;

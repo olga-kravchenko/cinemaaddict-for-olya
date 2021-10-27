@@ -266,20 +266,8 @@ class Popup extends SmartView {
   _commentDeleteHandler(evt) {
     let isDeleteButton = evt.target.classList.contains(`film-details__comment-delete`);
     if (isDeleteButton) {
-      const currentScroll = document.querySelector(`.film-details`).scrollTop;
       const id = evt.target.closest(`li`).id;
-      this._callback.deleteComment(id, this.data);
-
-      const newFilm = copyFilm(this.data);
-      newFilm.idDeleting = null;
-      newFilm.comments = newFilm.comments.filter((commentId) => commentId !== id);
-      this._filmComments = this._filmComments.filter((comment) => comment.id !== id);
-      this.updateState(newFilm, true);
-
-      this.getElement()
-        .querySelector(`.film-details__close-btn`)
-        .addEventListener(`click`, this._popupCloseClickHandler);
-      this.getElement().scrollTo(0, currentScroll);
+      this._callback.deleteComment(this.data, id, this._filmComments);
     }
   }
 

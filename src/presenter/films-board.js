@@ -5,7 +5,7 @@ import FilmsView from "../view/films";
 import LoadingView from "../view/loading.js";
 import FilmsContainerView from "../view/films-container";
 import ShowMoreButtonView from "../view/show-more-button";
-import FilmPresenter from "./film";
+import FilmPresenter, {State} from "./film";
 import FilmQuantityView from "../view/film-quantity";
 import {remove, render, RenderPosition} from "../utils/render";
 import {sortFilmsByDate, sortFilmsByRating} from "../utils/util";
@@ -77,7 +77,7 @@ class FilmsBoard {
     this._filterModel.removeObserver(this._handleModelEvent);
   }
 
-  _handleViewAction(updateType, actionType, updatedFilm, newComment) {
+  _handleViewAction(updateType, actionType, updatedFilm, newComment, commentId, updatedComments) {
     switch (actionType) {
       case UserAction.UPDATE_FILMS:
         updateType = this._filterModel.filters !== FilterType.ALL ? UpdateType.MAJOR : UpdateType.PATCH;
@@ -92,6 +92,13 @@ class FilmsBoard {
           .then((response) => {
             const {movie, comments} = response;
             this._filmsModel.updateFilm(updateType, FilmsModel.adaptToClient(movie), comments);
+          });
+        break;
+      case UserAction.DELETE_COMMENT:
+        this._filmPresenters[updatedFilm.id].setViewState(State.DELETING, updatedFilm, commentId);
+        this._server.deleteComments(commentId)
+          .then(() => {
+            this._filmsModel.deleteComment(updateType, updatedFilm, commentId, updatedComments);
           });
         break;
     }
