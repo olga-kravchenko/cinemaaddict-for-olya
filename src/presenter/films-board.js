@@ -221,8 +221,6 @@ class FilmsBoard {
     this._renderUser(this._filmsModel.films);
     if (filmQuantity) {
       this._renderSorting();
-    } else {
-      remove(this._sortingComponent);
     }
     render(this._container, this._contentContainerComponent, RenderPosition.BEFORE_END);
     render(this._contentContainerComponent, this._filmListComponent, RenderPosition.BEFORE_END);
