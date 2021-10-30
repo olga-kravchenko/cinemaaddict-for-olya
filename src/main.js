@@ -31,3 +31,7 @@ server.getFilms()
     menuPresenter.init();
     render(main, statsComponent, RenderPosition.BEFORE_END);
   });
+
+window.addEventListener(`load`, () => {
+  navigator.serviceWorker.register(`/sw.js`);
+});
