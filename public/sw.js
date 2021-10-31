@@ -1,4 +1,4 @@
-const CACHE_PREFIX = `taskmanager-cache`;
+const CACHE_PREFIX = `cinema-cache`;
 const CACHE_VER = `v13`;
 const CACHE_NAME = `${CACHE_PREFIX}-${CACHE_VER}`;
 
