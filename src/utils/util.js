@@ -72,4 +72,8 @@ const commentAdaptToClient = (comment) => {
   return adaptedComment;
 };
 
-export {getRandomNumber, formatTime, convertFormat, sortFilmsByDate, sortFilmsByRating, copyFilm, commentAdaptToServer, commentAdaptToClient};
+const isOnline = () => {
+  return window.navigator.onLine;
+};
+
+export {getRandomNumber, formatTime, convertFormat, sortFilmsByDate, sortFilmsByRating, copyFilm, commentAdaptToServer, commentAdaptToClient, isOnline};
