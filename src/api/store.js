@@ -19,17 +19,16 @@ class Store {
     );
   }
 
-  setItem(key, value) {
+  setItem(id, value) {
     const store = this.getItems();
 
-    this._storage.setItem(
-        this._storeKey,
-        JSON.stringify(
-            Object.assign({}, store, {
-              [key]: value
-            })
-        )
-    );
+    for (let i = 0; i < store.length; i++) {
+      if (store[i].id === id) {
+        store[i] = value;
+        break;
+      }
+    }
+    this.setItems(store);
   }
 
   removeItem(key) {

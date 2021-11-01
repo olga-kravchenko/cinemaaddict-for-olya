@@ -81,12 +81,15 @@ class FilmsBoard {
     switch (actionType) {
       case UserAction.UPDATE_FILMS:
         updateType = this._filterModel.filters !== FilterType.ALL ? UpdateType.MAJOR : UpdateType.PATCH;
-        this._server.updateFilm(updatedFilm).then((response) => {
-          this._filmsModel.updateFilm(updateType, response);
-          this._statsComponent.updateState(this._filmsModel.films, false);
-          this._userComponent.updateState(this._filmsModel.films, true);
-        })
-          .catch(() => {
+        this._server.updateFilm(updatedFilm)
+          .then((response) => {
+            const adaptedResponse = FilmsModel.adaptToClient(response);
+            this._filmsModel.updateFilm(updateType, adaptedResponse);
+            this._statsComponent.updateState(this._filmsModel.films, false);
+            this._userComponent.updateState(this._filmsModel.films, true);
+          })
+          .catch((error) => {
+            console.log(error);
             this._filmPresenters[updatedFilm.id].setViewState(State.ABORTING);
           });
 

@@ -24,25 +24,29 @@ class Provider {
     if (isOnline()) {
       return this._api.getFilms()
         .then((films) => {
-          const items = createStoreStructure(films.map(FilmsModel.adaptToServer));
+          const items = films.map(FilmsModel.adaptToServer);
           this._store.setItems(items);
-          return films;
+          const storeFilms = this._store.getItems();
+          return storeFilms.map(FilmsModel.adaptToClient);
         });
     }
-    const storeTasks = Object.values(this._store.getItems());
-    return Promise.resolve(storeTasks.map(FilmsModel.adaptToClient));
+    const storeFilms = this._store.getItems();
+    const adaptedStoreFilms = storeFilms.map(FilmsModel.adaptToClient);
+    return Promise.resolve(adaptedStoreFilms);
   }
 
   updateFilm(film) {
     if (isOnline()) {
       return this._api.updateFilm(film)
-        .then((updateFilm) => {
-          this._store.setItem(updateFilm.id, FilmsModel.adaptToServer(updateFilm));
-          return updateFilm;
+        .then((updatedFilm) => {
+          const adaptedStoreFilms = FilmsModel.adaptToClient(updatedFilm);
+          const adaptToServer = FilmsModel.adaptToServer(updatedFilm);
+          this._store.setItem(updatedFilm.id, adaptToServer);
+          return adaptedStoreFilms;
         });
     }
 
-    this._store.setItem(film.id, FilmsModel.adaptToServer(Object.assign({}, film)));
+    this._store.setItem(film.id, FilmsModel.adaptToServer(film));
     return Promise.resolve(film);
   }
 

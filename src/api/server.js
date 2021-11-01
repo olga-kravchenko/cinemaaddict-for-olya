@@ -22,7 +22,7 @@ class Server {
   getFilms() {
     return this._load({url: `movies`})
       .then(Server.toJSON)
-      .then((tasks) => tasks.map(FilmsModel.adaptToClient));
+      .then((films) => films.map(FilmsModel.adaptToClient));
   }
 
   getComments(filmId) {

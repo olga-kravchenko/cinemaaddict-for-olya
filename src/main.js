@@ -5,26 +5,36 @@ import FilterModel from "./model/filters";
 import MenuPresenter from "./presenter/menu";
 import StatsView from "./view/stats";
 import Server from "./api/server";
+import Store from "./api/store.js";
+import Provider from "./api/provider.js";
 
 const AUTHORIZATION = `Basic hiya87868v96vkjkjiyls2j`;
 const END_POINT = `https://13.ecmascript.pages.academy/cinemaddict/`;
+const STORE_PREFIX = `cinema-localstorage`;
+const STORE_VER = `v13`;
+const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
+
 const main = document.querySelector(`.main`);
 
 const server = new Server(END_POINT, AUTHORIZATION);
+const store = new Store(STORE_NAME, window.localStorage);
+const apiWithProvider = new Provider(server, store);
+
 const filmsModel = new FilmsModel();
 const filterModel = new FilterModel();
 const statsComponent = new StatsView(filmsModel.films);
-const filmBoardPresenter = new FilmsBoardPresenter(main, filmsModel, filterModel, statsComponent, server);
+const filmBoardPresenter = new FilmsBoardPresenter(main, filmsModel, filterModel, statsComponent, apiWithProvider);
 const menuPresenter = new MenuPresenter(main, filterModel, filmsModel, filmBoardPresenter, statsComponent);
 
 statsComponent.hide();
 filmBoardPresenter.init();
 
-server.getFilms()
+apiWithProvider.getFilms()
   .then((films) => {
     filmsModel.films = films;
   })
-  .catch(() => {
+  .catch((error) => {
+    console.log(error);
     filmsModel.films = [];
   })
   .finally(() => {
@@ -34,4 +44,13 @@ server.getFilms()
 
 window.addEventListener(`load`, () => {
   navigator.serviceWorker.register(`/sw.js`);
+});
+
+window.addEventListener(`online`, () => {
+  document.title = document.title.replace(` [offline]`, ``);
+  apiWithProvider.sync();
+});
+
+window.addEventListener(`offline`, () => {
+  document.title += ` [offline]`;
 });
