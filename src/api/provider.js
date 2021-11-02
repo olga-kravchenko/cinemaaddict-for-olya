@@ -15,58 +15,57 @@ const createStoreStructure = (items) => {
 };
 
 class Provider {
-  constructor(api, store) {
-    this._api = api;
-    this._store = store;
+  constructor(server, localStorage) {
+    this._server = server;
+    this._localStorage = localStorage;
   }
 
   getFilms() {
     if (isOnline()) {
-      return this._api.getFilms()
+      return this._server.getFilms()
         .then((films) => {
           const items = films.map(FilmsModel.adaptToServer);
-          this._store.setItems(items);
-          const storeFilms = this._store.getItems();
+          this._localStorage.setItems(items);
+          const storeFilms = this._localStorage.getItems();
           return storeFilms.map(FilmsModel.adaptToClient);
         });
     }
-    const storeFilms = this._store.getItems();
+    const storeFilms = this._localStorage.getItems();
     const adaptedStoreFilms = storeFilms.map(FilmsModel.adaptToClient);
     return Promise.resolve(adaptedStoreFilms);
   }
 
   updateFilm(film) {
     if (isOnline()) {
-      return this._api.updateFilm(film)
+      return this._server.updateFilm(film)
         .then((updatedFilm) => {
-          const adaptedStoreFilms = FilmsModel.adaptToClient(updatedFilm);
           const adaptToServer = FilmsModel.adaptToServer(updatedFilm);
-          this._store.setItem(updatedFilm.id, adaptToServer);
-          return adaptedStoreFilms;
+          this._localStorage.setItem(updatedFilm.id, adaptToServer);
+          return updatedFilm;
         });
     }
 
-    this._store.setItem(film.id, FilmsModel.adaptToServer(film));
+    this._localStorage.setItem(film.id, FilmsModel.adaptToServer(film));
     return Promise.resolve(film);
   }
 
   getComments(filmId) {
-    return isOnline() ? this._api.getComments(filmId) : Promise.reject(new Error(`Can't get comments offline`));
+    return isOnline() ? this._server.getComments(filmId) : Promise.reject(new Error(`Can't get comments offline`));
   }
 
   addComment(filmId, newComment) {
-    return isOnline ? this._api.addComment(filmId, newComment) : Promise.reject(new Error(`Can't add comments offline`));
+    return isOnline ? this._server.addComment(filmId, newComment) : Promise.reject(new Error(`Can't add comments offline`));
   }
 
   deleteComments(commentId) {
-    return isOnline() ? this._api.deleteComments(commentId) : Promise.reject(new Error(`Can't remove comments offline`));
+    return isOnline() ? this._server.deleteComments(commentId) : Promise.reject(new Error(`Can't remove comments offline`));
   }
 
   sync() {
     if (isOnline()) {
-      const storeFilms = Object.values(this._store.getItems());
+      const storeFilms = Object.values(this._localStorage.getItems());
 
-      return this._api.sync(storeFilms)
+      return this._server.sync(storeFilms)
         .then((response) => {
           // Забираем из ответа синхронизированные задачи
           const updatedFilms = getSyncedFilms(response.updated);
@@ -75,7 +74,7 @@ class Provider {
           // Хранилище должно быть актуальным в любой момент.
           const items = createStoreStructure([...updatedFilms]);
 
-          this._store.setItems(items);
+          this._localStorage.setItems(items);
         });
     }
 

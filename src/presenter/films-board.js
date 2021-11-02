@@ -17,13 +17,13 @@ import FilmsModel from "../model/films";
 const FILM_QUANTITY_PER_STEP = 5;
 
 class FilmsBoard {
-  constructor(container, filmsModel, filterModel, statsComponent, server) {
+  constructor(container, filmsModel, filterModel, statsComponent, provider) {
     this._container = container;
     this._filmsModel = filmsModel;
     this._filterModel = filterModel;
     this._statsComponent = statsComponent;
 
-    this._server = server;
+    this._provider = provider;
     this._header = document.querySelector(`.header`);
     this._footer = document.querySelector(`.footer__statistics`);
     this._renderedFilmQuantity = FILM_QUANTITY_PER_STEP;
@@ -81,22 +81,20 @@ class FilmsBoard {
     switch (actionType) {
       case UserAction.UPDATE_FILMS:
         updateType = this._filterModel.filters !== FilterType.ALL ? UpdateType.MAJOR : UpdateType.PATCH;
-        this._server.updateFilm(updatedFilm)
+        this._provider.updateFilm(updatedFilm)
           .then((response) => {
-            const adaptedResponse = FilmsModel.adaptToClient(response);
-            this._filmsModel.updateFilm(updateType, adaptedResponse);
+            this._filmsModel.updateFilm(updateType, response);
             this._statsComponent.updateState(this._filmsModel.films, false);
             this._userComponent.updateState(this._filmsModel.films, true);
           })
-          .catch((error) => {
-            console.log(error);
+          .catch(() => {
             this._filmPresenters[updatedFilm.id].setViewState(State.ABORTING);
           });
 
         break;
       case UserAction.ADD_COMMENT:
         this._filmPresenters[updatedFilm.id].setViewState(State.SAVING, updatedFilm, null, newComment);
-        this._server.addComment(updatedFilm, newComment)
+        this._provider.addComment(updatedFilm, newComment)
           .then((response) => {
             const {movie, comments} = response;
             this._filmsModel.addComment(updateType, FilmsModel.adaptToClient(movie), comments);
@@ -107,7 +105,7 @@ class FilmsBoard {
         break;
       case UserAction.DELETE_COMMENT:
         this._filmPresenters[updatedFilm.id].setViewState(State.DELETING, updatedFilm, commentId);
-        this._server.deleteComments(commentId)
+        this._provider.deleteComments(commentId)
           .then(() => {
             this._filmsModel.deleteComment(updateType, updatedFilm, commentId, updatedComments);
           })
@@ -191,7 +189,7 @@ class FilmsBoard {
   }
 
   _renderFilm(film) {
-    const filmPresenter = new FilmPresenter(this._filmContainerComponent, this._handleViewAction, this._server);
+    const filmPresenter = new FilmPresenter(this._filmContainerComponent, this._handleViewAction, this._provider);
     filmPresenter.initOrUpdate(film);
     this._filmPresenters[film.id] = filmPresenter;
   }

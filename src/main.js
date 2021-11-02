@@ -18,23 +18,22 @@ const main = document.querySelector(`.main`);
 
 const server = new Server(END_POINT, AUTHORIZATION);
 const store = new Store(STORE_NAME, window.localStorage);
-const apiWithProvider = new Provider(server, store);
+const provider = new Provider(server, store);
 
 const filmsModel = new FilmsModel();
 const filterModel = new FilterModel();
 const statsComponent = new StatsView(filmsModel.films);
-const filmBoardPresenter = new FilmsBoardPresenter(main, filmsModel, filterModel, statsComponent, apiWithProvider);
+const filmBoardPresenter = new FilmsBoardPresenter(main, filmsModel, filterModel, statsComponent, provider);
 const menuPresenter = new MenuPresenter(main, filterModel, filmsModel, filmBoardPresenter, statsComponent);
 
 statsComponent.hide();
 filmBoardPresenter.init();
 
-apiWithProvider.getFilms()
+provider.getFilms()
   .then((films) => {
     filmsModel.films = films;
   })
-  .catch((error) => {
-    console.log(error);
+  .catch(() => {
     filmsModel.films = [];
   })
   .finally(() => {
@@ -48,7 +47,7 @@ window.addEventListener(`load`, () => {
 
 window.addEventListener(`online`, () => {
   document.title = document.title.replace(` [offline]`, ``);
-  apiWithProvider.sync();
+  provider.sync();
 });
 
 window.addEventListener(`offline`, () => {
