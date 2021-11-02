@@ -14,8 +14,8 @@ const SuccessHTTPStatusRange = {
 };
 
 class Server {
-  constructor(endPoint, authorization) {
-    this._endPoint = endPoint;
+  constructor(url, authorization) {
+    this._url = url;
     this._authorization = authorization;
   }
 
@@ -46,21 +46,22 @@ class Server {
   }
 
   updateFilm(film) {
+    const adaptedFilmToServer = FilmsModel.adaptToServer(film);
     return this._load({
       url: `movies/${film.id}`,
       method: Method.PUT,
-      body: JSON.stringify(FilmsModel.adaptToServer(film)),
+      body: JSON.stringify(adaptedFilmToServer),
       headers: new Headers({"Content-Type": `application/json`}),
     })
       .then(Server.toJSON)
       .then(FilmsModel.adaptToClient);
   }
 
-  sync(data) {
+  sync(films) {
     return this._load({
       url: `movies/sync`,
       method: Method.POST,
-      body: JSON.stringify(data),
+      body: JSON.stringify(films),
       headers: new Headers({"Content-Type": `application/json`})
     })
       .then(Server.toJSON);
@@ -68,8 +69,7 @@ class Server {
 
   _load({url, method = Method.GET, body = null, headers = new Headers()}) {
     headers.append(`Authorization`, this._authorization);
-
-    return fetch(`${this._endPoint}/${url}`, {method, body, headers})
+    return fetch(`${this._url}/${url}`, {method, body, headers})
       .then(Server.checkStatus)
       .catch(Server.catchError);
   }

@@ -9,16 +9,16 @@ import Store from "./api/store.js";
 import Provider from "./api/provider.js";
 
 const AUTHORIZATION = `Basic hiya87868v96vkjkjiyls2j`;
-const END_POINT = `https://13.ecmascript.pages.academy/cinemaddict/`;
+const URL = `https://13.ecmascript.pages.academy/cinemaddict/`;
 const STORE_PREFIX = `cinema-localstorage`;
 const STORE_VER = `v13`;
 const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
 
 const main = document.querySelector(`.main`);
 
-const server = new Server(END_POINT, AUTHORIZATION);
-const store = new Store(STORE_NAME, window.localStorage);
-const provider = new Provider(server, store);
+const server = new Server(URL, AUTHORIZATION);
+const localStorage = new Store(STORE_NAME, window.localStorage);
+const provider = new Provider(server, localStorage);
 
 const filmsModel = new FilmsModel();
 const filterModel = new FilterModel();
