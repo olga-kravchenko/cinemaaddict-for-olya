@@ -5,7 +5,7 @@ import FilmsView from "../view/films";
 import LoadingView from "../view/loading.js";
 import FilmsContainerView from "../view/films-container";
 import ShowMoreButtonView from "../view/show-more-button";
-import FilmPresenter, {State} from "./film";
+import FilmPresenter from "./film";
 import FilmQuantityView from "../view/film-quantity";
 import {remove, render, RenderPosition} from "../utils/render";
 import {sortFilmsByDate, sortFilmsByRating, isOnline} from "../utils/util";
@@ -14,6 +14,7 @@ import {FilterType, SortType, UpdateType, UserAction} from "../constants";
 import {Filter} from "../utils/filter";
 import UserView from "../view/user";
 import FilmsModel from "../model/films";
+import {State} from "../constants";
 
 const FILM_QUANTITY_PER_STEP = 5;
 
@@ -95,7 +96,7 @@ class FilmsBoard {
         break;
       case UserAction.ADD_COMMENT:
         if (!isOnline()) {
-          toast(`You can't add new comment offline`);
+          toast(`You can't add a new comment offline`);
           break;
         }
         this._filmPresenters[updatedFilm.id].setViewState(State.SAVING, updatedFilm, null, newComment);
@@ -109,6 +110,10 @@ class FilmsBoard {
           });
         break;
       case UserAction.DELETE_COMMENT:
+        if (!isOnline()) {
+          toast(`You can't delete a comment offline`);
+          break;
+        }
         this._filmPresenters[updatedFilm.id].setViewState(State.DELETING, updatedFilm, commentId);
         this._provider.deleteComments(commentId)
           .then(() => {

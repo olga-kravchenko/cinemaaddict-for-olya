@@ -11,8 +11,6 @@ const DAY = HOUR * HOUR_QUANTITY_IN_DAY;
 const MONTH = DAY * DAY_QUANTITY_IN_MONTH;
 const YEAR = MONTH * MONTH_QUANTITY_IN_YEAR;
 
-const getRandomNumber = (min, max) => Math.floor(Math.random() * (max - min) + min);
-
 const formatTime = (minutes) => {
   return minutes <= MINUTE_QUANTITY_IN_HOUR ?
     `${minutes}m` :
@@ -65,15 +63,8 @@ const commentAdaptToServer = (comment) => {
   return adaptedComment;
 };
 
-const commentAdaptToClient = (comment) => {
-  const adaptedComment = Object.assign({}, comment);
-  adaptedComment.date = new Date(comment.date);
-
-  return adaptedComment;
-};
-
 const isOnline = () => {
   return window.navigator.onLine;
 };
 
-export {getRandomNumber, formatTime, convertFormat, sortFilmsByDate, sortFilmsByRating, copyFilm, commentAdaptToServer, commentAdaptToClient, isOnline};
+export {formatTime, convertFormat, sortFilmsByDate, sortFilmsByRating, copyFilm, commentAdaptToServer, isOnline};

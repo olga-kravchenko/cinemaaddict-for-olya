@@ -3,22 +3,15 @@ import PopupView from "../view/popup";
 import {render, RenderPosition, remove, replace} from "../utils/render";
 import {UpdateType, UserAction} from "../constants";
 import dayjs from "dayjs";
-
-export const State = {
-  SAVING: `SAVING`,
-  DELETING: `DELETING`,
-  ABORTING: `ABORTING`,
-};
+import {State} from "../constants";
 
 class Film {
-  constructor(container, changeData, server) {
+  constructor(container, changeData, provider) {
     this._container = container;
     this._changeData = changeData;
-    this._server = server;
+    this._provider = provider;
     this._body = document.querySelector(`body`);
-
     this._filmComponent = null;
-    this._filmPopupComponent = null;
 
     this._handleFilmCardClick = this._handleFilmCardClick.bind(this);
 
@@ -57,8 +50,9 @@ class Film {
     }
 
     const isPrevFilm = this._container.getElement().contains(prevFilmComponent.getElement());
+    const isPrevPopupOpen = this._body.contains(prevPopupComponent.getElement());
     if (isPrevFilm) {
-      if (this._body.contains(prevPopupComponent.getElement())) {
+      if (isPrevPopupOpen) {
         const currentScroll = this._body.querySelector(`.film-details`).scrollTop;
         replace(this._filmPopupComponent, prevPopupComponent);
         this._filmPopupComponent.getElement().scrollTo(0, currentScroll);
@@ -76,9 +70,9 @@ class Film {
   }
 
   _showPopup() {
-    if (!document.querySelector(`.film-details`)) {
+    if (!this._body.querySelector(`.film-details`)) {
       let filmComments;
-      this._server.getComments(this._film.id)
+      this._provider.getComments(this._film.id)
         .then((comments) => {
           filmComments = comments;
         })
@@ -154,7 +148,11 @@ class Film {
       if (localComment) {
         const comment = localComment.comment;
         const emotion = localComment.emotion;
-        this._filmPopupComponent.updateState(Object.assign(film, {idDeleting: null, isSaving: false, newComment: {comment, emotion}}), true);
+        this._filmPopupComponent.updateState(Object.assign(film, {
+          idDeleting: null,
+          isSaving: false,
+          newComment: {comment, emotion},
+        }), true);
       } else {
         const newFilm = Object.assign(film, {idDeleting: null, isSaving: false});
         newFilm.newComment.emotion = null;
@@ -163,6 +161,7 @@ class Film {
       }
       this._filmPopupComponent.getElement().scrollTo(0, currentScroll);
     };
+
     switch (state) {
       case State.SAVING:
         const newFilm = Object.assign(film, {isSaving: true});
@@ -181,7 +180,6 @@ class Film {
         break;
     }
   }
-
 }
 
 export default Film;

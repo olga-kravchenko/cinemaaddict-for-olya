@@ -41,4 +41,10 @@ const TimePeriod = {
   YEAR: `year`
 };
 
-export {UserStatus, EMOTIONS, SortType, UpdateType, FilterType, UserAction, TimePeriod, MINUTE_QUANTITY_IN_HOUR};
+const State = {
+  SAVING: `SAVING`,
+  DELETING: `DELETING`,
+  ABORTING: `ABORTING`,
+};
+
+export {UserStatus, EMOTIONS, SortType, UpdateType, FilterType, UserAction, TimePeriod, MINUTE_QUANTITY_IN_HOUR, State};
