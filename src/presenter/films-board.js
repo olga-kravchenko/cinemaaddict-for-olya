@@ -8,7 +8,8 @@ import ShowMoreButtonView from "../view/show-more-button";
 import FilmPresenter, {State} from "./film";
 import FilmQuantityView from "../view/film-quantity";
 import {remove, render, RenderPosition} from "../utils/render";
-import {sortFilmsByDate, sortFilmsByRating} from "../utils/util";
+import {sortFilmsByDate, sortFilmsByRating, isOnline} from "../utils/util";
+import {toast} from "../view/tost";
 import {FilterType, SortType, UpdateType, UserAction} from "../constants";
 import {Filter} from "../utils/filter";
 import UserView from "../view/user";
@@ -93,6 +94,10 @@ class FilmsBoard {
 
         break;
       case UserAction.ADD_COMMENT:
+        if (!isOnline()) {
+          toast(`You can't add new comment offline`);
+          break;
+        }
         this._filmPresenters[updatedFilm.id].setViewState(State.SAVING, updatedFilm, null, newComment);
         this._provider.addComment(updatedFilm, newComment)
           .then((response) => {
