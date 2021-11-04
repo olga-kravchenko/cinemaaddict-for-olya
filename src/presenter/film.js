@@ -35,12 +35,12 @@ class Film {
     this._filmComponent = new FilmView(film);
     this._filmPopupComponent = new PopupView(film, comments);
 
-    this._filmComponent.setCardClickHandler(this._handleFilmCardClick);
+    this._filmComponent.setClickHandler(this._handleFilmCardClick);
     this._filmComponent.setWatchlistClickHandler(this._handleWatchlistClick);
     this._filmComponent.setAlreadyWatchedClickHandler(this._handleAlreadyWatchedClick);
     this._filmComponent.setFavoriteClickHandler(this._handleFavoriteClick);
 
-    this._filmPopupComponent.setPopupCloseHandler(this._handleCloseButtonClick);
+    this._filmPopupComponent.setCloseHandler(this._handleCloseButtonClick);
     this._filmPopupComponent.setCommentDeleteHandler(this._handleCommentDeleteClick);
     this._filmPopupComponent.setCommentAddHandler(this._handleCommentAddClick);
 
@@ -81,7 +81,7 @@ class Film {
         })
         .then(() => {
           this._filmPopupComponent = new PopupView(this._film, filmComments);
-          this._filmPopupComponent.setPopupCloseHandler(this._handleCloseButtonClick);
+          this._filmPopupComponent.setCloseHandler(this._handleCloseButtonClick);
           this._filmPopupComponent.setCommentDeleteHandler(this._handleCommentDeleteClick);
           this._filmPopupComponent.setCommentAddHandler(this._handleCommentAddClick);
           this._body.classList.add(`hide-overflow`);

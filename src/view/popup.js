@@ -205,14 +205,14 @@ class Popup extends SmartView {
   }
 
   setHandlers() {
-    this._setPopupCloseHandler();
+    this._setCloseHandler();
     this._setClickEmojiHandler();
     this._setCommentAddHandler();
     this._setCommentDeleteHandler();
 
-    this._setPopupWatchlistClickHandler();
-    this._setPopupAlreadyWatchedClickHandler();
-    this._setPopupFavoriteClickHandler();
+    this._setWatchlistClickHandler();
+    this._setAlreadyWatchedClickHandler();
+    this._setFavoriteClickHandler();
   }
 
   _checkedTypeToggleHandler(evt) {
@@ -277,19 +277,19 @@ class Popup extends SmartView {
     }
   }
 
-  _setPopupWatchlistClickHandler() {
+  _setWatchlistClickHandler() {
     this.getElement()
       .querySelector(`#watchlist`)
       .addEventListener(`change`, this._watchlistClickHandler);
   }
 
-  _setPopupAlreadyWatchedClickHandler() {
+  _setAlreadyWatchedClickHandler() {
     this.getElement()
       .querySelector(`#watched`)
       .addEventListener(`change`, this._alreadyWatchedClickHandler);
   }
 
-  _setPopupFavoriteClickHandler() {
+  _setFavoriteClickHandler() {
     this.getElement()
       .querySelector(`#favorite`)
       .addEventListener(`change`, this._favoriteClickHandler);
@@ -308,13 +308,13 @@ class Popup extends SmartView {
     }
   }
 
-  _setPopupCloseHandler() {
+  _setCloseHandler() {
     this.getElement()
       .querySelector(`.film-details__close-btn`)
       .addEventListener(`click`, this._popupCloseClickHandler);
   }
 
-  setPopupCloseHandler(callback) {
+  setCloseHandler(callback) {
     this._callback.popupClose = callback;
     this.getElement()
       .querySelector(`.film-details__close-btn`)
