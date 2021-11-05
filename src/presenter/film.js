@@ -5,6 +5,9 @@ import {UpdateType, UserAction} from "../constants";
 import dayjs from "dayjs";
 import {State} from "../constants";
 
+const POPUP_SWITCHING_TIME = 500;
+let lastTimeout;
+
 class Film {
   constructor(container, changeData, provider) {
     this._container = container;
@@ -106,7 +109,12 @@ class Film {
   }
 
   _handleFilmCardClick() {
-    this._showPopup();
+    if (lastTimeout) {
+      window.clearTimeout(lastTimeout);
+    }
+    lastTimeout = window.setTimeout(() => {
+      this._showPopup();
+    }, POPUP_SWITCHING_TIME);
   }
 
   _handleWatchlistClick() {
