@@ -7,6 +7,7 @@ import StatsView from "./view/stats";
 import Server from "./api/server";
 import Store from "./api/store.js";
 import Provider from "./api/provider.js";
+import {toast} from "./view/tost";
 
 const AUTHORIZATION = `Basic hiya87868v96vkjkjiyls2j`;
 const URL = `https://13.ecmascript.pages.academy/cinemaddict/`;
@@ -52,4 +53,5 @@ window.addEventListener(`online`, () => {
 
 window.addEventListener(`offline`, () => {
   document.title += ` [offline]`;
+  toast(`offline`);
 });

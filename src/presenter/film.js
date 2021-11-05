@@ -175,8 +175,13 @@ class Film {
         this._filmPopupComponent.getElement().scrollTo(0, currentScroll);
         break;
       case State.ABORTING:
-        this._filmComponent.shake(resetFormState);
-        this._filmPopupComponent.shake(resetFormState);
+        const newComment = this._filmPopupComponent.getElement().querySelector(`.film-details__new-comment`);
+        if (commentId) {
+          const comment = this._filmPopupComponent.getElement().querySelector(`.film-details__comment[id = "${commentId}"]`);
+          this._filmPopupComponent.shake(comment, resetFormState);
+        } else {
+          this._filmPopupComponent.shake(newComment, resetFormState);
+        }
         break;
     }
   }

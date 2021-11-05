@@ -92,7 +92,6 @@ class FilmsBoard {
           .catch(() => {
             this._filmPresenters[updatedFilm.id].setViewState(State.ABORTING);
           });
-
         break;
       case UserAction.ADD_COMMENT:
         if (!isOnline()) {
