@@ -11,8 +11,6 @@ const DAY = HOUR * HOUR_QUANTITY_IN_DAY;
 const MONTH = DAY * DAY_QUANTITY_IN_MONTH;
 const YEAR = MONTH * MONTH_QUANTITY_IN_YEAR;
 
-const getRandomNumber = (min, max) => Math.floor(Math.random() * (max - min) + min);
-
 const formatTime = (minutes) => {
   return minutes <= MINUTE_QUANTITY_IN_HOUR ?
     `${minutes}m` :
@@ -32,7 +30,7 @@ const convertFormat = (milliseconds) => {
   } else if (minutes < MINUTE_QUANTITY_IN_HOUR) {
     format = `a few minutes ago`;
   } else if (hours < HOUR_QUANTITY_IN_DAY) {
-    format = `a few hour ago`;
+    format = `a few hours ago`;
   } else if (days < DAY_QUANTITY_IN_MONTH) {
     format = `${days} days ago`;
   } else if (months < MONTH_QUANTITY_IN_YEAR) {
@@ -44,7 +42,7 @@ const convertFormat = (milliseconds) => {
 };
 
 const sortFilmsByDate = (filmA, filmB) => {
-  return dayjs(filmA.filmInfo.date).diff(dayjs(filmB.filmInfo.date));
+  return dayjs(filmA.filmInfo.release.date).diff(dayjs(filmB.filmInfo.release.date));
 };
 
 const sortFilmsByRating = (filmA, filmB) => {
@@ -58,4 +56,15 @@ const copyFilm = (initialFilm) => {
   return updatedFilm;
 };
 
-export {getRandomNumber, formatTime, convertFormat, sortFilmsByDate, sortFilmsByRating, copyFilm};
+const commentAdaptToServer = (comment) => {
+  const adaptedComment = Object.assign({}, comment);
+  adaptedComment.date = comment.date.toISOString();
+
+  return adaptedComment;
+};
+
+const isOnline = () => {
+  return window.navigator.onLine;
+};
+
+export {formatTime, convertFormat, sortFilmsByDate, sortFilmsByRating, copyFilm, commentAdaptToServer, isOnline};

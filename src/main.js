@@ -1,37 +1,57 @@
-import UserView from "./view/user";
-import FilmQuantityView from "./view/film-quantity";
 import {RenderPosition, render} from "./utils/render";
-import {generateFilm} from "./mock/film";
 import FilmsBoardPresenter from "./presenter/films-board";
 import FilmsModel from "./model/films";
 import FilterModel from "./model/filters";
 import MenuPresenter from "./presenter/menu";
 import StatsView from "./view/stats";
+import Server from "./api/server";
+import Store from "./api/store.js";
+import Provider from "./api/provider.js";
+import {toast} from "./view/tost";
 
-const FILM_QUANTITY = 22;
+const AUTHORIZATION = `Basic hiya87868v96vkjkjiyls2j`;
+const URL = `https://13.ecmascript.pages.academy/cinemaddict/`;
+const STORE_PREFIX = `cinema-localstorage`;
+const STORE_VER = `v13`;
+const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
 
-const films = new Array(FILM_QUANTITY).fill().map(generateFilm);
+const main = document.querySelector(`.main`);
+
+const server = new Server(URL, AUTHORIZATION);
+const localStorage = new Store(STORE_NAME, window.localStorage);
+const provider = new Provider(server, localStorage);
 
 const filmsModel = new FilmsModel();
-filmsModel.films = films;
-
 const filterModel = new FilterModel();
-
-const header = document.querySelector(`.header`);
-const main = document.querySelector(`.main`);
-const statistics = document.querySelector(`.footer__statistics`);
-
 const statsComponent = new StatsView(filmsModel.films);
-const userComponent = new UserView(filmsModel.films);
-
-render(header, userComponent, RenderPosition.BEFORE_END);
-statsComponent.hide();
-
-const filmBoardPresenter = new FilmsBoardPresenter(main, filmsModel, filterModel, statsComponent, userComponent);
+const filmBoardPresenter = new FilmsBoardPresenter(main, filmsModel, filterModel, statsComponent, provider);
 const menuPresenter = new MenuPresenter(main, filterModel, filmsModel, filmBoardPresenter, statsComponent);
 
-menuPresenter.init();
-render(main, statsComponent, RenderPosition.BEFORE_END);
+statsComponent.hide();
 filmBoardPresenter.init();
 
-render(statistics, new FilmQuantityView(films.length), RenderPosition.BEFORE_END);
+provider.getFilms()
+  .then((films) => {
+    filmsModel.films = films;
+  })
+  .catch(() => {
+    filmsModel.films = [];
+  })
+  .finally(() => {
+    menuPresenter.init();
+    render(main, statsComponent, RenderPosition.BEFORE_END);
+  });
+
+window.addEventListener(`load`, () => {
+  navigator.serviceWorker.register(`/sw.js`);
+});
+
+window.addEventListener(`online`, () => {
+  document.title = document.title.replace(` [offline]`, ``);
+  provider.sync();
+});
+
+window.addEventListener(`offline`, () => {
+  document.title += ` [offline]`;
+  toast(`offline`);
+});

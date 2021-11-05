@@ -48,15 +48,17 @@ class Menu {
     if (!this._statsComponent.getElement().classList.contains(`visually-hidden`)) {
       this._statsComponent.hide();
       this.init();
+      this._filmBoardPresenter.destroy();
       this._filmBoardPresenter.init();
     }
     this._filterModel.filters = filterType;
   }
 
   _handleStatsClick() {
-    this._statsComponent.show();
     this._filmBoardPresenter.destroy();
+    this._filmBoardPresenter._renderUser(this._filmsModel.films);
     this._currentFilter = null;
+    this._statsComponent.show();
     this._statsComponent.updateState(this._filmsModel.films, true);
   }
 
