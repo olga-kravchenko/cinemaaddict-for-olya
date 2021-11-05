@@ -255,7 +255,6 @@ class FilmsBoard {
     this._filmPresenters = {};
     remove(this._loadingComponent);
     remove(this._userComponent);
-    remove(this._filmQuantityComponent);
     remove(this._noFilmsComponent);
     remove(this._sortingComponent);
     remove(this._showMoreButtonComponent);

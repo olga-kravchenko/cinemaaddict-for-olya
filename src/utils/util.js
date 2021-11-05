@@ -30,7 +30,7 @@ const convertFormat = (milliseconds) => {
   } else if (minutes < MINUTE_QUANTITY_IN_HOUR) {
     format = `a few minutes ago`;
   } else if (hours < HOUR_QUANTITY_IN_DAY) {
-    format = `a few hour ago`;
+    format = `a few hours ago`;
   } else if (days < DAY_QUANTITY_IN_MONTH) {
     format = `${days} days ago`;
   } else if (months < MONTH_QUANTITY_IN_YEAR) {
