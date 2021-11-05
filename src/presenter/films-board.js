@@ -97,9 +97,9 @@ class FilmsBoard {
       case UserAction.ADD_COMMENT:
         if (!isOnline()) {
           toast(`You can't add a new comment offline`);
-          break;
+        } else {
+          this._filmPresenters[updatedFilm.id].setViewState(State.SAVING, updatedFilm, null, newComment);
         }
-        this._filmPresenters[updatedFilm.id].setViewState(State.SAVING, updatedFilm, null, newComment);
         this._provider.addComment(updatedFilm, newComment)
           .then((response) => {
             const {movie, comments} = response;
@@ -112,15 +112,15 @@ class FilmsBoard {
       case UserAction.DELETE_COMMENT:
         if (!isOnline()) {
           toast(`You can't delete a comment offline`);
-          break;
         }
         this._filmPresenters[updatedFilm.id].setViewState(State.DELETING, updatedFilm, commentId);
+
         this._provider.deleteComments(commentId)
           .then(() => {
             this._filmsModel.deleteComment(updateType, updatedFilm, commentId, updatedComments);
           })
           .catch(() => {
-            this._filmPresenters[updatedFilm.id].setViewState(State.ABORTING, updatedFilm);
+            this._filmPresenters[updatedFilm.id].setViewState(State.ABORTING, updatedFilm, commentId);
           });
         break;
     }

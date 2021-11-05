@@ -55,10 +55,10 @@ class Menu {
   }
 
   _handleStatsClick() {
-    this._statsComponent.show();
     this._filmBoardPresenter.destroy();
     this._filmBoardPresenter._renderUser(this._filmsModel.films);
     this._currentFilter = null;
+    this._statsComponent.show();
     this._statsComponent.updateState(this._filmsModel.films, true);
   }
 

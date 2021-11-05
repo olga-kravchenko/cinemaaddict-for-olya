@@ -65,7 +65,7 @@ const createEmojiListTemplate = (isSaving) => `
     </div>`;
 
 const createPopupTemplate = (film, filmComments) => {
-  const {filmInfo, userDetails, isSaving, idDeleting, newComment} = film;
+  const {filmInfo, userDetails, comments, isSaving, idDeleting, newComment} = film;
   const {
     poster,
     title,
@@ -85,8 +85,8 @@ const createPopupTemplate = (film, filmComments) => {
   const releaseDate = dayjs(date).format(` DD MMMM YYYY`);
   const shownGeneres = genres.map((e) => `<span class="film-details__genre">${e}</span>`);
   const genreTitle = shownGeneres.length === 1 ? `Genre` : `Genres`;
-  const commentQuantity = filmComments.length;
-  const comments = createCommentListTemplate(filmComments, idDeleting);
+  const commentQuantity = comments.length;
+  const allComments = createCommentListTemplate(filmComments, idDeleting);
 
   return `
     <section class="film-details">
@@ -153,7 +153,7 @@ const createPopupTemplate = (film, filmComments) => {
         <div class="film-details__bottom-container">
           <section class="film-details__comments-wrap">
             <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentQuantity}</span></h3>
-            ${comments}
+            ${allComments}
 
             <div class="film-details__new-comment">
               <div class="film-details__add-emoji-label">
